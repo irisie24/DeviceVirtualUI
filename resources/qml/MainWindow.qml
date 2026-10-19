@@ -1,6 +1,5 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
-import QtQuick.Controls.Material 2.3
 import QtQuick.Layouts 1.3
 
 ApplicationWindow
@@ -15,8 +14,8 @@ ApplicationWindow
     //-- Temporarily commented
 
     //-- Temporarily code
-    width: Screen.width*0.50
-    height: Screen.height*0.50
+    width: 1024
+    height: 768
     //-- Temporarily code
 
     minimumHeight: height
@@ -47,9 +46,6 @@ ApplicationWindow
             id: mainView
             visible: true
 
-            Material.theme: Material.Light
-            Material.accent: applicationData.Theme.AccentColor
-
             //-- Temporarily commented
             //visibility: Window.FullScreen
             //width: Screen.width
@@ -57,8 +53,8 @@ ApplicationWindow
             //-- Temporarily commented
 
             //-- Temporarily code
-            width: Screen.width*0.50
-            height: Screen.height*0.50
+            width: mainWindow.width
+            height: mainWindow.height
             //-- Temporarily code
 
             property int iconHeight : applicationData.Theme.BarHeight*0.8
@@ -72,153 +68,6 @@ ApplicationWindow
                 stackView.push("Dashboard.qml")
             }
 
-            Action
-            {
-                id: navigateMenuAction
-                icon.name: stackView.depth > 1 ? "back" : "drawer"
-                onTriggered:
-                {
-                    if (stackView.depth > 1)
-                    {
-                      stackView.pop()
-                    }
-                    else
-                    {
-                       drawer.open()
-                    }
-                }
-            }
-
-            Action
-            {
-                id: openMenuAction
-                icon.name: stackView.depth > 1 ? "back" : "drawer"
-                onTriggered:
-                {
-                    drawer.open()
-                }
-            }
-
-            Action
-            {
-                id: navigateBackAction
-                icon.name: stackView.depth
-                onTriggered:
-                {
-                    applicationData.invokeSaveCurrentPage("Dashboard.qml")
-                    stackView.pop()
-                    stackView.push("Dashboard.qml")
-                }
-            }
-
-            Action
-            {
-                id: resetPassCode
-                icon.name: stackView.depth
-                onTriggered:
-                {
-                    applicationData.invokeSaveCurrentPage("ResetPasscodeStage1.qml")
-                    stackView.pop()
-                    stackView.push("ResetPasscodeStage1.qml")
-                }
-            }
-
-            Action
-            {
-                id: navigateAddMeter
-                icon.name: stackView.depth
-                onTriggered:
-                {
-                    applicationData.invokeSaveCurrentPage("AddMeter.qml")
-                    stackView.pop()
-                    stackView.push("AddMeter.qml")
-                }
-            }
-
-            Action
-            {
-                id: navigateAvailableMeters
-                icon.name: stackView.depth
-                onTriggered:
-                {
-                    applicationData.invokeSaveCurrentPage("AvailableMeters.qml")
-                    stackView.pop()
-                    stackView.push("AvailableMeters.qml")
-                }
-            }
-
-            Action
-            {
-                id: navigateAvailableTokens
-                icon.name: stackView.depth
-                onTriggered:
-                {
-                    applicationData.invokeSaveCurrentPage("AvailableTokens.qml")
-                    tackView.pop()
-                    stackView.push("AvailableTokens.qml")
-                }
-            }
-
-            Action
-            {
-                id: navigateAddToken
-                icon.name: stackView.depth
-                onTriggered:
-                {
-                    applicationData.invokeSaveCurrentPage("AddToken.qml")
-                    stackView.pop()
-                    stackView.push("AddToken.qml")
-                }
-            }
-
-            Action
-            {
-                id: navigatAlarmSettingsAction
-                icon.name: stackView.depth
-                onTriggered:
-                {
-                    applicationData.invokeSaveCurrentPage("AlarmSettings.qml")
-                    stackView.pop()
-                    stackView.push("AlarmSettings.qml")
-                }
-            }
-
-            Action
-            {
-                id: navigatActiveAlarms
-                icon.name: stackView.depth
-                onTriggered:
-                {
-                    applicationData.invokeSaveCurrentPage("Alarms.qml")
-                    stackView.pop()
-                    stackView.push("Alarms.qml")
-                }
-            }
-
-            Action
-            {
-                id: navigateLogin
-                icon.name: stackView.depth
-                onTriggered:
-                {
-                    applicationData.invokeSaveCurrentPage("Login.qml")
-                    stackView.pop()
-                    stackView.push("Login.qml")
-                }
-            }
-
-            Action
-            {
-                id: navigateEnergy
-                icon.name: stackView.depth
-                onTriggered:
-                {
-                    applicationData.invokeSaveCurrentPage("Energy.qml")
-                    stackView.pop()
-                    stackView.push("Energy.qml")
-                }
-            }
-
             Drawer
             {
                 id: drawer
@@ -227,39 +76,13 @@ ApplicationWindow
 
                 background: Rectangle
                 {
-                    color: applicationData.Theme.AccentBaseColor
+                    color: applicationData.Theme.AccentHighlightColor
                     radius: 0
-                }
-
-                Material.accent: applicationData.Theme.AccentBaseColor
-                Material.theme:
-                {
-                    if(applicationData.IsDarkTheme === true)
-                    {
-                        return Material.Dark;
-                    }
-                    else
-                    {
-                        return Material.Light;
-                    }
                 }
 
                 Column
                 {
                     anchors.fill: parent
-
-                    ItemDelegate
-                    {
-                        text: applicationData.CurrentUser.UserId
-                        width: parent.width
-
-                        icon
-                        {
-                            source: "../images/User.png"
-                            width: iconWidth
-                            height: iconHeight
-                        }
-                    }
 
                     ItemDelegate
                     {
@@ -292,15 +115,20 @@ ApplicationWindow
                         }
                     }
 
+                    MenuSeparator
+                    {
+                        width: parent.width
+                    }
+
                     ItemDelegate
                     {
-                        text: qsTr("My Meters")
+                        text: qsTr("Devices")
                         width: parent.width
                         onClicked:
                         {
-                            applicationData.invokeSaveCurrentPage("AvailableMeters.qml")
+                            applicationData.invokeSaveCurrentPage("Devices.qml")
                             stackView.pop()
-                            stackView.push("AvailableMeters.qml")
+                            stackView.push("Devices.qml")
                             drawer.close()
                         }
 
@@ -319,15 +147,15 @@ ApplicationWindow
 
                     ItemDelegate
                     {
-                        text: qsTr("Tokens")
+                        text: qsTr("Sensing Flows")
                         width: parent.width
 
                         onClicked:
                         {
                             drawer.close()
-                            applicationData.invokeSaveCurrentPage("AvailableTokens.qml")
+                            applicationData.invokeSaveCurrentPage("SensingFlows.qml")
                             stackView.pop()
-                            stackView.push("AvailableTokens.qml")
+                            stackView.push("SensingFlows.qml")
                         }
 
                         icon
@@ -350,15 +178,15 @@ ApplicationWindow
 
                     ItemDelegate
                     {
-                        text: qsTr("Alarms")
+                        text: qsTr("Actuation Rules")
                         width: parent.width
 
                         onClicked:
                         {
                             drawer.close()
-                            applicationData.invokeSaveCurrentPage("Alarms.qml")
+                            applicationData.invokeSaveCurrentPage("ActuationRules.qml")
                             stackView.pop()
-                            stackView.push("Alarms.qml")
+                            stackView.push("ActuationRules.qml")
                         }
 
                         icon
@@ -381,15 +209,15 @@ ApplicationWindow
 
                     ItemDelegate
                     {
-                        text: qsTr("Energy")
+                        text: qsTr("Signal Graph")
                         width: parent.width
 
                         onClicked:
                         {
                             drawer.close()
-                            applicationData.invokeSaveCurrentPage("Energy.qml")
+                            applicationData.invokeSaveCurrentPage("SignalGraph.qml")
                             stackView.pop()
-                            stackView.push("Energy.qml")
+                            stackView.push("SignalGraph.qml")
                         }
 
                         icon
@@ -410,6 +238,11 @@ ApplicationWindow
                         }
                     }
 
+                    MenuSeparator
+                    {
+                        width: parent.width
+                    }
+
                     ItemDelegate
                     {
                         text: qsTr("Settings")
@@ -425,26 +258,6 @@ ApplicationWindow
                         icon
                         {
                             source: "../images/Settings.png"
-                            width: iconWidth
-                            height: iconHeight
-                        }
-                    }
-
-                    ItemDelegate
-                    {
-                        text: qsTr("Contact Us")
-                        width: parent.width
-                        onClicked:
-                        {
-                            applicationData.invokeSaveCurrentPage("Contact.qml")
-                            stackView.pop()
-                            stackView.push("Contact.qml")
-                            drawer.close()
-                        }
-
-                        icon
-                        {
-                            source: "../images/ContactUs.png"
                             width: iconWidth
                             height: iconHeight
                         }
@@ -488,8 +301,11 @@ ApplicationWindow
                             width: iconWidth
                             height: iconHeight
                         }
+                    }
 
-                        visible: applicationData.IsTraceEnabled
+                    MenuSeparator
+                    {
+                        width: parent.width
                     }
 
                     ItemDelegate
@@ -522,19 +338,7 @@ ApplicationWindow
                 anchors.top: parent.top
                 anchors.bottom: parent.bottom
                 anchors.left: parent.left
-                color: applicationData.Theme.WidgetActiveColor
-                Material.accent: applicationData.Theme.AccentColor
-                Material.theme:
-                {
-                    if(applicationData.IsDarkTheme === true)
-                    {
-                        return Material.Dark;
-                    }
-                    else
-                    {
-                        return Material.Light;
-                    }
-                }
+                color: applicationData.Theme.PanelLowerColor
 
                 ColumnLayout
                 {
@@ -619,7 +423,6 @@ ApplicationWindow
                 {
                     id: footerPanel
                     anchors.bottom: parent.bottom
-                    width: parent.width - applicationData.Theme.SideMenuCollapsedWidth
                 }
             }
         }

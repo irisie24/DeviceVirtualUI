@@ -1,14 +1,10 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
-import QtQuick.Controls.Material 2.3
 import QtQuick.Layouts 1.3
 
 Page
 {
-    id: energyPage
-
-    Material.theme: Material.Light
-    Material.accent: applicationData.Theme.AccentColor
+    id: signalGraphPage
 
     property date currentDate: new Date()
     property date resetDate: new Date()
@@ -42,30 +38,19 @@ Page
     {
         id: background
         width: parent.width
-        height: parent.height - headerPanel.height
-        anchors.top: headerPanel.bottom
+        height: parent.height
+        anchors.top: parent.top
         color: applicationData.Theme.BackgroundColor
-    }
-
-    Header
-    {
-        id:headerPanel
-        headerTitle : "Energy"
-        isMenuButtonVisible: true
-        isMeterNameVisible: true
-        isSyncDateVisible: true
-        isConnectionIndicatorVisible: applicationData.IsAppConnected
     }
 
     ComboBox
     {
         id: parameterList
         height: headerPanel.height*0.5
-        width: energyPage.width*0.9
-        font.pointSize: headerPanel.fontSizeSmall
+        width: signalGraphPage.width*0.9
+        //font.pointSize: headerPanel.fontSizeSmall
         anchors.horizontalCenter: parent.horizontalCenter
-        anchors.top:headerPanel.bottom
-        Material.accent: applicationData.Theme.AccentColor
+        anchors.top:parent.top
 
         popup: Popup
         {
@@ -74,7 +59,7 @@ Page
             width: parameterList.width
             height:contentItem.implicitHeight
             padding: 1
-            font.pointSize: headerPanel.fontSizeSmall
+            //font.pointSize: headerPanel.fontSizeSmall
 
             contentItem: ListView
             {
@@ -82,18 +67,6 @@ Page
                 implicitHeight: contentHeight
                 model: parameterList.popup.visible ? parameterList.delegateModel : null
                 ScrollIndicator.vertical: ScrollIndicator { }
-                Material.accent: applicationData.Theme.AccentColor
-                Material.theme:
-                {
-                    if(applicationData.IsDarkTheme === true)
-                    {
-                        return Material.Dark;
-                    }
-                    else
-                    {
-                        return Material.Light;
-                    }
-                }
 
                 delegate: Text
                 {
@@ -109,18 +82,6 @@ Page
             }
         }
 
-        Material.theme:
-        {
-            if(applicationData.IsDarkTheme === true)
-            {
-                return Material.Dark;
-            }
-            else
-            {
-                return Material.Light;
-            }
-        }
-
         onCurrentIndexChanged:
         {
             loadEnergyData();
@@ -132,8 +93,8 @@ Page
     CustomTab
     {
         id: periodSelector
-        tabHeight: headerPanel.height*0.4
-        tabWidth: energyPage.width*0.9
+        tabHeight: applicationData.Theme.BarHeight
+        tabWidth: signalGraphPage.width*0.9
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.top:parameterList.bottom
         anchors.topMargin: 5
@@ -179,8 +140,8 @@ Page
     Rectangle
     {
         id: dateSelectRangeHeader
-        width: energyPage.width*0.9
-        height: headerPanel.height*0.3
+        width: signalGraphPage.width*0.9
+        height: applicationData.Theme.BarHeight
         anchors.top:periodSelector.bottom
         anchors.topMargin: 5
         anchors.horizontalCenter: parent.horizontalCenter
@@ -226,8 +187,8 @@ Page
     Rectangle
     {
         id: dateSelectRangeContent
-        width: energyPage.width*0.9
-        height: headerPanel.height*0.35
+        width: signalGraphPage.width*0.9
+        height: applicationData.Theme.BarHeight
         anchors.top:dateSelectRangeHeader.bottom
         anchors.horizontalCenter: parent.horizontalCenter
         color: applicationData.Theme.BackgroundColor
@@ -326,8 +287,8 @@ Page
     Rectangle
     {
         id: graphRect
-        height: energyPage.width*0.8
-        width: energyPage.width*0.9
+        height: signalGraphPage.width*0.8
+        width: signalGraphPage.width*0.9
         anchors.top: dateSelectRangeContent.bottom
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.topMargin: 5
@@ -389,8 +350,8 @@ Page
     Rectangle
     {
         id: modeRect
-        width: energyPage.width*0.9
-        height: headerPanel.height/2.5
+        width: signalGraphPage.width*0.9
+        height: applicationData.Theme.BarHeight
         anchors.top: xAxisLabel.bottom
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.topMargin: 5
@@ -443,8 +404,8 @@ Page
     {
         id: rectTou
         anchors.horizontalCenter: parent.horizontalCenter
-        width: energyPage.width*0.9
-        height: (energyPage.width*0.9)*0.125
+        width: signalGraphPage.width*0.9
+        height: (signalGraphPage.width*0.9)*0.125
         anchors.top: modeRect.bottom
         anchors.topMargin: 5
         color: applicationData.Theme.BackgroundColor
@@ -517,8 +478,8 @@ Page
     {
         id: rectTimestamp
         anchors.horizontalCenter: parent.horizontalCenter
-        width: energyPage.width*0.9
-        height: (energyPage.width*0.9)*0.15
+        width: signalGraphPage.width*0.9
+        height: (signalGraphPage.width*0.9)*0.15
         anchors.top: rectTou.bottom
         color: applicationData.Theme.BackgroundColor
 
@@ -581,9 +542,9 @@ Page
     {
         id: datepickerpopup
         visible: false
-        width: energyPage.width*0.9
-        height: energyPage.width
-        x: (energyPage.width - datepickerpopup.width)/2
+        width: signalGraphPage.width*0.9
+        height: signalGraphPage.width
+        x: (signalGraphPage.width - datepickerpopup.width)/2
         y: parent.height/3
         padding: 0
         modal: true
@@ -626,8 +587,8 @@ Page
                 CustomButton
                 {
                     id:btnCancel
-                    width: energyPage.width*0.25
-                    height: energyPage.width*0.125
+                    width: signalGraphPage.width*0.25
+                    height: signalGraphPage.width*0.125
                     text: "Cancel"
                     isDefault: false
                     accentColor: applicationData.Theme.AccentColor
@@ -640,8 +601,8 @@ Page
                 CustomButton
                 {
                     id:btnSave
-                    width: energyPage.width*0.25
-                    height: energyPage.width*0.125
+                    width: signalGraphPage.width*0.25
+                    height: signalGraphPage.width*0.125
                     text: "Save"
                     isDefault: true
                     accentColor: applicationData.Theme.AccentColor

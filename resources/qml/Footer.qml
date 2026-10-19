@@ -1,17 +1,14 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
-import QtQuick.Controls.Material 2.3
 import QtQuick.Layouts 1.15
 
 Rectangle
 {
     id: footerID
 
-    Material.theme: Material.Light
-    Material.accent: applicationData.Theme.AccentColor
-
     height: applicationData.Theme.BarHeight
     width: parent.width
+    color: applicationData.Theme.PanelLowerColor
 
     property double fontSizeNormal: fontlabel.font.pointSize
     property double fontSizeSmall: fontlabel.font.pointSize -  2.5
@@ -40,7 +37,7 @@ Rectangle
     {
         width: parent.width
         height: parent.height
-        color: applicationData.Theme.BaseColor
+        color: applicationData.Theme.PanelLowerColor
     }
 
     Connections

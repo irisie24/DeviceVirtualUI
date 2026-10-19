@@ -1,66 +1,52 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
-import QtQuick.Controls.Material 2.3
 import QtQuick.Layouts 1.3
 
 Page
 {
-    id: alarmsPage
+    id: availableActuationRulesPage
 
-    Material.theme: Material.Light
-    Material.accent: applicationData.Theme.AccentColor
-
-    property variant activeAlarmsModel :  []
+    property variant activationRulesModel :  []
 
     Component.onCompleted:
     {
         errorLabel.text = ""
-        activeAlarmsModel = applicationData.ActiveAlarms
+        activationRulesModel = applicationData.ActiveAlarms
     }
 
     Rectangle
     {
         id: background
         width: parent.width
-        height: parent.height - headerPanel.height
-        anchors.top: headerPanel.bottom
+        height: parent.height
+        anchors.top: parent.top
         color: applicationData.Theme.BackgroundColor
-    }
-
-    Header
-    {
-        id:headerPanel
-        headerTitle: "Active Alarms"
-        isMenuButtonVisible: true
-        isMeterNameVisible: true
-        isSyncDateVisible: true
-        isConnectionIndicatorVisible: applicationData.IsAppConnected
     }
 
     ListView
     {
-        id: alarmListView
+        id: activationRulesListView
         width: parent.width*0.90
-        anchors.top:headerPanel.bottom
+        anchors.top: parent.top
         anchors.topMargin: 10
         anchors.bottom: errorLabel.top
         anchors.horizontalCenter: parent.horizontalCenter
         visible: true
         spacing: 10
         clip: true
-        model: activeAlarmsModel
-        delegate: alarmsListDelegate
+        model: activationRulesModel
+        delegate: activationRulesListDelegate
     }
 
     Component
     {
-        id: alarmsListDelegate
+        id: activationRulesListDelegate
 
         Rectangle
         {
-            id: activeAlarmItemID
-            width: alarmListView.width
-            height: alarmsPage.width*0.1
+            id: activationRuleItem
+            width: activationRulesListView.width
+            height: availableActuationRulesPage.width*0.1
             radius: 5
             color: applicationData.Theme.BackgroundColor
 
@@ -68,8 +54,8 @@ Page
             {
                 id: activeAlarmImgID
                 source: "../images/Warning.png"
-                width: activeAlarmItemID.height*0.75
-                height: activeAlarmItemID.height*0.75
+                width: activationRuleItem.height*0.75
+                height: activationRuleItem.height*0.75
                 anchors.verticalCenter: parent.verticalCenter
                 anchors
                 {
@@ -92,7 +78,7 @@ Page
                     left: activeAlarmImgID.right
                     leftMargin: 30
                 }
-                text: activeAlarmsModel[index].AlarmName
+                text: activationRulesModel[index].AlarmName
             }
         }
     }
@@ -113,8 +99,8 @@ Page
     Rectangle
     {
         id: alarmCommandRect
-        width: alarmsPage.width
-        height: alarmsPage.width*0.2
+        width: availableActuationRulesPage.width
+        height: availableActuationRulesPage.width*0.2
         radius: 5
         color: applicationData.Theme.NavigationBarColor
 
@@ -127,7 +113,6 @@ Page
         ToolButton
         {
             id: name
-            action: navigatAlarmSettingsAction
             height: alarmCommandRect.height*0.75
             width: alarmCommandRect.height*0.75
             icon.source: "../images/Filter.png"
@@ -145,7 +130,7 @@ Page
         Label
         {
             text: "Configure Filters"
-            color: applicationData.Theme.FontColor
+            color: applicationData.Theme.TextPrimaryColor
             height: alarmCommandRect.height*0.5
             elide: Label.ElideRight
             horizontalAlignment: Qt.AlignHCenter
@@ -161,7 +146,7 @@ Page
 
         function onAlarmAction()
         {
-            activeAlarmsModel = applicationData.ActiveAlarms
+            activationRulesModel = applicationData.ActiveAlarms
         }
 
         function onAlarmError(str)

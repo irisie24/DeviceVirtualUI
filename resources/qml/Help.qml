@@ -8,7 +8,7 @@ Page
     id: helpPage
 
     Material.theme: Material.Light
-    Material.accent: applicationData.Theme.AccentColor
+    Material.accent: applicationData.Theme.AccentBaseColor
 
     property int helpIndex: 0
     property variant helpStringModel :  []
@@ -23,30 +23,18 @@ Page
     Rectangle
     {
         id: background
-        width: parent.width
-        height: parent.height - headerPanel.height
-        anchors.top: headerPanel.bottom
+        anchors.fill: parent
         color: applicationData.Theme.BackgroundColor
-    }
-
-    Header
-    {
-        id:headerPanel
-        headerTitle: "Help"
-        isMenuButtonVisible: true
-        isMeterNameVisible: false
-        isSyncDateVisible: false
-        isConnectionIndicatorVisible: false
     }
 
     ComboBox
     {
         id: topicList
-        height: headerPanel.height*0.5
+        height: applicationData.BarHeight*0.5
         width: helpPage.width*0.9
-        font.pointSize: headerPanel.fontSizeSmall
+        //font.pointSize: headerPanel.fontSizeSmall
         anchors.horizontalCenter: parent.horizontalCenter
-        anchors.top:headerPanel.bottom
+        anchors.top:parent.top
         Material.accent: applicationData.Theme.AccentColor
 
         popup: Popup
@@ -56,7 +44,7 @@ Page
             width: topicList.width
             height:contentItem.implicitHeight
             padding: 1
-            font.pointSize: headerPanel.fontSizeSmall
+            //font.pointSize: headerPanel.fontSizeSmall
 
             contentItem: ListView
             {
@@ -64,7 +52,7 @@ Page
                 implicitHeight: contentHeight
                 model: topicList.popup.visible ? topicList.delegateModel : null
                 ScrollIndicator.vertical: ScrollIndicator { }
-                Material.accent: applicationData.Theme.AccentColor
+                Material.accent: applicationData.Theme.AccentBaseColor
                 Material.theme:
                 {
                     if(applicationData.IsDarkTheme === true)
@@ -86,8 +74,8 @@ Page
             background: Rectangle
             {
                 border.width: 1
-                border.color: applicationData.Theme.AccentColor
-                color: applicationData.Theme.ControlColor
+                border.color: applicationData.Theme.AccentBaseColor
+                color: applicationData.Theme.WidgetActiveColor
             }
         }
 
@@ -119,8 +107,8 @@ Page
         anchors.top: topicList.bottom
         width: helpPage.width*0.9
         anchors.horizontalCenter: parent.horizontalCenter
-        font.pointSize: headerPanel.fontSizeSmall
-        color: applicationData.Theme.FontColor
+        //font.pointSize: headerPanel.fontSizeSmall
+        color: applicationData.Theme.TextPrimaryColor
 
         background: Rectangle
         {

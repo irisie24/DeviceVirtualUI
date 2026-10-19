@@ -1,26 +1,22 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
-import QtQuick.Controls.Material 2.3
 import QtQuick.Layouts 1.3
 
 Page
 {
-    id: availableTokensPage
+    id: availableSensingFlowsPage
 
-    Material.theme: Material.Light
-    Material.accent: applicationData.Theme.AccentColor
-
-    property variant availableTokensModel :  []
-    property variant availableTokenHistoriesModel :  []
-    property string selectedToken:  " "
+    property variant availableSensingFlowsModel :  []
+    property variant availableSensingFlowsHistoriesModel :  []
+    property string selectedSensingFlow:  " "
 
     Component.onCompleted:
     {
-        tokenListView.visible = true
+        sensingFlowsListView.visible = true
         tokenHistoryListView.visible = false
-        tokenListSelector.currentIndex = 0
-        availableTokensModel = applicationData.TokenList
-        availableTokenHistoriesModel = applicationData.TokenHistoryList
+        sensingFlowsListSelector.currentIndex = 0
+        availableSensingFlowsModel = applicationData.TokenList
+        availableSensingFlowsHistoriesModel = applicationData.TokenHistoryList
         errorLabel.text = ""
     }
 
@@ -28,46 +24,36 @@ Page
     {
         id: background
         width: parent.width
-        height: parent.height - headerPanel.height
-        anchors.top: headerPanel.bottom
+        height: parent.height
+        anchors.top: parent.bottom
         color: applicationData.Theme.BackgroundColor
-    }
-
-    Header
-    {
-        id:headerPanel
-        headerTitle: "Available Tokens"
-        isMenuButtonVisible: true
-        isMeterNameVisible: true
-        isSyncDateVisible: true
-        isConnectionIndicatorVisible: applicationData.IsAppConnected
     }
 
     CustomTab
     {
-        id: tokenListSelector
-        tabHeight: headerPanel.height*0.4
-        tabWidth: availableTokensPage.width*0.9
+        id: sensingFlowsListSelector
+        tabHeight: applicationData.Theme.BarHeight
+        tabWidth: availableSensingFlowsPage.width*0.9
         anchors.horizontalCenter: parent.horizontalCenter
-        anchors.top:headerPanel.bottom
+        anchors.top: parent.bottom
         model: ["New", "Transferred"]
-        accentColor: applicationData.Theme.AccentColor
-        accentLowColor: applicationData.Theme.AccentColor
-        controlLowColor: applicationData.Theme.ControlColor
-        controlColor: applicationData.Theme.ControlColor
-        fontColor: applicationData.Theme.FontColor
+        accentColor: applicationData.Theme.AccentBaseColor
+        accentLowColor: applicationData.Theme.AccentHighlightColor
+        controlLowColor: applicationData.Theme.WidgetPassiveColor
+        controlColor: applicationData.Theme.WidgetActiveColor
+        fontColor: applicationData.Theme.TextPrimaryColor
 
         onCurrentIndexChanged:
         {
             if(currentIndex === 0)
             {
-                tokenListView.visible = true
+                sensingFlowsListView.visible = true
                 tokenHistoryListView.visible = false
             }
 
             if(currentIndex === 1)
             {
-                tokenListView.visible = false
+                sensingFlowsListView.visible = false
                 tokenHistoryListView.visible = true
             }
         }
@@ -75,39 +61,39 @@ Page
 
     ListView
     {
-        id: tokenListView
+        id: sensingFlowsListView
         width: parent.width*0.90
-        anchors.top:tokenListSelector.bottom
+        anchors.top:sensingFlowsListSelector.bottom
         anchors.topMargin: 10
         anchors.bottom: errorLabel.top
         anchors.horizontalCenter: parent.horizontalCenter
         visible: true
         spacing: 10
         clip: true
-        model: availableTokensModel
-        delegate: tokenListDelegate
+        model: availableSensingFlowsModel
+        delegate: sensingFlowsListDelegate
     }
 
     Component
     {
-        id: tokenListDelegate
+        id: sensingFlowsListDelegate
 
         Rectangle
         {
-            id: availableTokensItemID
-            width: tokenListView.width
-            height: availableTokensPage.width*0.3
+            id: availableSensingFlowsItem
+            width: sensingFlowsListView.width
+            height: availableSensingFlowsPage.width*0.3
             radius: 5
-            color: applicationData.Theme.ControlColor
+            color: applicationData.Theme.WidgetActiveColor
 
-            property int tokenStatus : availableTokensModel[index].IsTokenNew
+            property int tokenStatus : availableSensingFlowsModel[index].IsTokenNew
 
             Column
             {
                 id: imagecol
-                anchors.left: availableTokensItemID.left
+                anchors.left: availableSensingFlowsItem.left
                 height: parent.height
-                width: availableTokensItemID.height*0.45
+                width: availableSensingFlowsItem.height*0.45
 
                 Rectangle
                 {
@@ -123,12 +109,12 @@ Page
                        anchors.verticalCenter: parent.verticalCenter
                        icon.source: "../images/TokenItem.png"
                        icon.color: "transparent"
-                       icon.height: availableTokensItemID.height*0.33
-                       icon.width: availableTokensItemID.height*0.33
+                       icon.height: availableSensingFlowsItem.height*0.33
+                       icon.width: availableSensingFlowsItem.height*0.33
 
                        background: Rectangle
                        {
-                           color: applicationData.Theme.ControlColor
+                           color: applicationData.Theme.WidgetActiveColor
                        }
                    }
                 }
@@ -146,9 +132,9 @@ Page
                 Rectangle
                 {
                     id: rectData
-                    height: availableTokensItemID.height
-                    width: availableTokensItemID.height*1.5
-                    color: applicationData.Theme.ControlColor
+                    height: availableSensingFlowsItem.height
+                    width: availableSensingFlowsItem.height*1.5
+                    color: applicationData.Theme.WidgetActiveColor
 
                     Text
                     {
@@ -158,16 +144,16 @@ Page
                         font.bold: true
                         anchors.top: rectData.top
                         anchors.topMargin: rectData.height*0.1
-                        color: applicationData.Theme.FontColor
+                        color: applicationData.Theme.TextPrimaryColor
                     }
 
                     Text
                     {
                         id: tokenNoValue
                         anchors.top: tokenNolabel.bottom
-                        text: availableTokensModel[index].TokenId
+                        text: availableSensingFlowsModel[index].TokenId
                         font.pointSize: headerPanel.fontSizeSmall
-                        color: applicationData.Theme.FontColor
+                        color: applicationData.Theme.TextPrimaryColor
                     }
 
                     Text
@@ -175,19 +161,19 @@ Page
                         id: tokenStatusLabel
                         anchors.top: tokenNoValue.bottom
                         font.bold: true
-                        text: availableTokensModel[index].TokenStatusStr
+                        text: availableSensingFlowsModel[index].TokenStatusStr
                         font.pointSize: headerPanel.fontSizeSmall
-                        color: applicationData.Theme.FontColor
+                        color: applicationData.Theme.TextPrimaryColor
                     }
 
                     Text
                     {
                         id: tokenValue
                         anchors.top: tokenStatusLabel.bottom
-                        text: availableTokensModel[index].TokenValue.toFixed(2)+ " " + applicationData.CreditCurrency
+                        text: availableSensingFlowsModel[index].TokenValue.toFixed(2)+ " " + applicationData.CreditCurrency
                         font.bold: true
                         font.pointSize: headerPanel.fontSizeSmall
-                        color: applicationData.Theme.FontColor
+                        color: applicationData.Theme.TextPrimaryColor
                     }
                 }
             }
@@ -197,15 +183,15 @@ Page
                 id: commandcol
                 anchors.verticalCenter: parent.verticalCenter
                 anchors.margins: 0
-                anchors.right: availableTokensItemID.right
+                anchors.right: availableSensingFlowsItem.right
                 anchors.rightMargin: 10
 
                 Rectangle
                 {
                     id: rectButtons
-                    height: availableTokensItemID.height
-                    width: (availableTokensItemID.height*0.35)*3
-                    color: applicationData.Theme.ControlColor
+                    height: availableSensingFlowsItem.height
+                    width: (availableSensingFlowsItem.height*0.35)*3
+                    color: applicationData.Theme.TextPrimaryColor
 
                     CustomButton
                     {
@@ -213,17 +199,17 @@ Page
                         anchors.right: rectButtons.right
                         anchors.top: rectButtons.top
                         anchors.topMargin: rectButtons.height*0.1
-                        width: (availableTokensItemID.height*0.35)*3
-                        height: availableTokensItemID.height*0.35
+                        width: (availableSensingFlowsItem.height*0.35)*3
+                        height: availableSensingFlowsItem.height*0.35
                         isDefault: false
                         text: "Remove"
-                        accentColor: applicationData.Theme.AccentColor
+                        accentColor: applicationData.Theme.AccentBaseColor
                         onClicked:
                         {
                             confirm.itemIndex = index;
                             headerPanel.isMenuButtonVisible = false
-                            selectedToken = availableTokensModel[index].TokenId;
-                            confirm.itemValue = availableTokensModel[index].TokenId;
+                            selectedToken = availableSensingFlowsModel[index].TokenId;
+                            confirm.itemValue = availableSensingFlowsModel[index].TokenId;
                             confirm.open();
                         }
                     }
@@ -234,21 +220,21 @@ Page
                         anchors.right: rectButtons.right
                         anchors.bottom: rectButtons.bottom
                         anchors.bottomMargin: rectButtons.height*0.1
-                        width: (availableTokensItemID.height*0.35)*3
-                        height: availableTokensItemID.height*0.35
+                        width: (availableSensingFlowsItem.height*0.35)*3
+                        height: availableSensingFlowsItem.height*0.35
                         isDefault: true
                         text: "Apply"
-                        accentColor: applicationData.Theme.AccentColor
+                        accentColor: applicationData.Theme.AccentBaseColor
                         onClicked:
                         {
                             errorLabel.text = ""
-                            tokenListView.enabled = false;
+                            sensingFlowsListView.enabled = false;
                             headerPanel.isMenuButtonVisible = false;
                             tokenAddCommandRect.enabled = false;
                             addTokenBtn.enabled = false
                             addTokenBtn.visible = false
                             addLbl.visible = false
-                            applicationData.invokeApplyToken(availableTokensModel[index].TokenId)
+                            applicationData.invokeApplyToken(availableSensingFlowsModel[index].TokenId)
                         }
                     }
                 }
@@ -260,14 +246,14 @@ Page
     {
         id: tokenHistoryListView
         width: parent.width*0.90
-        anchors.top:tokenListSelector.bottom
+        anchors.top:sensingFlowsListSelector.bottom
         anchors.topMargin: 10
         anchors.bottom: errorLabel.top
         anchors.horizontalCenter: parent.horizontalCenter
         visible: true
         spacing: 10
         clip: true
-        model: availableTokenHistoriesModel
+        model: availableSensingFlowsHistoriesModel
         delegate: tokenHistoryListDelegate
     }
 
@@ -279,9 +265,9 @@ Page
         {
             id: availableTokenHistoriesItemID
             width: tokenHistoryListView.width
-            height: availableTokensPage.width*0.3
+            height: availableSensingFlowsPage.width*0.3
             radius: 5
-            color: applicationData.Theme.ControlColor
+            color: applicationData.Theme.AccentBaseColor
 
             Column
             {
@@ -309,7 +295,7 @@ Page
 
                        background: Rectangle
                        {
-                           color: applicationData.Theme.ControlColor
+                           color: applicationData.Theme.AccentBaseColor
                        }
                    }
                 }
@@ -329,7 +315,7 @@ Page
                     id: rectData
                     height: availableTokenHistoriesItemID.height
                     width: availableTokenHistoriesItemID.height*1.5
-                    color: applicationData.Theme.ControlColor
+                    color: applicationData.Theme.AccentBaseColor
 
                     Text
                     {
@@ -339,16 +325,16 @@ Page
                         font.bold: true
                         anchors.top: rectData.top
                         anchors.topMargin: rectData.height*0.1
-                        color: applicationData.Theme.FontColor
+                        color: applicationData.Theme.TextPrimaryColor
                     }
 
                     Text
                     {
                         id: tokenNoValue
                         anchors.top: tokenNolabel.bottom
-                        text: availableTokenHistoriesModel[index].TokenId
+                        text: availableSensingFlowsHistoriesModel[index].TokenId
                         font.pointSize: headerPanel.fontSizeSmall
-                        color: applicationData.Theme.FontColor
+                        color: applicationData.Theme.TextPrimaryColor
                     }
 
                     Text
@@ -356,19 +342,19 @@ Page
                         id: tokenDateLabel
                         anchors.top: tokenNoValue.bottom
                         font.bold: true
-                        text: availableTokenHistoriesModel[index].AppliedDateStr
+                        text: availableSensingFlowsHistoriesModel[index].AppliedDateStr
                         font.pointSize: headerPanel.fontSizeSmall
-                        color: applicationData.Theme.FontColor
+                        color: applicationData.Theme.TextPrimaryColor
                     }
 
                     Text
                     {
                         id: tokenValue
                         anchors.top: tokenDateLabel.bottom
-                        text: availableTokenHistoriesModel[index].TokenValue.toFixed(2)+ " " + applicationData.CreditCurrency
+                        text: availableSensingFlowsHistoriesModel[index].TokenValue.toFixed(2)+ " " + applicationData.CreditCurrency
                         font.bold: true
                         font.pointSize: headerPanel.fontSizeSmall
-                        color: applicationData.Theme.FontColor
+                        color: applicationData.Theme.TextPrimaryColor
                     }
                 }
             }
@@ -392,10 +378,10 @@ Page
     Rectangle
     {
         id: tokenAddCommandRect
-        width: availableTokensPage.width
-        height: availableTokensPage.width*0.2
+        width: availableSensingFlowsPage.width
+        height: availableSensingFlowsPage.width*0.2
         radius: 5
-        color: applicationData.Theme.NavigationBarColor
+        color: applicationData.Theme.AccentHighlightColor
 
         anchors
         {
@@ -406,7 +392,6 @@ Page
         ToolButton
         {
             id: addTokenBtn
-            action: navigateAddToken
             height: tokenAddCommandRect.height*0.75
             width: tokenAddCommandRect.height*0.75
             icon.source: "../images/Add.png"
@@ -417,7 +402,7 @@ Page
 
             background: Rectangle
             {
-                color: applicationData.Theme.NavigationBarColor
+                color: applicationData.Theme.AccentHighlightColor
             }
         }
 
@@ -425,7 +410,7 @@ Page
         {
             id: addLbl
             text: "Add a new Token"
-            color: applicationData.Theme.FontColor
+            color: applicationData.Theme.TextPrimaryColor
             height: tokenAddCommandRect.height*0.5
             elide: Label.ElideRight
             horizontalAlignment: Qt.AlignHCenter
@@ -439,9 +424,9 @@ Page
     {
         id: confirm
         visible: false
-        width: availableTokensPage.width*0.9
-        height: (availableTokensPage.width*0.9)/1.5
-        x: (availableTokensPage.width - confirm.width)/2
+        width: availableSensingFlowsPage.width*0.9
+        height: (availableSensingFlowsPage.width*0.9)/1.5
+        x: (availableSensingFlowsPage.width - confirm.width)/2
         y: parent.height/3
         padding: 0
         modal: true
@@ -450,15 +435,15 @@ Page
 
         contentItem: Rectangle
         {
-            color: applicationData.Theme.ControlColor
+            color: applicationData.Theme.WidgetActiveColor
             anchors.fill: parent
-            border.color: applicationData.Theme.AccentColor
+            border.color: applicationData.Theme.AccentBaseColor
 
             Text
             {
                 id: confirmText
-                text: "Do you want to remove the token " + selectedToken + " ?"
-                color: applicationData.Theme.FontColor
+                text: "Do you want to remove the sensing flow " + selectedSensingFlow + " ?"
+                color: applicationData.Theme.TextPrimaryColor
                 wrapMode: "Wrap"
                 width: confirm.width*0.9
                 anchors.centerIn: parent
@@ -478,11 +463,11 @@ Page
                 CustomButton
                 {
                     id:btnNo
-                    height: tokenListView.width*0.125
-                    width: tokenListView.width*0.25
+                    height: sensingFlowsListView.width*0.125
+                    width: sensingFlowsListView.width*0.25
                     text: "No"
                     isDefault: false
-                    accentColor: applicationData.Theme.AccentColor
+                    accentColor: applicationData.Theme.AccentBaseColor
                     onClicked:
                     {
                         confirm.close();
@@ -492,15 +477,15 @@ Page
                 CustomButton
                 {
                     id:btnYes
-                    height: tokenListView.width*0.125
-                    width: tokenListView.width*0.25
+                    height: sensingFlowsListView.width*0.125
+                    width: sensingFlowsListView.width*0.25
                     text: "Yes"
                     isDefault: true
-                    accentColor: applicationData.Theme.AccentColor
+                    accentColor: applicationData.Theme.AccentBaseColor
                     onClicked:
                     {
                         confirm.close()
-                        applicationData.invokeRemoveToken(availableTokensModel[confirm.itemIndex].TokenId)
+                        applicationData.invokeRemoveToken(availableSensingFlowsModel[confirm.itemIndex].TokenId)
                     }
                 }
             }
@@ -513,11 +498,10 @@ Page
 
         function onTokenAction()
         {
-            availableTokensModel = applicationData.TokenList
-            availableTokenHistoriesModel = applicationData.TokenHistoryList
-            tokenListView.enabled = true;
+            availableSensingFlowsModel = applicationData.TokenList
+            availableSensingFlowsHistoriesModel = applicationData.TokenHistoryList
+            sensingFlowsListView.enabled = true;
             tokenAddCommandRect.enabled = true;
-            headerPanel.isMenuButtonVisible = true
             addTokenBtn.enabled = true
             addTokenBtn.visible = true
             addLbl.visible = true
@@ -536,9 +520,8 @@ Page
                 errorLabel.color = "red"
             }
 
-            tokenListView.enabled = true;
+            sensingFlowsListView.enabled = true;
             tokenAddCommandRect.enabled = true;
-            headerPanel.isMenuButtonVisible = true
             addTokenBtn.enabled = true
             addTokenBtn.visible = true
             addLbl.visible = true

@@ -5,78 +5,65 @@ import QtQuick.Layouts 1.3
 
 Page
 {
-    id: availableMetersPage
+    id: availableDevicesPage
 
     Material.theme: Material.Light
     Material.accent: applicationData.Theme.AccentColor
 
-    property variant availableMetersModel :  []
-    property string selectedMeter:  " "
+    property variant availableDevicessModel :  []
+    property string selectedDevice:  " "
 
 
     Component.onCompleted:
     {
         confirm.close()
-        headerPanel.visible = true
-        headerPanel.isSyncDateVisible = false
-        availableMetersModel = applicationData.MeterList
+        availableDevicessModel = applicationData.DeviceList
         errorLabel.text = ""
     }
 
     Rectangle
     {
         id: background
-        width: parent.width
-        height: parent.height - headerPanel.height
-        anchors.top: headerPanel.bottom
-        color: applicationData.Theme.BackgroundColor
+        anchors.fill: parent
+        color: applicationData.Theme.BaseColor
     }
 
-    Header
-    {
-        id:headerPanel
-        headerTitle: "Available Meters"
-        isMenuButtonVisible: true
-        isConnectionIndicatorVisible: applicationData.IsAppConnected
-        isMeterNameVisible: applicationData.IsAppConnected
-        isSyncDateVisible: applicationData.IsAppConnected
-    }
 
     ListView
     {
-        id: meterListView
+        id: deviceListView
         width: parent.width*0.90
-        anchors.top:headerPanel.bottom
+        anchors.top:parent.top
         anchors.topMargin: 5
         anchors.bottom: errorLabel.top
         anchors.horizontalCenter: parent.horizontalCenter
         visible: true
         spacing: 5
         clip: true
-        model: availableMetersModel
-        delegate: meterListDelegate
+        model: availableDevicessModel
+        delegate: deviceListDelegate
     }
 
     Component
     {
-        id: meterListDelegate
+        id: deviceListDelegate
 
         Rectangle
         {
-            id: availableMetersItemID
-            width: meterListView.width
-            height: availableMetersPage.width*0.3
+            id: availableDevicesItem
+            width: deviceListView.width
+            height: availableDevicesPage.width*0.3
             radius: 5
             color: applicationData.Theme.ControlColor
 
-            property string meterStatus  : availableMetersModel[index].StatusStr
+            property string deviceStatus  : availableDevicessModel[index].StatusStr
 
             Column
             {
                 id: imagecol
-                anchors.left: availableMetersItemID.left
+                anchors.left: availableDevicesItem.left
                 height: parent.height
-                width: availableMetersItemID.height*0.45
+                width: availableDevicesItem.height*0.45
 
                 Rectangle
                 {
@@ -93,13 +80,13 @@ Page
 
                        onClicked:
                        {
-                           applicationData.invokeSelectMeter(availableMetersModel[index].SerialNo)
+                           applicationData.invokeSelectMeter(availableDevicessModel[index].SerialNo)
                        }
 
                        icon.source: "../images/MeterItem.png"
                        icon.color: "transparent"
-                       icon.height: availableMetersItemID.height*0.35
-                       icon.width: availableMetersItemID.height*0.35
+                       icon.height: availableDevicesItem.height*0.35
+                       icon.width: availableDevicesItem.height*0.35
 
                        background: Rectangle
                        {
@@ -119,14 +106,14 @@ Page
                 Rectangle
                 {
                     id: rectData
-                    height: availableMetersItemID.height
-                    width:  availableMetersItemID.height*1.5
+                    height: availableDevicesItem.height
+                    width:  availableDevicesItem.height*1.5
                     color: applicationData.Theme.ControlColor
 
                     Text
                     {
                         id: meterNamelabel
-                        text: availableMetersModel[index].MeterName
+                        text: availableDevicessModel[index].MeterName
                         font.pointSize: headerPanel.fontSizeSmall
                         font.bold: true
                         anchors.top: rectData.top
@@ -138,10 +125,10 @@ Page
                     {
                         id: serialNolabel
                         anchors.top: meterNamelabel.bottom
-                        text: availableMetersModel[index].SerialNo
+                        text: availableDevicessModel[index].SerialNo
                         font.pointSize: headerPanel.fontSizeNormal
-                        font.bold: availableMetersModel[index].IsSelected ? true : false
-                        font.underline: availableMetersModel[index].IsSelected ? true : false
+                        font.bold: availableDevicessModel[index].IsSelected ? true : false
+                        font.underline: availableDevicessModel[index].IsSelected ? true : false
                         color: applicationData.Theme.FontColor
                     }
 
@@ -149,7 +136,7 @@ Page
                     {
                         id: syncDatelabel
                         anchors.top: serialNolabel.bottom
-                        text: availableMetersModel[index].LastSyncStr
+                        text: availableDevicessModel[index].LastSyncStr
                         font.pointSize: headerPanel.fontSizeSmall
                         font.bold: false
                         color: applicationData.Theme.FontColor
@@ -159,7 +146,7 @@ Page
                     {
                         id: rssilabel
                         anchors.top: syncDatelabel.bottom
-                        text: "Signal " + availableMetersModel[index].RSSIStr
+                        text: "Signal " + availableDevicessModel[index].RSSIStr
                         font.pointSize: headerPanel.fontSizeSmall
                         font.bold: false
                         color: applicationData.Theme.FontColor
@@ -171,7 +158,7 @@ Page
                         font.pointSize: headerPanel.fontSizeNormal
                         color:
                         {
-                            if(meterStatus === "0")
+                            if(deviceStatus === "0")
                                 return "red"
                             else
                                 return "green"
@@ -179,7 +166,7 @@ Page
 
                         font.bold:
                         {
-                            if(meterStatus === "0")
+                            if(deviceStatus === "0")
                                 return false
                             else
                                 return true
@@ -190,7 +177,7 @@ Page
                         verticalAlignment: Qt.AlignVCenter
                         text:
                         {
-                            if(meterStatus === "0")
+                            if(deviceStatus === "0")
                                 return "Not Connected"
                             else
                                 return "Connected"
@@ -198,7 +185,7 @@ Page
 
                         visible:
                         {
-                            if(availableMetersModel[index].SerialNo === "EDM1DEMO" || availableMetersModel[index].SerialNo === "EDM2DEMO")
+                            if(availableDevicessModel[index].SerialNo === "EDM1DEMO" || availableDevicessModel[index].SerialNo === "EDM2DEMO")
                             {
                                 return false
                             }
@@ -215,14 +202,14 @@ Page
             {
                 id: commandcol
                 anchors.verticalCenter: parent.verticalCenter
-                anchors.right: availableMetersItemID.right
+                anchors.right: availableDevicesItem.right
                 anchors.rightMargin: 10
 
                 Rectangle
                 {
                     id: rectButtons
-                    height: availableMetersItemID.height
-                    width: (availableMetersItemID.height*0.35)*3
+                    height: availableDevicesItem.height
+                    width: (availableDevicesItem.height*0.35)*3
                     color: applicationData.Theme.ControlColor
 
                     CustomButton
@@ -232,13 +219,13 @@ Page
                         anchors.right: rectButtons.right
                         anchors.top: rectButtons.top
                         anchors.topMargin: rectButtons.height*0.1
-                        width: (availableMetersItemID.height*0.35)*3
-                        height: availableMetersItemID.height*0.35
+                        width: (availableDevicesItem.height*0.35)*3
+                        height: availableDevicesItem.height*0.35
                         isDefault: false
                         accentColor: applicationData.Theme.AccentColor
                         enabled:
                         {
-                            if(meterStatus === "0")
+                            if(deviceStatus === "0")
                                 return true
                             else
                                 return false
@@ -249,7 +236,7 @@ Page
                         onClicked:
                         {
                             confirm.itemIndex = index;
-                            selectedMeter = availableMetersModel[index].SerialNo;
+                            selectedMeter = availableDevicessModel[index].SerialNo;
                             confirm.open();
                         }
                     }
@@ -260,28 +247,28 @@ Page
                         anchors.right: rectButtons.right
                         anchors.bottom: rectButtons.bottom
                         anchors.bottomMargin: rectButtons.height*0.1
-                        width: (availableMetersItemID.height*0.35)*3
-                        height: availableMetersItemID.height*0.35
+                        width: (availableDevicesItem.height*0.35)*3
+                        height: availableDevicesItem.height*0.35
                         isDefault: true
                         accentColor: applicationData.Theme.AccentColor
                         enabled:
                         {
-                            if(meterStatus === "0" && applicationData.IsAppConnected === true)
+                            if(deviceStatus === "0" && applicationData.IsAppConnected === true)
                             {
                                 return false;
                             }
 
-                            if(meterStatus === "0" && applicationData.IsAppConnected === false)
+                            if(deviceStatus === "0" && applicationData.IsAppConnected === false)
                             {
                                 return true;
                             }
 
-                            if(meterStatus === "1" && applicationData.IsAppConnected === true)
+                            if(deviceStatus === "1" && applicationData.IsAppConnected === true)
                             {
                                 return true;
                             }
 
-                            if(meterStatus === "1" && applicationData.IsAppConnected === false)
+                            if(deviceStatus === "1" && applicationData.IsAppConnected === false)
                             {
                                 return false;
                             }
@@ -291,7 +278,7 @@ Page
 
                         text:
                         {
-                            if(meterStatus === "0")
+                            if(deviceStatus === "0")
                                 return "Connect"
                             else
                                 return "Disconnect"
@@ -300,21 +287,21 @@ Page
                         onClicked:
                         {
                             errorLabel.text = ""
-                            meterListView.enabled = false;
-                            meterAddCommandRect.enabled = false;
-                            addMeterBtn.enabled = false;
-                            addMeterBtn.visible = false;
+                            deviceListView.enabled = false;
+                            deviceAddCommandRect.enabled = false;
+                            addDeviceBtn.enabled = false;
+                            addDeviceBtn.visible = false;
                             addLbl.visible = false;
                             headerPanel.isMenuButtonVisible = false
-                            if(meterStatus === "0")
+                            if(deviceStatus === "0")
                             {
-                                applicationData.invokeConnectMeter(availableMetersModel[index].SerialNo)
+                                applicationData.invokeConnectMeter(availableDevicessModel[index].SerialNo)
                             }
                             else
                             {
-                                if(meterStatus === "1")
+                                if(deviceStatus === "1")
                                 {
-                                    applicationData.invokeDisconnectMeter(availableMetersModel[index].SerialNo)
+                                    applicationData.invokeDisconnectMeter(availableDevicessModel[index].SerialNo)
                                 }
                             }
                         }
@@ -327,7 +314,7 @@ Page
     Label
     {
         id: errorLabel
-        anchors.bottom: meterAddCommandRect.top
+        anchors.bottom: deviceAddCommandRect.top
         anchors.horizontalCenter: parent.horizontalCenter
         font.bold: true
         text: "Error"
@@ -339,71 +326,25 @@ Page
 
     Rectangle
     {
-        id: meterAddCommandRect
-        width: availableMetersPage.width
-        height: availableMetersPage.width*0.2
+        id: deviceAddCommandRect
+        width: availableDevicesPage.width
+        height: applicationData.Theme.BarHeight*1.25
         radius: 5
-        color: applicationData.Theme.NavigationBarColor
+        color: applicationData.Theme.PanelLowerColor
         anchors
         {
             bottom: parent.bottom
             horizontalCenter: parent.horizontalCenter
         }
 
-        ToolButton
+        CustomButton
         {
-            id: addMeterBtn
-            action: navigateAddMeter
-            height: meterAddCommandRect.height*0.75
-            width: meterAddCommandRect.height*0.75
-            icon.color: "transparent"
-            icon.height: meterAddCommandRect.height*0.5
-            icon.width: meterAddCommandRect.height*0.5
-            anchors.horizontalCenter:meterAddCommandRect.horizontalCenter
-
-            background: Rectangle
-            {
-                color: applicationData.Theme.NavigationBarColor
-            }
-
-            enabled:
-            {
-               if(applicationData.IsAppConnected === true)
-               {
-                   return false;
-               }
-
-               if(applicationData.IsAppConnected === false)
-               {
-                   return true;
-               }
-            }
-
-            icon.source:
-            {
-                if(applicationData.IsAppConnected === true)
-                {
-                    return "../images/AddGrey.png";
-                }
-
-                if(applicationData.IsAppConnected === false)
-                {
-                    return "../images/Add.png";
-                }
-            }
-        }
-
-        Label
-        {
-            id: addLbl
-            text: "Add a new Meter"
-            color: applicationData.Theme.FontColor
-            height: meterAddCommandRect.height*0.5
-            elide: Label.ElideRight
-            horizontalAlignment: Qt.AlignHCenter
-            verticalAlignment: Qt.AlignVCenter
-            anchors.bottom: meterAddCommandRect.bottom
-            anchors.horizontalCenter:meterAddCommandRect.horizontalCenter
+            text: "New Device ..."
+            anchors.right: parent.right
+            anchors.verticalCenter: parent.verticalCenter
+            height: applicationData.Theme.BarHeight
+            width:  150
+            color: applicationData.Theme.AccentBaseColor
         }
     }
 
@@ -411,9 +352,9 @@ Page
     {
         id: confirm
         visible: false
-        width: availableMetersPage.width*0.9
-        height: (availableMetersPage.width*0.9)/1.5
-        x: (availableMetersPage.width - confirm.width)/2
+        width: availableDevicesPage.width*0.9
+        height: (availableDevicesPage.width*0.9)/1.5
+        x: (availableDevicesPage.width - confirm.width)/2
         y: parent.height/3
         padding: 0
         modal: true
@@ -424,13 +365,13 @@ Page
         {
             color: applicationData.Theme.ControlColor
             anchors.fill: parent
-            border.color: applicationData.Theme.AccentColor
+            border.color: applicationData.Theme.AccentBaseColor
 
             Text
             {
                 id: confirmText
-                text: "Do you want to remove the meter " + selectedMeter + " ?"
-                color: applicationData.Theme.FontColor
+                text: "Do you want to remove the meter " + selectedDevice + " ?"
+                color: applicationData.Theme.TextPrimaryColor
                 wrapMode: "Wrap"
                 width: confirm.width*0.9
                 anchors.centerIn: parent
@@ -450,11 +391,11 @@ Page
                 CustomButton
                 {
                     id:btnNo
-                    width: meterListView.width*0.25
-                    height: meterListView.width*0.125
+                    width: deviceListView.width*0.25
+                    height: deviceListView.width*0.125
                     text: "No"
                     isDefault: false
-                    accentColor: applicationData.Theme.AccentColor
+                    accentColor: applicationData.Theme.AccentBaseColor
                     onClicked:
                     {
                         confirm.close();
@@ -464,15 +405,15 @@ Page
                 CustomButton
                 {
                     id:btnYes
-                    width: meterListView.width*0.25
-                    height: meterListView.width*0.125
+                    width: deviceListView.width*0.25
+                    height: deviceListView.width*0.125
                     text: "Yes"
                     isDefault: true
-                    accentColor: applicationData.Theme.AccentColor
+                    accentColor: applicationData.Theme.AccentBaseColor
                     onClicked:
                     {
                         confirm.close()
-                        applicationData.invokeRemoveMeter(availableMetersModel[confirm.itemIndex].SerialNo)
+                        applicationData.invokeRemoveMeter(availableDevicessModel[confirm.itemIndex].SerialNo)
                     }
                 }
             }
@@ -483,36 +424,36 @@ Page
     {
         target: applicationData
 
-        function onMeterAction(fl)
+        function onDeviceAction(fl)
         {
             confirm.close()
-            availableMetersModel = applicationData.MeterList
+            availableDevicessModel = applicationData.MeterList
 
             if(fl === true)
             {
-                meterListView.enabled = true;
-                meterAddCommandRect.enabled = true;
+                deviceListView.enabled = true;
+                deviceAddCommandRect.enabled = true;
                 headerPanel.isMeterNameVisible = true;
                 headerPanel.isSyncDateVisible = true;
                 headerPanel.isMenuButtonVisible = true
-                addMeterBtn.enabled = true;
-                addMeterBtn.visible = true;
+                addDeviceBtn.enabled = true;
+                addDeviceBtn.visible = true;
                 addLbl.visible = true;
             }
             else
             {
-                meterListView.enabled = false;
-                meterAddCommandRect.enabled = false;
+                deviceListView.enabled = false;
+                deviceAddCommandRect.enabled = false;
                 headerPanel.isMeterNameVisible = false;
                 headerPanel.isSyncDateVisible = false;
                 headerPanel.isMenuButtonVisible = false
-                addMeterBtn.enabled = false;
-                addMeterBtn.visible = false;
+                addDeviceBtn.enabled = false;
+                addDeviceBtn.visible = false;
                 addLbl.visible = false;
             }
         }
 
-        function onMeterMessage(fl, str)
+        function onDeviceMessage(fl, str)
         {
             if(fl === true)
             {
@@ -525,7 +466,7 @@ Page
 
             errorLabel.text = str
             confirm.close()
-            availableMetersModel = applicationData.MeterList
+            availableDevicessModel = applicationData.MeterList
         }
     }
 }

@@ -8,7 +8,7 @@ Page
     id: settingsPage
 
     Material.theme: Material.Light
-    Material.accent: applicationData.Theme.AccentColor
+    Material.accent: applicationData.Theme.AccentBaseColor
 
     Component.onCompleted:
     {
@@ -52,21 +52,10 @@ Page
     Rectangle
     {
         id: background
-        width: parent.width
-        height: parent.height - headerID.height
-        anchors.top: headerID.bottom
-        color: applicationData.Theme.BackgroundColor
+        color: applicationData.Theme.BaseColor
+        anchors.fill: parent
     }
 
-    Header
-    {
-        id:headerID
-        headerTitle: "Settings"
-        isMenuButtonVisible: true
-        isMeterNameVisible: false
-        isSyncDateVisible: false
-        isConnectionIndicatorVisible: false
-    }
 
     Rectangle
     {
@@ -74,22 +63,22 @@ Page
         width: settingsPage.width*0.9
         height: 2
         border.width: 1
-        anchors.top: headerID.bottom
+        anchors.top: parent.top
         anchors.horizontalCenter: parent.horizontalCenter
-        border.color: applicationData.Theme.BackgroundColor
+        border.color: applicationData.Theme.BaseColor
     }
 
     CustomSelector
     {
         id: demoSelector
         anchors.top:  line0.bottom
-        anchors.topMargin: headerID.height*0.05
+        anchors.topMargin: applicationData.Theme.BarHeight
         anchors.left: line0.left
         selectorSize: 32
         text: "Demo Mode"
-        accentColor: applicationData.Theme.AccentColor
-        fontColor: applicationData.Theme.FontColor
-        backgroundColor: applicationData.Theme.BackgroundColor
+        accentColor: applicationData.Theme.AccentBaseColor
+        fontColor: applicationData.Theme.TextPrimaryColor
+        backgroundColor: applicationData.Theme.BaseColor
 
         onClicked:
         {
@@ -104,22 +93,22 @@ Page
         height: 2
         border.width: 1
         anchors.top: demoSelector.bottom
-        anchors.topMargin: headerID.height*0.05
+        anchors.topMargin: applicationData.Theme.BarHeight
         anchors.horizontalCenter: parent.horizontalCenter
-        border.color: applicationData.Theme.AccentColor
+        border.color: applicationData.Theme.AccentBaseColor
     }
 
     CustomSelector
     {
         id: traceSelector
         anchors.top:  line2.bottom
-        anchors.topMargin: headerID.height*0.05
+        anchors.topMargin: applicationData.Theme.BarHeight
         anchors.left: line0.left
         selectorSize: 32
         text: "Trace"
-        accentColor: applicationData.Theme.AccentColor
-        fontColor: applicationData.Theme.FontColor
-        backgroundColor: applicationData.Theme.BackgroundColor
+        accentColor: applicationData.Theme.AccentBaseColor
+        fontColor: applicationData.Theme.TextPrimaryColor
+        backgroundColor: applicationData.Theme.BaseColor
 
         onClicked:
         {
@@ -143,22 +132,22 @@ Page
         height: 2
         border.width: 1
         anchors.top: traceSelector.bottom
-        anchors.topMargin: headerID.height*0.05
+        anchors.topMargin: applicationData.Theme.BarHeight
         anchors.horizontalCenter: parent.horizontalCenter
-        border.color: applicationData.Theme.AccentColor
+        border.color: applicationData.Theme.AccentBaseColor
     }
 
     CustomSelector
     {
         id: dumpSelector
         anchors.top:  line3.bottom
-        anchors.topMargin: headerID.height*0.05
+        anchors.topMargin: applicationData.Theme.BarHeight
         anchors.left: line0.left
         selectorSize: 32
         text: "Dump Rx/Tx"
-        accentColor: applicationData.Theme.AccentColor
-        fontColor: applicationData.Theme.FontColor
-        backgroundColor: applicationData.Theme.BackgroundColor
+        accentColor: applicationData.Theme.AccentBaseColor
+        fontColor: applicationData.Theme.TextPrimaryColor
+        backgroundColor: applicationData.Theme.BaseColor
 
         onClicked:
         {
@@ -171,7 +160,6 @@ Page
         id: swVersion
         text: "Version " + applicationData.AppVersion
         color: "darkgrey"
-        font.pointSize: headerID.fontSizeSmall
         anchors.bottom: parent.bottom
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.bottomMargin: 10

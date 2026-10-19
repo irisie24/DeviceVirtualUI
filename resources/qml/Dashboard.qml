@@ -115,7 +115,7 @@ Page
         anchors.bottom: rectEnergy.top
         anchors.bottomMargin: rectAlarms.height*0.2
         anchors.topMargin: 10
-        color: applicationData.Theme.WidgetActiveColor
+        color: applicationData.Theme.PanelUpperColor
         radius: 5
 
         Text
@@ -233,7 +233,7 @@ Page
         id: rectEnergy
         width:homePage.width * 0.4
         height:homePage.height * 0.125
-        color: applicationData.Theme.WidgetActiveColor
+        color: applicationData.Theme.PanelUpperColor
         radius: 2
         anchors.left: quickArea.left
         anchors.bottom: rectAlarms.top
@@ -276,7 +276,7 @@ Page
         id: rectTariff
         width:homePage.width * 0.4
         height:homePage.height * 0.125
-        color: applicationData.Theme.ControlColor
+        color: applicationData.Theme.PanelUpperColor
         radius: 2
         anchors.right: quickArea.right
         anchors.bottom: rectTokens.top
@@ -319,7 +319,7 @@ Page
         id: rectAlarms
         width:homePage.width * 0.4
         height:homePage.height * 0.125
-        color: applicationData.Theme.ControlColor
+        color: applicationData.Theme.PanelUpperColor
         anchors.left: quickArea.left
         anchors.bottom: buffer.top
         radius: 2
@@ -362,7 +362,7 @@ Page
         id: rectTokens
         width:homePage.width * 0.4
         height:homePage.height * 0.125
-        color: applicationData.Theme.ControlColor
+        color: applicationData.Theme.PanelUpperColor
         radius: 2
         anchors.right: quickArea.right
         anchors.bottom: buffer.top

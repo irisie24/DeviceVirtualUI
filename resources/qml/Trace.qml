@@ -10,37 +10,18 @@ Page
     Material.theme: Material.Light
     Material.accent: applicationData.Theme.AccentColor
 
-    Rectangle
-    {
-        id: background
-        width: parent.width
-        height: parent.height - headerPanel.height
-        anchors.top: headerPanel.bottom
-        color: applicationData.Theme.BackgroundColor
-    }
-
     Label
     {
         id: fontlabel
         text: ""
     }
 
-    Header
-    {
-        id:headerPanel
-        headerTitle: "Trace"
-        isMenuButtonVisible: true
-        isMeterNameVisible: true
-        isSyncDateVisible: true
-        isConnectionIndicatorVisible: applicationData.IsAppConnected
-    }
-
     ScrollView
     {
         id: traceScrollView
         width: parent.width
-        height: parent.height - headerPanel.height
-        anchors.top: headerPanel.bottom
+        height: parent.height
+        anchors.top: parent.top
         ScrollBar.horizontal.policy: ScrollBar.AlwaysOff
         ScrollBar.vertical.policy: ScrollBar.AlwaysOn
         Material.accent: applicationData.Theme.AccentColor
@@ -62,7 +43,7 @@ Page
             readOnly: true
             anchors.fill: parent
             font.pointSize: fontlabel.font.pointSize -  2.5
-            color: applicationData.Theme.FontColor
+            color: applicationData.Theme.TextPrimaryColor
             text: applicationData.TraceString
 
             onTextChanged:

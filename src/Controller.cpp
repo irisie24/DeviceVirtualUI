@@ -113,7 +113,7 @@ void ApplicationInitializationThread::run()
 
     for(int x = 1; x < 6; x++)
     {
-        QThread::sleep(1);
+        //QThread::sleep(1);
     }
 
     emit resultReady(result);

@@ -131,7 +131,8 @@ signals:
     void userLoginFailed(QString reason);
 
     //Data related
-    void ChartTitleChanged();
+    void deviceAction();
+    void deviceMessage();
 
     //User management errors
     void userNameError();
