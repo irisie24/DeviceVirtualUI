@@ -1,30 +1,15 @@
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
 #include <QUrl>
-#include "QtAppTemplate.hpp"
+#include "DeviceVirtualApp.hpp"
 #include "Controller.hpp"
-#include "BluetoothInterface.hpp"
-#include "CameraInterface.hpp"
 
 int main(int argc, char *argv[])
 {
     Q_INIT_RESOURCE(DeviceVirtualUI);
 
-    QtAppTemplate  app(argc, argv);
-
-    BluetoothInterface binterface;
-    CameraInterface cinterface;
+    DeviceVirtualApp  app(argc, argv);
     Controller controller(&app);
-
-    if(!binterface.Initialize())
-    {
-        return -1;
-    }
-
-    if(!cinterface.Initialize())
-    {
-        return -1;
-    }
     
     const QUrl urlMain("qrc:///qml/MainWindow.qml");
 

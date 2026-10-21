@@ -48,17 +48,17 @@ if(WIN32)
 endif()
 
 if(DARWIN)
-find_package(Qt6 6.10 REQUIRED COMPONENTS Quick Core Sql Qml Multimedia Bluetooth)
+find_package(Qt6 6.10 REQUIRED COMPONENTS Quick Core Sql Qml Network)
 qt_standard_project_setup(REQUIRES 6.10)
 endif(DARWIN)
 
 if(GNU_LINUX)
-find_package(Qt6 6.10 REQUIRED COMPONENTS Quick Core Sql Qml Multimedia Bluetooth)
+find_package(Qt6 6.10 REQUIRED COMPONENTS Quick Core Sql Qml Network)
 qt_standard_project_setup(REQUIRES 6.10)
 endif(GNU_LINUX)
 
 if(WIN32)
-find_package(Qt6 6.10 REQUIRED COMPONENTS Quick Core Sql Qml Multimedia Bluetooth)
+find_package(Qt6 6.10 REQUIRED COMPONENTS Quick Core Sql Qml Network)
 qt_standard_project_setup(REQUIRES 6.10)
 endif(WIN32)
 
@@ -71,24 +71,22 @@ set(SOURCES
 ${SOURCES}
 ${SOURCE_DIR}/main.cpp
 ${SOURCE_DIR}/Logger.cpp
-${SOURCE_DIR}/QtAppTemplate.cpp
+${SOURCE_DIR}/DeviceVirtualApp.cpp
 ${SOURCE_DIR}/Help.cpp
+${SOURCE_DIR}/Mqtt.cpp
 ${SOURCE_DIR}/Controller.cpp
-${SOURCE_DIR}/BluetoothInterface.cpp
-${SOURCE_DIR}/CameraInterface.cpp
 ${SOURCE_DIR}/UserInfo.cpp
 )
 
 set(HEADERS
 ${HEADERS}
 ${HEADER_DIR}/Logger.hpp
-${HEADER_DIR}/QtAppTemplate.hpp
+${HEADER_DIR}/DeviceVirtualApp.hpp
 ${HEADER_DIR}/Help.hpp
 ${HEADER_DIR}/GraphData.hpp
 ${HEADER_DIR}/ApplicationTheme.hpp
+${HEADER_DIR}/Mqtt.hpp
 ${HEADER_DIR}/Controller.hpp
-${HEADER_DIR}/BluetoothInterface.hpp
-${HEADER_DIR}/CameraInterface.hpp
 ${HEADER_DIR}/Version.hpp
 ${HEADER_DIR}/UserInfo.hpp
 )
@@ -112,8 +110,7 @@ target_link_libraries(DeviceVirtualUI
     PRIVATE Qt6::Core
     PRIVATE Qt6::Sql
     PRIVATE Qt6::Qml
-    PRIVATE Qt6::Multimedia
-    PRIVATE Qt6::Bluetooth
+    PRIVATE Qt6::Network
 )
 
 install(TARGETS DeviceVirtualUI

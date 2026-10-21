@@ -11,9 +11,7 @@
 #include <QUuid>
 #include <QPalette>
 
-#include "BluetoothInterface.hpp"
 #include "ApplicationTheme.hpp"
-#include "CameraInterface.hpp"
 #include "UserInfo.hpp"
 #include "Logger.hpp"
 
@@ -95,9 +93,6 @@ public:
     void setIsDumpRxTxEnabled(bool isdumprxtxenabled);
     bool getIsDumpRxTxEnabled();
 
-    Q_PROPERTY (bool IsCameraAccessEnabled READ getIsCameraAccessEnabled NOTIFY IsCameraAccessEnabledChanged)
-    bool getIsCameraAccessEnabled() { return (bool)ENABLE_CAMERA_ACCESS; };
-
     void InitializeSysten();
     void Trace(QString str);
     void ClearTrace();
@@ -151,32 +146,10 @@ signals:
 private slots:
     void OnAppInitializationComplete();
 
-    void OnDeviceDiscovered(const QString &address, const QString &name, const QString &rssi, const QMultiHash<quint16, QByteArray> &mdata);
-    void OnScanComplete();
-
-    void OnConnectFailed();
-    void OnDeviceConnected(const QString &name);
-    void OnDeviceDisconnected(const QString &name);
-    void OnDataReceived(const QByteArray& data);
-    void OnDataSent(const QByteArray& data);
-    void OnCommunicationTimeout();
-
-    void OnSendKeepAlive();
-    void OnReset();
-
-    void OnConnectCompleted(QString &serialNo, bool status);
-    void OnDisconnectCompleted(QString &serialNo, bool status);
-    void OnKeepAliveCompleted(bool status);
-
 private:
-    void handleCommunicationDrop(const QString &errstr);
-    void retryScan();
-    void retryConnect();
     void generateDashboardData();
 
     QGuiApplication* app;
-    QTimer keepAliveTimer;
-    QTimer connectionResetTimer;
 
     QList<UserInfo> userList_;
     QList<QString> helpStringList_;
@@ -203,8 +176,6 @@ private:
     QDateTime sessionStart_;
     QDateTime sessionEnd_;
 };
-
-extern Controller* controllerInstance;
 
 class ApplicationInitializationThread : public QThread
 {

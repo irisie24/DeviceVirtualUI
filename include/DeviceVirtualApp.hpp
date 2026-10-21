@@ -1,5 +1,5 @@
-#ifndef QT_APP_TEMPLATE
-#define QT_APP_TEMPLATE
+#ifndef DEVICE_VIRTUAL_APP
+#define DEVICE_VIRTUAL_APP
 
 #include <QtQuickWidgets/QQuickWidget>
 #include <QGuiApplication>
@@ -19,16 +19,16 @@
 #include <QDir>
 #include <QFile>
 
-class QtAppTemplate : public QGuiApplication
+class DeviceVirtualApp : public QGuiApplication
 {
     Q_OBJECT
 public:
-    explicit QtAppTemplate(int argc, char *argv[]);
-    virtual ~QtAppTemplate();
+    explicit DeviceVirtualApp(int argc, char *argv[]);
+    virtual ~DeviceVirtualApp();
     bool Initialize();
 private:
 };
 
-extern QtAppTemplate* apptempl;
+extern DeviceVirtualApp* appptr;
 
 #endif
