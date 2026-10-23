@@ -134,7 +134,7 @@ ApplicationWindow
 
                         icon
                         {
-                            source: "../images/Meter.png"
+                            source: "../images/Device.png"
                             width: iconWidth
                             height: iconHeight
                         }
@@ -160,7 +160,7 @@ ApplicationWindow
 
                         icon
                         {
-                            source: "../images/Token.png"
+                            source: "../images/Sensing.png"
                             width: iconWidth
                             height: iconHeight
                         }
@@ -191,7 +191,7 @@ ApplicationWindow
 
                         icon
                         {
-                            source: "../images/Alarm.png"
+                            source: "../images/Actuation.png"
                             width: iconWidth
                             height: iconHeight
                         }
@@ -222,7 +222,7 @@ ApplicationWindow
 
                         icon
                         {
-                            source: "../images/Energy.png"
+                            source: "../images/SignalGraph.png"
                             width: iconWidth
                             height: iconHeight
                         }
@@ -415,14 +415,8 @@ ApplicationWindow
                    id: stackView
                    anchors.top: headerPanel.bottom
                    anchors.right: parent.right
-                   anchors.bottom: footerPanel.top
+                   anchors.bottom: parent.top
                    anchors.left: parent.left
-                }
-
-                Footer
-                {
-                    id: footerPanel
-                    anchors.bottom: parent.bottom
                 }
             }
         }

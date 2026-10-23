@@ -32,8 +32,9 @@
         <file>qml/Help.qml</file>
         <file>qml/Settings.qml</file>
         <file>qml/Trace.qml</file>
+
         <file>images/AnimationSplash.gif</file>
-        <file>images/MeterReader.png</file>
+
         <file>images/Logo.png</file>
         <file>images/NextWhite.png</file>
         <file>images/NextBlack.png</file>
@@ -42,22 +43,27 @@
         <file>images/MenuWhite.png</file>
         <file>images/MenuBlack.png</file>
         <file>images/GreenDot.png</file>
-        <file>images/Token.png</file>
+
+
         <file>images/User.png</file>
         <file>images/Home.png</file>
-        <file>images/Meter.png</file>
-        <file>images/MeterItem.png</file>
-        <file>images/Token.png</file>
-        <file>images/TokenItem.png</file>
-        <file>images/Alarm.png</file>
-        <file>images/Energy.png</file>
+
+        <file>images/Device.png</file>
+        <file>images/DeviceItem.png</file>
+
+        <file>images/Sensing.png</file>
+        <file>images/SensingItem.png</file>
+
+        <file>images/SignalGraph.png</file>
+
+        <file>images/Actuation.png</file>
+        <file>images/ActuationItem.png</file>
+
         <file>images/Settings.png</file>
-        <file>images/ContactUs.png</file>
         <file>images/Help.png</file>
         <file>images/Trace.png</file>
         <file>images/Exit.png</file>
-        <file>images/EMail.png</file>
-        <file>images/Phone.png</file>
+
         <file>images/Add.png</file>
         <file>images/AddGrey.png</file>
         <file>images/Pass.png</file>
@@ -66,7 +72,6 @@
         <file>images/Filter.png</file>
         <file>images/Calendar.png</file>
         <file>images/Warning.png</file>
-        <file>images/Scan.png</file>
-        <file>images/ScanGrey.png</file>
+
     </qresource>
 </RCC>

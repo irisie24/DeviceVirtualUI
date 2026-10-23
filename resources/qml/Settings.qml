@@ -1,14 +1,10 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
-import QtQuick.Controls.Material 2.3
 import QtQuick.Layouts 1.3
 
 Page
 {
     id: settingsPage
-
-    Material.theme: Material.Light
-    Material.accent: applicationData.Theme.AccentBaseColor
 
     Component.onCompleted:
     {
