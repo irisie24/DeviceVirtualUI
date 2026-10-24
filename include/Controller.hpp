@@ -12,7 +12,7 @@
 #include <QPalette>
 
 #include "ApplicationTheme.hpp"
-#include "UserInfo.hpp"
+#include "EntityUserInfo.hpp"
 #include "Logger.hpp"
 
 typedef enum ScanMode

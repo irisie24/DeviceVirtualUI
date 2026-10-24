@@ -75,7 +75,12 @@ ${SOURCE_DIR}/DeviceVirtualApp.cpp
 ${SOURCE_DIR}/Help.cpp
 ${SOURCE_DIR}/Mqtt.cpp
 ${SOURCE_DIR}/Controller.cpp
-${SOURCE_DIR}/UserInfo.cpp
+${SOURCE_DIR}/DataInterface.cpp
+${SOURCE_DIR}/DataEntity.cpp
+${SOURCE_DIR}/EntityUserInfo.cpp
+${SOURCE_DIR}/EntityDevice.cpp
+${SOURCE_DIR}/EntitySensingFlow.cpp
+${SOURCE_DIR}/EntityActuationRule.cpp
 )
 
 set(HEADERS
@@ -87,8 +92,13 @@ ${HEADER_DIR}/GraphData.hpp
 ${HEADER_DIR}/ApplicationTheme.hpp
 ${HEADER_DIR}/Mqtt.hpp
 ${HEADER_DIR}/Controller.hpp
+${HEADER_DIR}/DataInterface.hpp
+${HEADER_DIR}/DataEntity.hpp
+${HEADER_DIR}/EntityUserInfo.hpp
+${HEADER_DIR}/EntityDevice.hpp
+${HEADER_DIR}/EntitySensingFlow.hpp
+${HEADER_DIR}/EntityActuationRule.hpp
 ${HEADER_DIR}/Version.hpp
-${HEADER_DIR}/UserInfo.hpp
 )
 
 set(RESOURCE_FILE ./resources/DeviceVirtualUI.qrc)
