@@ -76,7 +76,7 @@ Item
     {
         text: title
         anchors.horizontalCenter: parent.horizontalCenter
-        color: applicationData.Theme.FontColor
+        color: applicationData.Theme.TextPrimaryColor
         anchors.bottom: parent.bottom
     }
 
@@ -99,31 +99,6 @@ Item
             }
         }
     }
-
-    /*
-    Text
-    { // x label
-        text: xLabel
-        font.pixelSize: 0.03 * factor
-        anchors
-        {
-            topMargin: 50
-            bottom: parent.bottom;
-            horizontalCenter: plot.horizontalCenter
-        }
-        color:
-        {
-            if(applicationData.IsDarkTheme === true)
-            {
-                return "white";
-            }
-            else
-            {
-                return "black";
-            }
-        }
-    }
-    */
 
     Item
     {
