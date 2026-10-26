@@ -314,7 +314,7 @@ Page
     Label
     {
         id: errorLabel
-        anchors.bottom: deviceAddCommandRect.top
+        anchors.bottom: parent.bottom
         anchors.horizontalCenter: parent.horizontalCenter
         font.bold: true
         text: "Error"
@@ -322,30 +322,6 @@ Page
         wrapMode: "Wrap"
         anchors.topMargin: 5
         anchors.bottomMargin: 5
-    }
-
-    Rectangle
-    {
-        id: deviceAddCommandRect
-        width: availableDevicesPage.width
-        height: applicationData.Theme.BarHeight*1.25
-        radius: 5
-        color: applicationData.Theme.PanelLowerColor
-        anchors
-        {
-            bottom: parent.bottom
-            horizontalCenter: parent.horizontalCenter
-        }
-
-        CustomButton
-        {
-            text: "New Device ..."
-            anchors.right: parent.right
-            anchors.verticalCenter: parent.verticalCenter
-            height: applicationData.Theme.BarHeight
-            width:  150
-            color: applicationData.Theme.AccentBaseColor
-        }
     }
 
     Popup

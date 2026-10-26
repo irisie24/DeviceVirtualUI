@@ -66,6 +66,10 @@ ApplicationWindow
             Component.onCompleted:
             {
                 stackView.push("Dashboard.qml")
+                headerPanel.headerTitle = "Dashboard"
+                headerPanel.addIconVisible = false;
+                headerPanel.progressIndicatorVisible = false;
+                headerPanel.connectionIndicatorVisible = true;
             }
 
             Drawer
@@ -129,6 +133,10 @@ ApplicationWindow
                             applicationData.invokeSaveCurrentPage("Devices.qml")
                             stackView.pop()
                             stackView.push("Devices.qml")
+                            headerPanel.headerTitle = "Devices"
+                            headerPanel.addIconVisible = true;
+                            headerPanel.progressIndicatorVisible = false;
+                            headerPanel.connectionIndicatorVisible = true;
                             drawer.close()
                         }
 
@@ -156,6 +164,10 @@ ApplicationWindow
                             applicationData.invokeSaveCurrentPage("SensingFlows.qml")
                             stackView.pop()
                             stackView.push("SensingFlows.qml")
+                            headerPanel.headerTitle = "Sensing Flows"
+                            headerPanel.addIconVisible = true;
+                            headerPanel.progressIndicatorVisible = false;
+                            headerPanel.connectionIndicatorVisible = true;
                         }
 
                         icon
@@ -186,7 +198,10 @@ ApplicationWindow
                             drawer.close()
                             applicationData.invokeSaveCurrentPage("ActuationRules.qml")
                             stackView.pop()
-                            stackView.push("ActuationRules.qml")
+                            headerPanel.headerTitle = "Actuation Rules"
+                            headerPanel.addIconVisible = true;
+                            headerPanel.progressIndicatorVisible = false;
+                            headerPanel.connectionIndicatorVisible = true;                            stackView.push("ActuationRules.qml")
                         }
 
                         icon
@@ -217,7 +232,10 @@ ApplicationWindow
                             drawer.close()
                             applicationData.invokeSaveCurrentPage("SignalGraph.qml")
                             stackView.pop()
-                            stackView.push("SignalGraph.qml")
+                            headerPanel.headerTitle = "Signal Graph"
+                            headerPanel.addIconVisible = false;
+                            headerPanel.progressIndicatorVisible = false;
+                            headerPanel.connectionIndicatorVisible = true;                            stackView.push("SignalGraph.qml")
                         }
 
                         icon
@@ -252,7 +270,10 @@ ApplicationWindow
                             applicationData.invokeSaveCurrentPage("Settings.qml")
                             stackView.pop()
                             stackView.push("Settings.qml")
-                            drawer.close()
+                            headerPanel.headerTitle = "Settings"
+                            headerPanel.addIconVisible = true;
+                            headerPanel.progressIndicatorVisible = false;
+                            headerPanel.connectionIndicatorVisible = false;                            drawer.close()
                         }
 
                         icon
@@ -273,6 +294,10 @@ ApplicationWindow
                             stackView.pop()
                             stackView.push("Help.qml")
                             drawer.close()
+                            headerPanel.headerTitle = "Help"
+                            headerPanel.addIconVisible = true;
+                            headerPanel.progressIndicatorVisible = false;
+                            headerPanel.connectionIndicatorVisible = false;
                         }
 
                         icon
@@ -293,6 +318,10 @@ ApplicationWindow
                             stackView.pop()
                             stackView.push("Trace.qml")
                             drawer.close()
+                            headerPanel.headerTitle = "Trace"
+                            headerPanel.addIconVisible = true;
+                            headerPanel.progressIndicatorVisible = false;
+                            headerPanel.connectionIndicatorVisible = false;
                         }
 
                         icon

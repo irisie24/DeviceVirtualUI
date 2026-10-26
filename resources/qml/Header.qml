@@ -1,20 +1,18 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
-import QtQuick.Controls.Material 2.3
 import QtQuick.Layouts 1.15
 
 Rectangle
 {
     id: headerID
 
-    Material.theme: Material.Light
-    Material.accent: applicationData.Theme.AccentBaseColor
-
     height: applicationData.Theme.BarHeight
     width: parent.width
 
     property string headerTitle: ""
-    property bool isConnectionIndicatorVisible: true
+    property bool connectionIndicatorVisible: true
+    property bool progressIndicatorVisible: true
+    property bool addIconVisible: true
 
     property double fontSizeNormal: fontlabel.font.pointSize
     property double fontSizeSmall: fontlabel.font.pointSize -  2.5
@@ -30,19 +28,6 @@ Rectangle
         fontSizeBig = fontlabel.font.pointSize +  2.5
         fontSizeLarge = fontlabel.font.pointSize + 5.0
         headerTitle = "Dashboard"
-
-        //progressAnimator.visible = false
-        progressAnimator.visible = true
-
-        // if(applicationData.IsAppConnected === true && isConnectionIndicatorVisible === true && applicationData.ShowIndicator)
-        // {
-        //     connectionStatusIcon.visible = true
-        // }
-        // else
-        // {
-        //     connectionStatusIcon.visible = false
-        // }
-        connectionStatusIcon.visible = true
     }
 
     Label
@@ -60,7 +45,7 @@ Rectangle
 
         Rectangle
         {
-            id: spacer
+            id: spacer1
             anchors.verticalCenter: parent.verticalCenter
             height: titleRect.height*0.5
             width: titleRect.height*0.5
@@ -73,10 +58,9 @@ Rectangle
             height: titleRect.height*0.5
             width: titleRect.height*0.5
             anchors.verticalCenter: parent.verticalCenter
-            anchors.left: spacer.right
+            anchors.left: spacer1.right
             source : "../images/GreenDot.png"
-            //visible: isConnectionIndicatorVisible
-            visible: true
+            visible: connectionIndicatorVisible
         }
 
         Label
@@ -92,6 +76,31 @@ Rectangle
             font.pointSize: fontSizeBig
         }
 
+        RoundButton
+        {
+            height: titleRect.height*0.5
+            width: titleRect.height*0.5
+            anchors.verticalCenter: parent.verticalCenter
+            anchors.right: spacer2.left
+            visible: addIconVisible
+            Image
+            {
+                height: titleRect.height*0.5
+                width: titleRect.height*0.5
+                id: name
+                source: "../images/Add.png"
+            }
+        }
+
+        Rectangle
+        {
+            id: spacer2
+            anchors.verticalCenter: parent.verticalCenter
+            height: titleRect.height*0.5
+            width: titleRect.height*0.5
+            anchors.right: progressAnimator.left
+        }
+
         BusyIndicator
         {
             id: progressAnimator
@@ -101,21 +110,7 @@ Rectangle
             anchors.right: titleRect.right
             anchors.rightMargin: 0
             running: true
-            Material.accent: applicationData.Theme.AccentBaseColor
-            Material.theme:
-            {
-                if(applicationData.IsDarkTheme === true)
-                {
-                    return Material.Dark;
-                }
-                else
-                {
-                    return Material.Light;
-                }
-            }
-
-            //visible: isProgressStateVisible
-            visible: true
+            visible: progressIndicatorVisible
         }
     }
 
@@ -125,29 +120,27 @@ Rectangle
 
         function onProgressIndicatorsOff()
         {
-            progressPerCent.visible = false;
-            progressAnimator.visible = false;
+            progressIndicatorVisible.visible = false;
         }
 
         function onProgressIndicatorsOn()
         {
             if(applicationData.ShowIndicator)
             {
-                progressPerCent.visible = true;
-                progressAnimator.visible = true;
+                progressIndicatorVisible.visible = true;
             }
         }
 
         function onNetworkIndicatorsOff()
         {
-            connectionStatusIcon.visible = false
+            connectionIndicatorVisible.visible = false
         }
 
         function onNetworkIndicatorsOn()
         {
             if(applicationData.ShowIndicator)
             {
-                connectionStatusIcon.visible = true
+                connectionIndicatorVisible.visible = true
             }
         }
     }

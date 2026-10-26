@@ -8,7 +8,6 @@ Page
 
     Component.onCompleted:
     {
-        console.log("loaded")
     }
 
     background: Rectangle
