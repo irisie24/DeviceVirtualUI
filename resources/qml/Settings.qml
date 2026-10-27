@@ -156,9 +156,9 @@ Page
         id: swVersion
         text: "Version " + applicationData.AppVersion
         color: "darkgrey"
-        anchors.bottom: parent.bottom
+        anchors.top: dumpSelector.bottom
         anchors.horizontalCenter: parent.horizontalCenter
-        anchors.bottomMargin: 10
+        anchors.topMargin: 10
     }
 }
 

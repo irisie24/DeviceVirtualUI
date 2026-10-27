@@ -13,6 +13,9 @@
 
 #include "ApplicationTheme.hpp"
 #include "EntityUserInfo.hpp"
+#include "EntityDevice.hpp"
+#include "EntitySensingFlow.hpp"
+#include "EntityActuationRule.hpp"
 #include "Logger.hpp"
 
 typedef enum ScanMode
@@ -97,6 +100,18 @@ public:
     void Trace(QString str);
     void ClearTrace();
 
+    Q_PROPERTY (QList<Device> DeviceList READ getDeviceList WRITE setDeviceList NOTIFY DeviceListChanged)
+    void setDeviceList(QList<Device> devicelist);
+    QList<Device> getDeviceList();
+
+    Q_PROPERTY (QList<SensingFlow> SensingFlowList READ getSensingFlowList WRITE setSensingFlowList NOTIFY SensingFlowListChanged)
+    void setSensingFlowList(QList<SensingFlow> sensingFlowlist);
+    QList<SensingFlow> getSensingFlowList();
+
+    Q_PROPERTY (QList<ActuationRule> ActuationRuleList READ getActuationRuleList WRITE setActuationRuleList NOTIFY ActuationRuleListChanged)
+    void setActuationRuleList(QList<ActuationRule> actuationRulelist);
+    QList<ActuationRule> getActuationRuleList();
+
 signals:
 
     void ThemeChanged();
@@ -143,6 +158,11 @@ signals:
     void networkIndicatorsOn();
     void updateDashboard();
 
+    //Entities
+    void DeviceListChanged();
+    void SensingFlowListChanged();
+    void ActuationRuleListChanged();
+
 private slots:
     void OnAppInitializationComplete();
 
@@ -175,6 +195,11 @@ private:
 
     QDateTime sessionStart_;
     QDateTime sessionEnd_;
+
+    //Entities
+    QList<Device> devices_;
+    QList<SensingFlow> sensingFlows_;
+    QList<ActuationRule> actuationRules_;
 };
 
 class ApplicationInitializationThread : public QThread

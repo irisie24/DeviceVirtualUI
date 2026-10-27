@@ -66,7 +66,7 @@ void ApplicationInitializationThread::run()
 
     for(int x = 1; x < 6; x++)
     {
-        //QThread::sleep(1);
+
     }
 
     emit resultReady(result);
@@ -425,4 +425,55 @@ void Controller::setCurrentUser(UserInfo iuser)
 UserInfo Controller::getCurrentUser()
 {
     return currentUser_;
+}
+
+void Controller::setDeviceList(QList<Device> devicelist)
+{
+    devices_.clear();
+
+    foreach(Device d , devicelist)
+    {
+        devices_.append(d);
+    }
+
+    emit DeviceListChanged();
+}
+
+QList<Device> Controller::getDeviceList()
+{
+    return devices_;
+}
+
+void Controller::setSensingFlowList(QList<SensingFlow> sensingFlowlist)
+{
+    sensingFlows_.clear();
+
+    foreach(SensingFlow s , sensingFlowlist)
+    {
+        sensingFlows_.append(s);
+    }
+
+    emit SensingFlowListChanged();
+}
+
+QList<SensingFlow> Controller::getSensingFlowList()
+{
+    return sensingFlows_;
+}
+
+void Controller::setActuationRuleList(QList<ActuationRule> actuationRulelist)
+{
+    actuationRules_.clear();
+
+    foreach(ActuationRule a , actuationRulelist)
+    {
+        actuationRules_.append(a);
+    }
+
+    emit ActuationRuleListChanged();
+}
+
+QList<ActuationRule> Controller::getActuationRuleList()
+{
+    return actuationRules_;
 }

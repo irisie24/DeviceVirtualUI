@@ -201,7 +201,8 @@ ApplicationWindow
                             headerPanel.headerTitle = "Actuation Rules"
                             headerPanel.addIconVisible = true;
                             headerPanel.progressIndicatorVisible = false;
-                            headerPanel.connectionIndicatorVisible = true;                            stackView.push("ActuationRules.qml")
+                            headerPanel.connectionIndicatorVisible = true;
+                            stackView.push("ActuationRules.qml")
                         }
 
                         icon
@@ -235,7 +236,8 @@ ApplicationWindow
                             headerPanel.headerTitle = "Signal Graph"
                             headerPanel.addIconVisible = false;
                             headerPanel.progressIndicatorVisible = false;
-                            headerPanel.connectionIndicatorVisible = true;                            stackView.push("SignalGraph.qml")
+                            headerPanel.connectionIndicatorVisible = true;
+                            stackView.push("SignalGraph.qml")
                         }
 
                         icon
@@ -271,9 +273,10 @@ ApplicationWindow
                             stackView.pop()
                             stackView.push("Settings.qml")
                             headerPanel.headerTitle = "Settings"
-                            headerPanel.addIconVisible = true;
+                            headerPanel.addIconVisible = false;
                             headerPanel.progressIndicatorVisible = false;
-                            headerPanel.connectionIndicatorVisible = false;                            drawer.close()
+                            headerPanel.connectionIndicatorVisible = false;
+                            drawer.close()
                         }
 
                         icon
@@ -295,7 +298,7 @@ ApplicationWindow
                             stackView.push("Help.qml")
                             drawer.close()
                             headerPanel.headerTitle = "Help"
-                            headerPanel.addIconVisible = true;
+                            headerPanel.addIconVisible = false;
                             headerPanel.progressIndicatorVisible = false;
                             headerPanel.connectionIndicatorVisible = false;
                         }
@@ -319,7 +322,7 @@ ApplicationWindow
                             stackView.push("Trace.qml")
                             drawer.close()
                             headerPanel.headerTitle = "Trace"
-                            headerPanel.addIconVisible = true;
+                            headerPanel.addIconVisible = false;
                             headerPanel.progressIndicatorVisible = false;
                             headerPanel.connectionIndicatorVisible = false;
                         }
@@ -378,15 +381,15 @@ ApplicationWindow
 
                     ToolButton
                     {
-                        icon.source :
-                        if(applicationData.IsDarkTheme === true)
-                        {
-                            return "../images/MenuWhite.png";
-                        }
-                        else
-                        {
-                            return "../images/MenuBlack.png";
-                        }
+                        icon.source : "../images/Menu.png"
+                        // if(applicationData.IsDarkTheme === true)
+                        // {
+                        //     return "../images/MenuWhite.png";
+                        // }
+                        // else
+                        // {
+                        //     return "../images/MenuBlack.png";
+                        // }
 
                         icon.width:  iconWidth
                         icon.height: iconHeight

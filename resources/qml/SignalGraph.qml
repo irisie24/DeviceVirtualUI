@@ -50,7 +50,7 @@ Page
             {
                 border.width: 1
                 border.color: applicationData.Theme.AccentBaseColor
-                color: applicationData.Theme.WidgetActiveColor
+                color: applicationData.Theme.AccentHighlightColor
             }
         }
 
@@ -71,6 +71,7 @@ Page
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.topMargin: 5
 
+        theme: GraphsTheme { }
 
         // Configure the horizontal X axis
         axisX: ValueAxis

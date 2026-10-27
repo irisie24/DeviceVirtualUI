@@ -36,14 +36,16 @@
         <file>images/AnimationSplash.gif</file>
 
         <file>images/Logo.png</file>
+        <file>images/Next.png</file>
         <file>images/NextWhite.png</file>
         <file>images/NextBlack.png</file>
+        <file>images/Backspace.png</file>
         <file>images/BackspaceWhite.png</file>
         <file>images/BackspaceBlack.png</file>
+        <file>images/Menu.png</file>
         <file>images/MenuWhite.png</file>
         <file>images/MenuBlack.png</file>
         <file>images/GreenDot.png</file>
-
 
         <file>images/User.png</file>
         <file>images/Home.png</file>
