@@ -12,7 +12,7 @@ Page
 
     background: Rectangle
     {
-        color: "black"
+        color: "transparent"
     }
 
     CircularProgressBar
@@ -20,6 +20,11 @@ Page
         width: parent.width/3
         height: parent.width/3
         anchors.horizontalCenter: parent.horizontalCenter
+        size: parent.width/3
+        lineWidth: 40
+        value: 66
+        secondaryColor: applicationData.Theme.AccentBaseColor
+        primaryColor: applicationData.Theme.AccentHighlightColor
     }
 }
 

@@ -8,8 +8,6 @@ Page
 
     Component.onCompleted:
     {
-        console.log(applicationData.DeviceList.length + " devices in model for QML Component.onCompleted")
-        console.log(deviceListView.count + " devices in view for QML onDeviceAction")
     }
 
     Rectangle

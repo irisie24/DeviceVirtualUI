@@ -6,137 +6,120 @@ Page
 {
     id: availableActuationRulesPage
 
-    property variant activationRulesModel :  []
-
     Component.onCompleted:
     {
-        errorLabel.text = ""
-        activationRulesModel = applicationData.ActiveAlarms
     }
 
     Rectangle
     {
         id: background
-        width: parent.width
-        height: parent.height
-        anchors.top: parent.top
-        color: applicationData.Theme.BackgroundColor
+        anchors.fill: parent
+        color: applicationData.Theme.BaseColor
     }
 
     ListView
     {
-        id: activationRulesListView
-        width: parent.width*0.90
-        anchors.top: parent.top
-        anchors.topMargin: 10
-        anchors.bottom: errorLabel.top
-        anchors.horizontalCenter: parent.horizontalCenter
+        id: actuationRuleListView
+        anchors.fill: parent
         visible: true
-        spacing: 10
+        spacing: 5
         clip: true
-        model: activationRulesModel
-        delegate: activationRulesListDelegate
-    }
+        model: applicationData.ActuationRuleList
 
-    Component
-    {
-        id: activationRulesListDelegate
-
-        Rectangle
+        delegate: Component
         {
-            id: activationRuleItem
-            width: activationRulesListView.width
-            height: availableActuationRulesPage.width*0.1
-            radius: 5
-            color: applicationData.Theme.BackgroundColor
+            id: actuationRuleListDelegate
 
-            Image
+            Rectangle
             {
-                id: activeAlarmImgID
-                source: "../images/Warning.png"
-                width: activationRuleItem.height*0.75
-                height: activationRuleItem.height*0.75
-                anchors.verticalCenter: parent.verticalCenter
-                anchors
+                id: availableActuationRulesItem
+                width: actuationRuleListView.width
+                height: 50
+                radius: 0
+                color: applicationData.Theme.PanelUpperColor
+                border.color: applicationData.Theme.LineColor
+
+                Rectangle
                 {
-                    left: parent.left
-                    leftMargin:  30
+                    id: spacer1
+                    height: parent.height*0.95
+                    width: parent.height*0.95
+                    color: applicationData.Theme.PanelUpperColor
+                    anchors.verticalCenter: parent.verticalCenter
+                    border.width: 0
+                }
+
+                Label
+                {
+                    id: deviceId
+                    text: actuationRuleListView.model[index].RuleId
+                    anchors.verticalCenter: parent.verticalCenter
+                    anchors.left: spacer1.right
+                }
+
+                Rectangle
+                {
+                    id: spacer2
+                    height: parent.height*0.95
+                    width: parent.height*0.95
+                    color: applicationData.Theme.PanelUpperColor
+                    anchors.verticalCenter: parent.verticalCenter
+                    border.width: 0
+                    anchors.left: deviceId.right
+                }
+
+                Label
+                {
+                    id: deviceName
+                    text: actuationRuleListView.model[index].TargetDeviceName
+                    anchors.verticalCenter: parent.verticalCenter
+                    anchors.left: spacer2.right
+                }
+
+                // ----
+
+                Rectangle
+                {
+                    id: spacer3
+                    height: parent.height*0.95
+                    width: parent.height*0.95
+                    color: applicationData.Theme.PanelUpperColor
+                    anchors.verticalCenter: parent.verticalCenter
+                    anchors.right: parent.right
+                    border.width: 0
+                }
+
+                ToolButton
+                {
+                    id: cmdItem
+                    icon.source: "../images/DeviceItem.png"
+                    icon.width:  parent.height*0.5
+                    icon.height: parent.height*0.5
+                    anchors.verticalCenter: parent.verticalCenter
+                    anchors.right: spacer3.left
+                }
+
+                Rectangle
+                {
+                    id: spacer4
+                    height: parent.height*0.95
+                    width: parent.height*0.95
+                    color: applicationData.Theme.PanelUpperColor
+                    anchors.verticalCenter: parent.verticalCenter
+                    anchors.right: cmdItem.left
+                    border.width: 0
+                }
+
+                ToolButton
+                {
+                    id: cmdDelete
+                    icon.source: "../images/Delete.png"
+                    icon.width:  parent.height*0.5
+                    icon.height: parent.height*0.5
+                    anchors.verticalCenter: parent.verticalCenter
+                    anchors.right: spacer4.left
                 }
             }
-
-            Label
-            {
-                id:activeAlarmNamelbl
-                font.pointSize: headerPanel.fontSizeSmall
-                color: applicationData.Theme.FontColor
-                elide: Label.ElideRight
-                horizontalAlignment: Qt.AlignHCenter
-                verticalAlignment: Qt.AlignVCenter
-                anchors.verticalCenter: parent.verticalCenter
-                anchors
-                {
-                    left: activeAlarmImgID.right
-                    leftMargin: 30
-                }
-                text: activationRulesModel[index].AlarmName
-            }
-        }
-    }
-
-    Label
-    {
-        id: errorLabel
-        anchors.bottom: alarmCommandRect.top
-        anchors.horizontalCenter: parent.horizontalCenter
-        font.bold: true
-        text: "Error"
-        color: "red"
-        wrapMode: "Wrap"
-        anchors.topMargin: 5
-        anchors.bottomMargin: 5
-    }
-
-    Rectangle
-    {
-        id: alarmCommandRect
-        width: availableActuationRulesPage.width
-        height: availableActuationRulesPage.width*0.2
-        radius: 5
-        color: applicationData.Theme.NavigationBarColor
-
-        anchors
-        {
-            bottom: parent.bottom
-            horizontalCenter: parent.horizontalCenter
-        }
-
-        ToolButton
-        {
-            id: name
-            height: alarmCommandRect.height*0.75
-            width: alarmCommandRect.height*0.75
-            icon.source: "../images/Filter.png"
-            icon.color: "transparent"
-            icon.height: alarmCommandRect.height*0.5
-            icon.width: alarmCommandRect.height*0.5
-            anchors.horizontalCenter:alarmCommandRect.horizontalCenter
-
-            background: Rectangle
-            {
-                color: applicationData.Theme.NavigationBarColor
-            }
-        }
-
-        Label
-        {
-            text: "Configure Filters"
-            color: applicationData.Theme.TextPrimaryColor
-            height: alarmCommandRect.height*0.5
-            elide: Label.ElideRight
-            horizontalAlignment: Qt.AlignHCenter
-            verticalAlignment: Qt.AlignVCenter
-            anchors.bottom: alarmCommandRect.bottom
-            anchors.horizontalCenter:alarmCommandRect.horizontalCenter
         }
     }
 
@@ -144,15 +127,16 @@ Page
     {
         target: applicationData
 
-        function onAlarmAction()
-        {
-            activationRulesModel = applicationData.ActiveAlarms
-        }
+        // function onDeviceAction(fl)
+        // {
+        //     console.log("Device update received")
+        //     deviceListView.model = applicationData.DeviceList
+        //     console.log(deviceListView.count + " devices in QML onDeviceAction")
+        // }
 
-        function onAlarmError(str)
-        {
-            errorLabel.text = str
-        }
+        // function onDeviceMessage(fl, str)
+        // {
+        //     deviceListView.model = applicationData.DeviceList
+        // }
     }
 }
-
