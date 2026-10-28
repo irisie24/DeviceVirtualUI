@@ -30,8 +30,8 @@ public:
     Q_GADGET
 
 public:
-    QString     DeviceId_;
     QString     RuleId_;
+    QString     DeviceId_;
     int         Condition_ = Equals;         // LogicalCondition
     qint64      ValueThreshold_ = 0;
     quint64     Scale_ = 0;
@@ -43,8 +43,8 @@ public:
     QString     RuleIdIfConditionTrue_;      // jump here as second pass even if the condition was met (empty = none)
 
 public:
-    Q_PROPERTY(QString DeviceId MEMBER DeviceId_)
     Q_PROPERTY(QString RuleId MEMBER RuleId_)
+    Q_PROPERTY(QString DeviceId MEMBER DeviceId_)
     Q_PROPERTY(int Condition MEMBER Condition_)
     Q_PROPERTY(qint64 ValueThreshold MEMBER ValueThreshold_)
     Q_PROPERTY(quint64 Scale MEMBER Scale_)
@@ -60,13 +60,13 @@ public:
     {
     }
 
-    ActuationRule(QString iDeviceId, QString iRuleId, int iCondition, qint64 iValueThreshold,
+    ActuationRule(QString iRuleId, QString iDeviceId, int iCondition, qint64 iValueThreshold,
                       quint64 iScale, int iTargetType, QString iTargetDeviceName,
                       qint64 iTargetActionValue, bool iIsChained,
                       QString iRuleIdIfConditionFalse, QString iRuleIdIfConditionTrue)
     {
-        DeviceId_ = iDeviceId;
         RuleId_ = iRuleId;
+        DeviceId_ = iDeviceId;
         Condition_ = iCondition;
         ValueThreshold_ = iValueThreshold;
         Scale_ = iScale;
@@ -79,6 +79,7 @@ public:
     }
 };
 
+// Table: "ActuationRules"
 class EntityActuationRule : public DataEntity
 {
 public:

@@ -31,6 +31,12 @@ class Controller : public QObject
 public:
     explicit Controller(QGuiApplication* appPtr, QObject *parent = nullptr);
 
+    void InitializeSysten();
+    void Trace(QString str);
+    void ClearTrace();
+    void initializeDatabase();
+    void generateDashboardData();
+
     Q_INVOKABLE void invokeThemeUpdate();
     Q_INVOKABLE void invokeChangePage(int ipage);
     Q_INVOKABLE void invokeApplicationInitialization();
@@ -39,9 +45,9 @@ public:
     Q_INVOKABLE void invokeExit();
 
     Q_INVOKABLE void invokeLogin(QString pin);
-    Q_INVOKABLE void invokeChangePassword(QString consumerid, QString pass);
+    Q_INVOKABLE void invokeChangePassword(QString userid, QString pass);
 
-    Q_INVOKABLE void invokeCreateUserStage1(QString name, QString userid);
+    Q_INVOKABLE void invokeCreateUserStage1(QString userid);
     Q_INVOKABLE void invokeCreateUserStage2(QString passcode);
     Q_INVOKABLE void invokeCreateUserStage3(QString passcode);
 
@@ -96,10 +102,6 @@ public:
     void setIsDumpRxTxEnabled(bool isdumprxtxenabled);
     bool getIsDumpRxTxEnabled();
 
-    void InitializeSysten();
-    void Trace(QString str);
-    void ClearTrace();
-
     Q_PROPERTY (QList<Device> DeviceList READ getDeviceList WRITE setDeviceList NOTIFY DeviceListChanged)
     void setDeviceList(QList<Device> devicelist);
     QList<Device> getDeviceList();
@@ -141,8 +143,8 @@ signals:
     void userLoginFailed(QString reason);
 
     //Data related
-    void deviceAction();
-    void deviceMessage();
+    void deviceAction(bool fl);
+    void deviceMessage(bool fl, QString str);
 
     //User management errors
     void userNameError();
@@ -167,11 +169,9 @@ private slots:
     void OnAppInitializationComplete();
 
 private:
-    void generateDashboardData();
 
     QGuiApplication* app;
 
-    QList<UserInfo> userList_;
     QList<QString> helpStringList_;
     QString helpImageUrl_;
 
@@ -197,10 +197,13 @@ private:
     QDateTime sessionEnd_;
 
     //Entities
+    QList<UserInfo> users_;
     QList<Device> devices_;
     QList<SensingFlow> sensingFlows_;
     QList<ActuationRule> actuationRules_;
 };
+
+extern Controller* controllerPtr;
 
 class ApplicationInitializationThread : public QThread
 {

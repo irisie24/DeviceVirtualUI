@@ -13,14 +13,12 @@ public:
 public:
     bool    IsFirstLogin_ = false;
     QString UserId_;
-    QString ConsumerId_;
     QString PassCode1_;
     QString PassCode2_;
 
 public:
     Q_PROPERTY(bool IsFirstLogin MEMBER IsFirstLogin_)
     Q_PROPERTY(QString UserId MEMBER UserId_)
-    Q_PROPERTY(QString ConsumerId MEMBER ConsumerId_)
     Q_PROPERTY(QString PassCode1 MEMBER PassCode1_)
     Q_PROPERTY(QString PassCode2 MEMBER PassCode2_)
 
@@ -29,16 +27,16 @@ public:
     {
     }
 
-    UserInfo(bool iIsFirstLogin, QString iUserId, QString iConsumerId, QString iPassCode1, QString iPassCode2)
+    UserInfo(bool iIsFirstLogin, QString iUserId, QString iPassCode1, QString iPassCode2)
     {
         IsFirstLogin_ = iIsFirstLogin;
         UserId_ = iUserId;
-        ConsumerId_ = iConsumerId;
         PassCode1_ = iPassCode1;
         PassCode2_ = iPassCode2;
     }
 };
 
+// Table: "Users"
 class EntityUserInfo : public DataEntity
 {
 public:

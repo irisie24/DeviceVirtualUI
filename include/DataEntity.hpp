@@ -29,7 +29,7 @@ public:
     bool update(QString uniquekeyname, QVariant uniquevalue, QString keyname, QVariant value);
     virtual bool createTable()=0;
 
-    // Invalid QVariant when the table is empty, the query fails, or the identifier is rejected
+    // Invalid QVariant when the table is empty or the query fails
     QVariant maximumValue(QString keyname);
     QVariant maximumValue(QString keyname, QString filter, QVariant filterval);
 
@@ -38,6 +38,11 @@ public:
 protected:
     // Runs one statement with bound values (?). Values are never spliced into the SQL text.
     bool executeQuery(const QString &querystring, const QVariantList &binds = QVariantList());
+
+    // Table and column names are always emitted double-quoted so PascalCase names survive PostgreSQL's
+    // case folding. Case must match the schema exactly. Embedded quotes are doubled, so any input is safe.
+    static QString quoteIdentifier(const QString &name);
+    QString quotedTable() const;
 
     void normalizeDateString(QString &str);
     void normalizeDateString(uint32_t val, QString &str);
@@ -53,7 +58,6 @@ protected:
 
 private:
     bool runQuery(const QString &sql, const QVariantList &binds, QList<QSqlRecord> *out);
-    bool checkIdentifier(const QString &name);
 
     QString             _LastError;
 };

@@ -13,38 +13,30 @@ EntityUserInfo::~EntityUserInfo()
 
 bool EntityUserInfo::createTable()
 {
-    QString sqlString =
-        "CREATE TABLE IF NOT EXISTS _table_ ( "
-        "user_id text NOT NULL PRIMARY KEY, "
-        "consumer_id text NOT NULL, "
-        "passcode1 text NOT NULL, "
-        "passcode2 text NOT NULL, "
-        "first_login integer NOT NULL, "
-        "UNIQUE ( consumer_id ) )";
-
-    sqlString.replace("_table_", _TableName);
+    QString sqlString = QString(R"SQL(CREATE TABLE IF NOT EXISTS %1 ("UserId" TEXT NOT NULL PRIMARY KEY, "PassCode1" TEXT NOT NULL, "PassCode2" TEXT NOT NULL, "IsFirstLogin" INTEGER NOT NULL, UNIQUE ("UserId")))SQL")
+    .arg(quotedTable());
 
     return executeQuery(sqlString);
 }
 
 bool EntityUserInfo::createUserInfo(const UserInfo &rec)
 {
-    return executeQuery(
-        "insert into " + _TableName +
-        " (user_id, consumer_id, passcode1, passcode2, first_login) values (?, ?, ?, ?, ?)",
-        QVariantList() << rec.UserId_ << rec.ConsumerId_ << rec.PassCode1_ << rec.PassCode2_
-                       << (rec.IsFirstLogin_ ? 1 : 0));
+    QString sqlString = QString(R"SQL(INSERT INTO %1 ("UserId", "PassCode1", "PassCode2", "IsFirstLogin") VALUES (?, ?, ?, ?))SQL")
+    .arg(quotedTable());
+
+    return executeQuery(sqlString,
+                        QVariantList() << rec.UserId_ << rec.PassCode1_ << rec.PassCode2_
+                                       << (rec.IsFirstLogin_ ? 1 : 0));
 }
 
 UserInfo EntityUserInfo::fromRecord(const QSqlRecord &rec)
 {
     UserInfo struc;
 
-    struc.UserId_ = rec.value("user_id").toString();
-    struc.ConsumerId_ = rec.value("consumer_id").toString();
-    struc.PassCode1_ = rec.value("passcode1").toString();
-    struc.PassCode2_ = rec.value("passcode2").toString();
-    struc.IsFirstLogin_ = rec.value("first_login").toInt() != 0;
+    struc.UserId_ = rec.value("UserId").toString();
+    struc.PassCode1_ = rec.value("PassCode1").toString();
+    struc.PassCode2_ = rec.value("PassCode2").toString();
+    struc.IsFirstLogin_ = rec.value("IsFirstLogin").toInt() != 0;
 
     return struc;
 }

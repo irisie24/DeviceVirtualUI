@@ -13,59 +13,44 @@ EntityDevice::~EntityDevice()
 
 bool EntityDevice::createTable()
 {
-    QString sqlString =
-        "CREATE TABLE IF NOT EXISTS _table_ ( "
-        "device_id text NOT NULL PRIMARY KEY, "
-        "device_name text NOT NULL, "
-        "make text NOT NULL, "
-        "model text NOT NULL, "
-        "number_of_flows bigint NOT NULL, "
-        "repeat_flow_sequence boolean NOT NULL, "
-        "flow_sequence_end bigint NOT NULL, "
-        "mode integer NOT NULL, "
-        "operating_max bigint NOT NULL, "
-        "operating_min bigint NOT NULL, "
-        "latitude bigint NOT NULL, "
-        "longitude bigint NOT NULL, "
-        "altitude bigint NOT NULL, "
-        "gen_model integer NOT NULL )";
-
-    sqlString.replace("_table_", _TableName);
+    QString sqlString = QString(R"SQL(CREATE TABLE IF NOT EXISTS %1 ("DeviceId" text NOT NULL PRIMARY KEY, "UserId" text NOT NULL REFERENCES "Users"("UserId"), "DeviceName" text NOT NULL, "Make" text NOT NULL, "Model" text NOT NULL, "NumberOfFlows" bigint NOT NULL, "RepeatFlowSequence" boolean NOT NULL, "FlowSequenceEnd" bigint NOT NULL, "Mode" integer NOT NULL, "OperatingMax" bigint NOT NULL, "OperatingMin" bigint NOT NULL, "Latitude" bigint NOT NULL, "Longitude" bigint NOT NULL, "Altitude" bigint NOT NULL, "GenModel" integer NOT NULL, UNIQUE ("DeviceId")))SQL")
+    .arg(quotedTable());
 
     return executeQuery(sqlString);
 }
 
 bool EntityDevice::createDevice(const Device &rec)
 {
-    return executeQuery(
-        "insert into " + _TableName +
-        " (device_id, device_name, make, model, number_of_flows, repeat_flow_sequence, "
-        "flow_sequence_end, mode, operating_max, operating_min, latitude, longitude, "
-        "altitude, gen_model) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
-        QVariantList() << rec.DeviceId_ << rec.DeviceName_ << rec.Make_ << rec.Model_
-                       << rec.NumberOfFlows_ << rec.RepeatFlowSequence_ << rec.FlowSequenceEnd_
-                       << rec.Mode_ << rec.OperatingMax_ << rec.OperatingMin_
-                       << rec.Latitude_ << rec.Longitude_ << rec.Altitude_ << rec.GenModel_);
+    QString sqlString = QString(R"SQL(INSERT INTO %1 ("DeviceId", "UserId", "DeviceName", "Make", "Model", "NumberOfFlows", "RepeatFlowSequence", "FlowSequenceEnd", "Mode", "OperatingMax", "OperatingMin", "Latitude", "Longitude", "Altitude", "GenModel") VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?))SQL")
+    .arg(quotedTable());
+
+    return executeQuery(sqlString,
+                        QVariantList() << rec.DeviceId_ << rec.UserId_ << rec.DeviceName_ << rec.Make_
+                                       << rec.Model_ << rec.NumberOfFlows_ << rec.RepeatFlowSequence_
+                                       << rec.FlowSequenceEnd_ << rec.Mode_ << rec.OperatingMax_
+                                       << rec.OperatingMin_ << rec.Latitude_ << rec.Longitude_
+                                       << rec.Altitude_ << rec.GenModel_);
 }
 
 Device EntityDevice::fromRecord(const QSqlRecord &rec)
 {
     Device struc;
 
-    struc.DeviceId_ = rec.value("device_id").toString();
-    struc.DeviceName_ = rec.value("device_name").toString();
-    struc.Make_ = rec.value("make").toString();
-    struc.Model_ = rec.value("model").toString();
-    struc.NumberOfFlows_ = rec.value("number_of_flows").toUInt();
-    struc.RepeatFlowSequence_ = rec.value("repeat_flow_sequence").toBool();
-    struc.FlowSequenceEnd_ = rec.value("flow_sequence_end").toULongLong();
-    struc.Mode_ = rec.value("mode").toInt();
-    struc.OperatingMax_ = rec.value("operating_max").toULongLong();
-    struc.OperatingMin_ = rec.value("operating_min").toULongLong();
-    struc.Latitude_ = rec.value("latitude").toULongLong();
-    struc.Longitude_ = rec.value("longitude").toULongLong();
-    struc.Altitude_ = rec.value("altitude").toULongLong();
-    struc.GenModel_ = rec.value("gen_model").toInt();
+    struc.DeviceId_ = rec.value("DeviceId").toString();
+    struc.UserId_ = rec.value("UserId").toString();
+    struc.DeviceName_ = rec.value("DeviceName").toString();
+    struc.Make_ = rec.value("Make").toString();
+    struc.Model_ = rec.value("Model").toString();
+    struc.NumberOfFlows_ = rec.value("NumberOfFlows").toUInt();
+    struc.RepeatFlowSequence_ = rec.value("RepeatFlowSequence").toBool();
+    struc.FlowSequenceEnd_ = rec.value("FlowSequenceEnd").toULongLong();
+    struc.Mode_ = rec.value("Mode").toInt();
+    struc.OperatingMax_ = rec.value("OperatingMax").toULongLong();
+    struc.OperatingMin_ = rec.value("OperatingMin").toULongLong();
+    struc.Latitude_ = rec.value("Latitude").toULongLong();
+    struc.Longitude_ = rec.value("Longitude").toULongLong();
+    struc.Altitude_ = rec.value("Altitude").toULongLong();
+    struc.GenModel_ = rec.value("GenModel").toInt();
 
     return struc;
 }

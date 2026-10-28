@@ -151,12 +151,96 @@ Page
         }
     }
 
+    Rectangle
+    {
+        id: line4
+        width: settingsPage.width*0.9
+        height: 2
+        border.width: 1
+        anchors.top: dumpSelector.bottom
+        anchors.topMargin: applicationData.Theme.BarHeight
+        anchors.horizontalCenter: parent.horizontalCenter
+        border.color: applicationData.Theme.AccentBaseColor
+    }
+
+    Rectangle
+    {
+        id: rect1
+        width: settingsPage.width*0.9
+        height: applicationData.Theme.BarHeight*2
+        anchors.horizontalCenter: parent.horizontalCenter
+        anchors.top: line4.bottom
+
+        Label
+        {
+            id: lbl1
+            height: applicationData.Theme.BarHeight
+            width: 200
+            text: "MQTT Host IP Address"
+            anchors.verticalCenter: parent.verticalCenter
+            anchors.left: parent.left
+        }
+
+        TextField
+        {
+            id: inp1
+            height: applicationData.Theme.BarHeight
+            width: 200
+            anchors.verticalCenter: parent.verticalCenter
+            anchors.left: lbl1.right
+            maximumLength: 15
+            placeholderText: "IPv4 Address"
+        }
+    }
+
+    Rectangle
+    {
+        id: rect2
+        width: settingsPage.width*0.9
+        height: applicationData.Theme.BarHeight*2
+        anchors.horizontalCenter: parent.horizontalCenter
+        anchors.top: rect1.bottom
+
+        Label
+        {
+            id: lbl2
+            height: applicationData.Theme.BarHeight
+            width: 200
+            text: "MQTT Host Port"
+            anchors.verticalCenter: parent.verticalCenter
+            anchors.left: parent.left
+        }
+
+        TextField
+        {
+            id: inp2
+            height: applicationData.Theme.BarHeight
+            width: 200
+            anchors.verticalCenter: parent.verticalCenter
+            anchors.left: lbl2.right
+            maximumLength: 5
+            placeholderText: "Port"
+        }
+    }
+
+    Rectangle
+    {
+        id: line5
+        width: settingsPage.width*0.9
+        height: 2
+        border.width: 1
+        anchors.top: rect2.bottom
+        anchors.topMargin: applicationData.Theme.BarHeight
+        anchors.horizontalCenter: parent.horizontalCenter
+        border.color: applicationData.Theme.AccentBaseColor
+    }
+
     Label
     {
         id: swVersion
         text: "Version " + applicationData.AppVersion
         color: "darkgrey"
-        anchors.top: dumpSelector.bottom
+        anchors.top: line5.bottom
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.topMargin: 10
     }

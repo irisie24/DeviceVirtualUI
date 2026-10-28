@@ -2,7 +2,6 @@
 
 #include <QDate>
 #include <QDateTime>
-#include <QRegularExpression>
 #include <cstdio>
 
 DataEntity::DataEntity(QSqlDatabase *db, QString tabname)
@@ -21,14 +20,14 @@ void DataEntity::clear()
 
 bool DataEntity::truncate()
 {
-    return executeQuery("delete from " + _TableName);
+    return executeQuery("delete from " + quotedTable());
 }
 
 QList<QSqlRecord>* DataEntity::getAllRecords(QString str)
 {
     _RecordList.clear();
 
-    QString querystring = str.isEmpty() ? "select * from " + _TableName : str;
+    QString querystring = str.isEmpty() ? "select * from " + quotedTable() : str;
 
     return runQuery(querystring, QVariantList(), &_RecordList) ? &_RecordList : nullptr;
 }
@@ -37,13 +36,8 @@ QList<QSqlRecord>* DataEntity::getSelectedRecords(QString keyname, QVariant valu
 {
     _RecordList.clear();
 
-    if(!checkIdentifier(keyname))
-    {
-        return nullptr;
-    }
-
-    QString querystring = str.isEmpty() ? "select * from " + _TableName : str;
-    querystring += " where " + keyname + " = ?";
+    QString querystring = str.isEmpty() ? "select * from " + quotedTable() : str;
+    querystring += " where " + quoteIdentifier(keyname) + " = ?";
 
     return runQuery(querystring, QVariantList() << value, &_RecordList) ? &_RecordList : nullptr;
 }
@@ -57,23 +51,14 @@ QList<QSqlRecord>* DataEntity::getCustomRecords(QString str, const QVariantList 
 
 bool DataEntity::remove(QString keyname, QVariant value)
 {
-    if(!checkIdentifier(keyname))
-    {
-        return false;
-    }
-
-    return executeQuery("delete from " + _TableName + " where " + keyname + " = ?",
+    return executeQuery("delete from " + quotedTable() + " where " + quoteIdentifier(keyname) + " = ?",
                         QVariantList() << value);
 }
 
 bool DataEntity::update(QString uniquekeyname, QVariant uniquevalue, QString keyname, QVariant value)
 {
-    if(!checkIdentifier(uniquekeyname) || !checkIdentifier(keyname))
-    {
-        return false;
-    }
-
-    return executeQuery("update " + _TableName + " set " + keyname + " = ? where " + uniquekeyname + " = ?",
+    return executeQuery("update " + quotedTable() + " set " + quoteIdentifier(keyname) + " = ? where " +
+                            quoteIdentifier(uniquekeyname) + " = ?",
                         QVariantList() << value << uniquevalue);
 }
 
@@ -85,15 +70,9 @@ bool DataEntity::executeQuery(const QString &querystring, const QVariantList &bi
 QVariant DataEntity::maximumValue(QString keyname)
 {
     QVariant retval;
-
-    if(!checkIdentifier(keyname))
-    {
-        return retval;
-    }
-
     QList<QSqlRecord> rows;
 
-    if(runQuery("select max(" + keyname + ") from " + _TableName, QVariantList(), &rows) && !rows.isEmpty())
+    if(runQuery("select max(" + quoteIdentifier(keyname) + ") from " + quotedTable(), QVariantList(), &rows) && !rows.isEmpty())
     {
         QVariant v = rows.first().value(0);
 
@@ -109,16 +88,10 @@ QVariant DataEntity::maximumValue(QString keyname)
 QVariant DataEntity::maximumValue(QString keyname, QString filter, QVariant filterval)
 {
     QVariant retval;
-
-    if(!checkIdentifier(keyname) || !checkIdentifier(filter))
-    {
-        return retval;
-    }
-
     QList<QSqlRecord> rows;
 
-    if(runQuery("select max(" + keyname + ") from " + _TableName + " where " + filter + " = ?",
-                 QVariantList() << filterval, &rows) && !rows.isEmpty())
+    if(runQuery("select max(" + quoteIdentifier(keyname) + ") from " + quotedTable() + " where " +
+                     quoteIdentifier(filter) + " = ?", QVariantList() << filterval, &rows) && !rows.isEmpty())
     {
         QVariant v = rows.first().value(0);
 
@@ -134,6 +107,18 @@ QVariant DataEntity::maximumValue(QString keyname, QString filter, QVariant filt
 QString DataEntity::lastError() const
 {
     return _LastError;
+}
+
+QString DataEntity::quoteIdentifier(const QString &name)
+{
+    QString escaped = name;
+    escaped.replace("\"", "\"\"");
+    return "\"" + escaped + "\"";
+}
+
+QString DataEntity::quotedTable() const
+{
+    return quoteIdentifier(_TableName);
 }
 
 bool DataEntity::runQuery(const QString &sql, const QVariantList &binds, QList<QSqlRecord> *out)
@@ -201,20 +186,6 @@ bool DataEntity::runQuery(const QString &sql, const QVariantList &binds, QList<Q
         {
             out->append(query.record());
         }
-    }
-
-    return true;
-}
-
-bool DataEntity::checkIdentifier(const QString &name)
-{
-    // Column names cannot be bound, so only plain identifiers are allowed into SQL text
-    static const QRegularExpression identifier("\\A[A-Za-z_][A-Za-z0-9_]*\\z");
-
-    if(!identifier.match(name).hasMatch())
-    {
-        _LastError = "invalid identifier: " + name;
-        return false;
     }
 
     return true;

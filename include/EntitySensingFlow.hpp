@@ -28,7 +28,7 @@ public:
     Q_GADGET
 
 public:
-    qint64      FlowId_ = 0;                 // surrogate key, assigned by the database (0 = not yet stored)
+    QString     FlowId_ = 0;                 // surrogate key, assigned by the database (0 = not yet stored)
     QString     DeviceId_;
     int         Type_ = FlowUnknown;         // FlowType
     quint64     Scale_ = 0;
@@ -41,7 +41,7 @@ public:
     QString     DatasetFilename_;
 
 public:
-    Q_PROPERTY(qint64 FlowId MEMBER FlowId_)
+    Q_PROPERTY(QString FlowId MEMBER FlowId_)
     Q_PROPERTY(QString DeviceId MEMBER DeviceId_)
     Q_PROPERTY(int Type MEMBER Type_)
     Q_PROPERTY(quint64 Scale MEMBER Scale_)
@@ -58,7 +58,7 @@ public:
     {
     }
 
-    SensingFlow(qint64 iFlowId, QString iDeviceId, int iType, quint64 iScale, quint64 iDuration,
+    SensingFlow(QString iFlowId, QString iDeviceId, int iType, quint64 iScale, quint64 iDuration,
              quint64 iUnixEpochStart, quint64 iUnixEpochEnd, quint64 iMinimum, quint64 iMaximum,
              QString iUnitOfMeasurement, QString iDatasetFilename)
     {
@@ -76,11 +76,12 @@ public:
     }
 };
 
-class EntitySensingFlow : public DataEntity
+// Table: "SensingFlows"
+class EntityFlow : public DataEntity
 {
 public:
-    EntitySensingFlow(QSqlDatabase* db, QString tabname);
-    virtual ~EntitySensingFlow();
+    EntityFlow(QSqlDatabase* db, QString tabname);
+    virtual ~EntityFlow();
     bool createTable();
     bool createFlow(const SensingFlow &rec);
     bool allFlow(QList<SensingFlow> &list);
@@ -89,6 +90,6 @@ private:
     static SensingFlow fromRecord(const QSqlRecord &rec);
 };
 
-extern EntitySensingFlow* flowEntityPtr;
+extern EntityFlow* flowEntityPtr;
 
 #endif

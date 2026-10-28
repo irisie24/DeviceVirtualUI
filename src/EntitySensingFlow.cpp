@@ -1,72 +1,55 @@
 #include "EntitySensingFlow.hpp"
 
-EntitySensingFlow* flowEntityPtr = nullptr;
+EntityFlow* flowEntityPtr = nullptr;
 
-EntitySensingFlow::EntitySensingFlow(QSqlDatabase *db, QString tabname) : DataEntity(db, tabname)
+EntityFlow::EntityFlow(QSqlDatabase *db, QString tabname) : DataEntity(db, tabname)
 {
     flowEntityPtr = this;
 }
 
-EntitySensingFlow::~EntitySensingFlow()
+EntityFlow::~EntityFlow()
 {
 }
 
-bool EntitySensingFlow::createTable()
+bool EntityFlow::createTable()
 {
-    QString sqlString =
-        "CREATE TABLE IF NOT EXISTS _table_ ( "
-        "flow_id bigserial NOT NULL PRIMARY KEY, "
-        "device_id text NOT NULL REFERENCES device(device_id) ON DELETE CASCADE, "
-        "flow_type integer NOT NULL, "
-        "scale bigint NOT NULL, "
-        "duration bigint NOT NULL, "
-        "unix_epoch_start bigint NOT NULL, "
-        "unix_epoch_end bigint NOT NULL, "
-        "minimum bigint NOT NULL, "
-        "maximum bigint NOT NULL, "
-        "unit_of_measurement varchar(16) NOT NULL, "
-        "dataset_filename text NOT NULL DEFAULT '' )";
+    QString sqlString = QString(R"SQL(CREATE TABLE IF NOT EXISTS %1 ("FlowId" TEXT NOT NULL PRIMARY KEY, "DeviceId" TEXT NOT NULL REFERENCES "Devices"("DeviceId") ON DELETE CASCADE, "FlowType" INTEGER NOT NULL, "Scale" BIGINT NOT NULL, "Duration" BIGINT NOT NULL, "UnixEpochStart" BIGINT NOT NULL, "UnixEpochEnd" BIGINT NOT NULL, "Minimum" BIGINT NOT NULL, "Maximum" BIGINT NOT NULL, "UnitOfMeasurement" VARCHAR(16) NOT NULL, "DatasetFilename" TEXT NOT NULL DEFAULT ''))SQL")
+    .arg(quotedTable());
 
-    sqlString.replace("_table_", _TableName);
-
-    QString indexString = "CREATE INDEX IF NOT EXISTS idx__table__device_id ON _table_ (device_id)";
-    indexString.replace("_table_", _TableName);
-
-    return executeQuery(sqlString) && executeQuery(indexString);
+    return executeQuery(sqlString);
 }
 
-bool EntitySensingFlow::createFlow(const SensingFlow &rec)
+bool EntityFlow::createFlow(const SensingFlow &rec)
 {
-    return executeQuery(
-        "insert into " + _TableName +
-        " (device_id, flow_type, scale, duration, unix_epoch_start, unix_epoch_end, "
-        "minimum, maximum, unit_of_measurement, dataset_filename) "
-        "values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
-        QVariantList() << rec.DeviceId_ << rec.Type_ << rec.Scale_ << rec.Duration_
-                       << rec.UnixEpochStart_ << rec.UnixEpochEnd_ << rec.Minimum_ << rec.Maximum_
-                       << rec.UnitOfMeasurement_ << rec.DatasetFilename_);
+    QString sqlString = QString(R"SQL(INSERT INTO %1 ("DeviceId", "FlowType", "Scale", "Duration", "UnixEpochStart", "UnixEpochEnd", "Minimum", "Maximum", "UnitOfMeasurement", "DatasetFilename") VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?))SQL")
+    .arg(quotedTable());
+
+    return executeQuery(sqlString,
+                        QVariantList() << rec.DeviceId_ << rec.Type_ << rec.Scale_ << rec.Duration_
+                                       << rec.UnixEpochStart_ << rec.UnixEpochEnd_ << rec.Minimum_
+                                       << rec.Maximum_ << rec.UnitOfMeasurement_ << rec.DatasetFilename_);
 }
 
-SensingFlow EntitySensingFlow::fromRecord(const QSqlRecord &rec)
+SensingFlow EntityFlow::fromRecord(const QSqlRecord &rec)
 {
     SensingFlow struc;
 
-    struc.FlowId_ = rec.value("flow_id").toLongLong();
-    struc.DeviceId_ = rec.value("device_id").toString();
-    struc.Type_ = rec.value("flow_type").toInt();
-    struc.Scale_ = rec.value("scale").toULongLong();
-    struc.Duration_ = rec.value("duration").toULongLong();
-    struc.UnixEpochStart_ = rec.value("unix_epoch_start").toULongLong();
-    struc.UnixEpochEnd_ = rec.value("unix_epoch_end").toULongLong();
-    struc.Minimum_ = rec.value("minimum").toULongLong();
-    struc.Maximum_ = rec.value("maximum").toULongLong();
-    struc.UnitOfMeasurement_ = rec.value("unit_of_measurement").toString();
-    struc.DatasetFilename_ = rec.value("dataset_filename").toString();
+    struc.FlowId_ = rec.value("FlowId").toString();
+    struc.DeviceId_ = rec.value("DeviceId").toString();
+    struc.Type_ = rec.value("FlowType").toInt();
+    struc.Scale_ = rec.value("Scale").toULongLong();
+    struc.Duration_ = rec.value("Duration").toULongLong();
+    struc.UnixEpochStart_ = rec.value("UnixEpochStart").toULongLong();
+    struc.UnixEpochEnd_ = rec.value("UnixEpochEnd").toULongLong();
+    struc.Minimum_ = rec.value("Minimum").toULongLong();
+    struc.Maximum_ = rec.value("Maximum").toULongLong();
+    struc.UnitOfMeasurement_ = rec.value("UnitOfMeasurement").toString();
+    struc.DatasetFilename_ = rec.value("DatasetFilename").toString();
 
     return struc;
 }
 
-bool EntitySensingFlow::allFlow(QList<SensingFlow> &list)
+bool EntityFlow::allFlow(QList<SensingFlow> &list)
 {
     QList<QSqlRecord> *reclist = getAllRecords();
 
@@ -83,7 +66,7 @@ bool EntitySensingFlow::allFlow(QList<SensingFlow> &list)
     return true;
 }
 
-bool EntitySensingFlow::selectedFlow(QList<SensingFlow> &list, QString keyname, QVariant value)
+bool EntityFlow::selectedFlow(QList<SensingFlow> &list, QString keyname, QVariant value)
 {
     QList<QSqlRecord> *reclist = getSelectedRecords(keyname, value);
 

@@ -3,12 +3,14 @@
 #include "Version.hpp"
 
 //New User creation interpage variables
-QString newUName, newConsId, newPassCode1, newPassCode2;
+QString newUserId, newPassCode1, newPassCode2;
 //New User creation interpage variables
 
 //Reset passcode interpage variables
-QString resetConsId, resetPassCode1, resetPassCode2;
+QString resetUserId, resetPassCode1, resetPassCode2;
 //Reset passcode interpage variables
+
+Controller* controllerPtr = nullptr;
 
 Controller::Controller(QGuiApplication *appPtr, QObject *parent)
     : QObject(parent)
@@ -39,6 +41,8 @@ Controller::Controller(QGuiApplication *appPtr, QObject *parent)
         isDarkTheme_ = true;
         theme_.EnableDarkMode();
     }
+
+    controllerPtr = this;
 }
 
 void Controller::InitializeSysten()
@@ -64,10 +68,7 @@ void ApplicationInitializationThread::run()
 {
     QString result;
 
-    for(int x = 1; x < 6; x++)
-    {
-
-    }
+    controllerPtr->initializeDatabase();
 
     emit resultReady(result);
 }
@@ -75,6 +76,9 @@ void ApplicationInitializationThread::run()
 void Controller::OnAppInitializationComplete()
 {
     emit initializationComplete();
+    emit DeviceListChanged();
+    emit deviceAction(true);
+    qDebug() << devices_.size() << " devices in C++";
 }
 
 void Controller::setIsAppConnected(bool isappconnected)
@@ -193,7 +197,7 @@ void Controller::setIsFirstRun(bool isfirstrun)
 
 bool Controller::getIsFirstRun()
 {
-    if(userList_.count() < 1)
+    if(users_.count() < 1)
     {
         is_first_run_ = true;
     }
@@ -263,7 +267,7 @@ void Controller::invokeLogin(QString pin)
     isTraceEnabled_ = false;
     emit IsTraceEnabledChanged();
 
-    foreach (auto user, userList_)
+    foreach (auto user, users_)
     {
         if(user.PassCode1_ == pin)
         {
@@ -284,13 +288,13 @@ void Controller::invokeLogin(QString pin)
     }
 }
 
-void Controller::invokeChangePassword(QString consumerid, QString pass)
+void Controller::invokeChangePassword(QString userid, QString pass)
 {
     bool found = true;
     UserInfo u;
-    foreach (auto user, userList_)
+    foreach (auto user, users_)
     {
-        if(user.ConsumerId_ == consumerid)
+        if(user.UserId_ == userid)
         {
             found = true;
             u = user;
@@ -302,23 +306,23 @@ void Controller::invokeChangePassword(QString consumerid, QString pass)
 
     emit CurrentUserChanged();
 
-    userList_.clear();
+    users_.clear();
 
     emit pageAction(9);
 }
 
-void Controller::invokeCreateUserStage1(QString name, QString userid)
+void Controller::invokeCreateUserStage1(QString userid)
 {
     bool errorset =  false;
 
-    if(name.length() > 16 || name.length() < 4)
+    if(userid.length() > 16 || userid.length() < 4)
     {
         errorset = true;
     }
 
-    for(int x = 0; x < name.length(); x++)
+    for(int x = 0; x < userid.length(); x++)
     {
-        char ch = name.at(x).toLatin1();
+        char ch = userid.at(x).toLatin1();
 
         if(isalnum(ch) == 0)
         {
@@ -336,8 +340,7 @@ void Controller::invokeCreateUserStage1(QString name, QString userid)
         return;
     }
 
-    newUName = name;
-    newConsId = userid;
+    newUserId = userid;
 
     emit pageAction(11);
 }
@@ -359,14 +362,13 @@ void Controller::invokeCreateUserStage3(QString passcode)
     }
 
     UserInfo u1;
-    u1.ConsumerId_ = newConsId;
     u1.IsFirstLogin_ = true;
     u1.PassCode1_ = newPassCode1;
     u1.PassCode2_ = newPassCode2;
-    u1.UserId_ = newUName;
+    u1.UserId_ = newUserId;
 
 
-    userList_.clear();
+    users_.clear();
 
     currentUser_ = u1;
     emit CurrentUserChanged();
@@ -376,7 +378,7 @@ void Controller::invokeCreateUserStage3(QString passcode)
 
 void Controller::invokeResetPasscodeStage1(QString userid)
 {
-    resetConsId = userid;
+    resetUserId = userid;
     emit pageAction(15);
 }
 
@@ -396,20 +398,20 @@ void Controller::invokeResetPasscodeStage3(QString passcode)
         return;
     }
 
-    foreach (auto user, userList_)
+    foreach (auto user, users_)
     {
-        if(user.ConsumerId_ == resetConsId)
+        if(user.UserId_ == resetUserId)
         {
             break;
         }
     }
 
 
-    userList_.clear();
+    users_.clear();
 
-    if(userList_.count() > 0)
+    if(users_.count() > 0)
     {
-        currentUser_ = userList_.at(0);
+        currentUser_ = users_.at(0);
     }
 
     emit CurrentUserChanged();
@@ -476,4 +478,44 @@ void Controller::setActuationRuleList(QList<ActuationRule> actuationRulelist)
 QList<ActuationRule> Controller::getActuationRuleList()
 {
     return actuationRules_;
+}
+
+void Controller::initializeDatabase()
+{
+    users_.append(UserInfo(true, "USER001", "1234", "1234"));
+
+    devices_.append(Device("DEV-001", "USER001", "Boiler Temperature Probe", "Acme", "T-100", 3, true, 1900000000ULL, SimulationModeRealtime, 15000ULL, 0ULL, 2257ULL, 8836ULL, 1100ULL, MarkovTwoState));
+    devices_.append(Device("DEV-002", "USER001", "Line Pressure Transducer", "Borealis", "P-250", 5, false, 1895000000ULL,SimulationModeDataset, 40000ULL, 500ULL, 1908ULL, 7288ULL, 1400ULL, Bernoulli));
+    devices_.append(Device("DEV-003", "USER001", "Coolant Flow Meter", "Cirrus", "F-30", 2, true, 1910000000ULL, SimulationModeRealtime, 9000ULL, 100ULL, 1308ULL, 8027ULL, 600ULL, PoissonOnset));
+    devices_.append(Device("DEV-004", "USER001", "Motor Vibration Sensor", "Delta", "V-8", 4, true, 1905000000ULL, SimulationModeDataset, 2000ULL, 0ULL, 2861ULL, 7721ULL, 21600ULL, HiddenMarkov));
+    devices_.append(Device("DEV-005", "USER001", "Tank Level Switch", "Eon", "L-5", 1, false, 1890000000ULL, SimulationModeRealtime, 1000ULL, 0ULL, 1297ULL, 7759ULL, 92000ULL, DeterministicPattern));
+
+    sensingFlows_.append(SensingFlow("10001", "DEV-001", 1, 100, 300, 1790812800, 1793404800, 18, 35, "degC", "Boiler.csv"));
+    sensingFlows_.append(SensingFlow("10002", "DEV-001", 2, 100, 300, 1790812800, 1793404800, 18, 35, "degC", "Boiler.csv"));
+    sensingFlows_.append(SensingFlow("10003", "DEV-002", 1, 100, 300, 1790812800, 1793404800, 18, 35, "degC", "Boiler.csv"));
+    sensingFlows_.append(SensingFlow("10004", "DEV-002", 2, 100, 300, 1790812800, 1793404800, 18, 35, "degC", "Boiler.csv"));
+    sensingFlows_.append(SensingFlow("10005", "DEV-003", 1, 100, 300, 1790812800, 1793404800, 18, 35, "degC", "Boiler.csv"));
+    sensingFlows_.append(SensingFlow("10006", "DEV-003", 2, 100, 300, 1790812800, 1793404800, 18, 35, "degC", "Boiler.csv"));
+    sensingFlows_.append(SensingFlow("10007", "DEV-004", 1, 100, 300, 1790812800, 1793404800, 18, 35, "degC", "Boiler.csv"));
+    sensingFlows_.append(SensingFlow("10008", "DEV-004", 2, 100, 300, 1790812800, 1793404800, 18, 35, "degC", "Boiler.csv"));
+    sensingFlows_.append(SensingFlow("10009", "DEV-005", 1, 100, 300, 1790812800, 1793404800, 18, 35, "degC", "Boiler.csv"));
+    sensingFlows_.append(SensingFlow("10010", "DEV-005", 2, 100, 300, 1790812800, 1793404800, 18, 35, "degC", "Boiler.csv"));
+
+    actuationRules_.append(ActuationRule("10001", "DEV-001",  3, 40, 100, 3, "/dev/USB0", 5, false, "",""));
+    actuationRules_.append(ActuationRule("10002", "DEV-001",  3, 40, 100, 4, "/dev/USB0", 7, false, "",""));
+    actuationRules_.append(ActuationRule("10003", "DEV-002",  3, 40, 100, 3, "/dev/USB0", 5, false, "",""));
+    actuationRules_.append(ActuationRule("10004", "DEV-002",  3, 40, 100, 4, "/dev/USB0", 7, false, "",""));
+    actuationRules_.append(ActuationRule("10005", "DEV-003",  3, 40, 100, 3, "/dev/USB0", 5, false, "",""));
+    actuationRules_.append(ActuationRule("10006", "DEV-003",  3, 40, 100, 4, "/dev/USB0", 7, false, "",""));
+    actuationRules_.append(ActuationRule("10007", "DEV-004",  3, 40, 100, 3, "/dev/USB0", 5, false, "",""));
+    actuationRules_.append(ActuationRule("10008", "DEV-004",  3, 40, 100, 4, "/dev/USB0", 7, false, "",""));
+    actuationRules_.append(ActuationRule("10009", "DEV-005",  3, 40, 100, 3, "/dev/USB0", 5, false, "",""));
+    actuationRules_.append(ActuationRule("10010", "DEV-005",  3, 40, 100, 4, "/dev/USB0", 7, false, "",""));
+
+
+}
+
+void Controller::generateDashboardData()
+{
+
 }

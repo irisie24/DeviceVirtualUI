@@ -33,6 +33,7 @@ public:
 
 public:
     QString     DeviceId_;
+    QString     UserId_;                     // owning user, references Users
     QString     DeviceName_;
     QString     Make_;
     QString     Model_;
@@ -49,6 +50,7 @@ public:
 
 public:
     Q_PROPERTY(QString DeviceId MEMBER DeviceId_)
+    Q_PROPERTY(QString UserId MEMBER UserId_)
     Q_PROPERTY(QString DeviceName MEMBER DeviceName_)
     Q_PROPERTY(QString Make MEMBER Make_)
     Q_PROPERTY(QString Model MEMBER Model_)
@@ -68,12 +70,13 @@ public:
     {
     }
 
-    Device(QString iDeviceId, QString iDeviceName, QString iMake, QString iModel,
+    Device(QString iDeviceId, QString iUserId, QString iDeviceName, QString iMake, QString iModel,
                quint32 iNumberOfFlows, bool iRepeatFlowSequence, quint64 iFlowSequenceEnd,
                int iMode, quint64 iOperatingMax, quint64 iOperatingMin,
                quint64 iLatitude, quint64 iLongitude, quint64 iAltitude, int iGenModel)
     {
         DeviceId_ = iDeviceId;
+        UserId_ = iUserId;
         DeviceName_ = iDeviceName;
         Make_ = iMake;
         Model_ = iModel;
@@ -90,6 +93,7 @@ public:
     }
 };
 
+// Table: "Devices"
 class EntityDevice : public DataEntity
 {
 public:
