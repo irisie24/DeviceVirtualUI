@@ -45,6 +45,7 @@ SensingFlow EntityFlow::fromRecord(const QSqlRecord &rec)
     struc.Maximum_ = rec.value("Maximum").toULongLong();
     struc.UnitOfMeasurement_ = rec.value("UnitOfMeasurement").toString();
     struc.DatasetFilename_ = rec.value("DatasetFilename").toString();
+    struc.FlowTypeName_ = getFlowTypeName((FlowType)struc.Type_);
 
     return struc;
 }
@@ -81,4 +82,23 @@ bool EntityFlow::selectedFlow(QList<SensingFlow> &list, QString keyname, QVarian
     }
 
     return true;
+}
+
+QString getFlowTypeName(FlowType ftype)
+{
+    switch(ftype)
+    {
+    case BaseLine:      return "Baseline";
+    case Normal:        return "Normal";
+    case Spikes:        return "Spikes";
+    case Dead:          return "Dead";
+    case Stuck:         return "Stuck";
+    case Offset:        return "Offset";
+    case Noise:         return "Noise";
+    case DriftLinear:   return "Drift (Linear)";
+    case DriftStepped:  return "Drift (Stepped)";
+    case FlowUnknown:   return "Unknown";
+    }
+
+    return "Unknown";   // out-of-range value, e.g. a bad int read back from Type_
 }

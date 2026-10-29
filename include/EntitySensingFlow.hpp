@@ -20,6 +20,8 @@ typedef enum FlowType
     FlowUnknown
 }FlowType;
 
+QString getFlowTypeName(FlowType ftype);
+
 // Definition of a sensing simulation flow
 // Uses the simulation mode and generational model from the device parent
 class SensingFlow
@@ -39,6 +41,7 @@ public:
     quint64     Maximum_ = 0;
     QString     UnitOfMeasurement_;          // max 16 characters
     QString     DatasetFilename_;
+    QString     FlowTypeName_;
 
 public:
     Q_PROPERTY(QString FlowId MEMBER FlowId_)
@@ -52,6 +55,7 @@ public:
     Q_PROPERTY(quint64 Maximum MEMBER Maximum_)
     Q_PROPERTY(QString UnitOfMeasurement MEMBER UnitOfMeasurement_)
     Q_PROPERTY(QString DatasetFilename MEMBER DatasetFilename_)
+    Q_PROPERTY(QString FlowTypeName MEMBER FlowTypeName_)
 
 public:
     SensingFlow()
@@ -73,6 +77,7 @@ public:
         Maximum_ = iMaximum;
         UnitOfMeasurement_ = iUnitOfMeasurement;
         DatasetFilename_ = iDatasetFilename;
+        FlowTypeName_ = getFlowTypeName((FlowType)iType);
     }
 };
 

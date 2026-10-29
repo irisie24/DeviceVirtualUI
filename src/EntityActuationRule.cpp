@@ -46,6 +46,7 @@ ActuationRule EntityActuationRule::fromRecord(const QSqlRecord &rec)
     struc.IsChained_ = rec.value("IsChained").toBool();
     struc.RuleIdIfConditionFalse_ = rec.value("RuleIdIfConditionFalse").toString();
     struc.RuleIdIfConditionTrue_ = rec.value("RuleIdIfConditionTrue").toString();
+    struc.ConditionName_ = getLogicalConditionName(LogicalCondition(struc.Condition_));
 
     return struc;
 }
@@ -82,4 +83,19 @@ bool EntityActuationRule::selectedActuationRule(QList<ActuationRule> &list, QStr
     }
 
     return true;
+}
+
+QString getLogicalConditionName(LogicalCondition logic)
+{
+    switch(logic)
+    {
+    case Equals:            return "Equals";
+    case EqualsOrLesser:    return "Equals Or Lesser";
+    case EqualsOrGreater:   return "Equals Or Greater";
+    case Lesser:            return "Lesser";
+    case Greater:           return "Greater";
+    case Unknown:           return "Unknown";
+    }
+
+    return "Unknown";   // out-of-range value, e.g. a bad int read back from Type_
 }

@@ -58,6 +58,7 @@ public:
     Q_INVOKABLE void invokeSaveCurrentPage(QString page);
     Q_INVOKABLE QString invokeRetreiveLastPage();
     Q_INVOKABLE void invokeLoadHelpStrings(uint32_t index);
+    Q_INVOKABLE void invokeAddCommand();
 
     Q_PROPERTY (QString AppVersion READ getAppVersion NOTIFY AppVersionChanged)
     QString getAppVersion();
@@ -145,6 +146,13 @@ signals:
     //Data related
     void deviceAction(bool fl);
     void deviceMessage(bool fl, QString str);
+    void deviceAdd();
+    void sensingFlowAction(bool fl);
+    void sensingFlowMessage(bool fl, QString str);
+    void sensingFlowAdd();
+    void actuationRuleAction(bool fl);
+    void actuationRuleMessage(bool fl, QString str);
+    void actuationRuleAdd();
 
     //User management errors
     void userNameError();

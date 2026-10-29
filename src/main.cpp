@@ -13,8 +13,6 @@ int main(int argc, char *argv[])
     
     const QUrl urlMain("qrc:///qml/MainWindow.qml");
 
-    qRegisterMetaType<QList<Device>>("QList<Device>");
-
     QQmlApplicationEngine engine;
 
     QObject::connect(&engine, &QQmlApplicationEngine::objectCreationFailed, &app, []()

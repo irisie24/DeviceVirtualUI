@@ -146,6 +146,27 @@ void Controller::invokeLoadHelpStrings(uint32_t index)
     emit HelpStringsChanged();
 }
 
+void Controller::invokeAddCommand()
+{
+    if(lastPage_ == "Devices.qml")
+    {
+        emit deviceAdd();
+        return;
+    }
+
+    if(lastPage_ == "SensingFlows.qml")
+    {
+        emit sensingFlowAdd();
+        return;
+    }
+
+    if(lastPage_ == "ActuationRules.qml")
+    {
+        emit actuationRuleAdd();
+        return;
+    }
+}
+
 bool Controller::getIsDemoMode()
 {
     return isDemoMode_;
@@ -501,16 +522,16 @@ void Controller::initializeDatabase()
     sensingFlows_.append(SensingFlow("10009", "DEV-005", 1, 100, 300, 1790812800, 1793404800, 18, 35, "degC", "Boiler.csv"));
     sensingFlows_.append(SensingFlow("10010", "DEV-005", 2, 100, 300, 1790812800, 1793404800, 18, 35, "degC", "Boiler.csv"));
 
-    actuationRules_.append(ActuationRule("10001", "DEV-001",  3, 40, 100, 3, "/dev/USB0", 5, false, "",""));
-    actuationRules_.append(ActuationRule("10002", "DEV-001",  3, 40, 100, 4, "/dev/USB0", 7, false, "",""));
-    actuationRules_.append(ActuationRule("10003", "DEV-002",  3, 40, 100, 3, "/dev/USB0", 5, false, "",""));
-    actuationRules_.append(ActuationRule("10004", "DEV-002",  3, 40, 100, 4, "/dev/USB0", 7, false, "",""));
-    actuationRules_.append(ActuationRule("10005", "DEV-003",  3, 40, 100, 3, "/dev/USB0", 5, false, "",""));
-    actuationRules_.append(ActuationRule("10006", "DEV-003",  3, 40, 100, 4, "/dev/USB0", 7, false, "",""));
-    actuationRules_.append(ActuationRule("10007", "DEV-004",  3, 40, 100, 3, "/dev/USB0", 5, false, "",""));
-    actuationRules_.append(ActuationRule("10008", "DEV-004",  3, 40, 100, 4, "/dev/USB0", 7, false, "",""));
-    actuationRules_.append(ActuationRule("10009", "DEV-005",  3, 40, 100, 3, "/dev/USB0", 5, false, "",""));
-    actuationRules_.append(ActuationRule("10010", "DEV-005",  3, 40, 100, 4, "/dev/USB0", 7, false, "",""));
+    actuationRules_.append(ActuationRule("10001", "DEV-001",  1, 40, 100, 3, "/dev/USB0", 5, false, "",""));
+    actuationRules_.append(ActuationRule("10002", "DEV-001",  2, 40, 100, 4, "/dev/USB0", 7, false, "",""));
+    actuationRules_.append(ActuationRule("10003", "DEV-002",  1, 40, 100, 3, "/dev/USB0", 5, false, "",""));
+    actuationRules_.append(ActuationRule("10004", "DEV-002",  2, 40, 100, 4, "/dev/USB0", 7, false, "",""));
+    actuationRules_.append(ActuationRule("10005", "DEV-003",  1, 40, 100, 3, "/dev/USB0", 5, false, "",""));
+    actuationRules_.append(ActuationRule("10006", "DEV-003",  2, 40, 100, 4, "/dev/USB0", 7, false, "",""));
+    actuationRules_.append(ActuationRule("10007", "DEV-004",  1, 40, 100, 3, "/dev/USB0", 5, false, "",""));
+    actuationRules_.append(ActuationRule("10008", "DEV-004",  2, 40, 100, 4, "/dev/USB0", 7, false, "",""));
+    actuationRules_.append(ActuationRule("10009", "DEV-005",  1, 40, 100, 3, "/dev/USB0", 5, false, "",""));
+    actuationRules_.append(ActuationRule("10010", "DEV-005",  2, 40, 100, 4, "/dev/USB0", 7, false, "",""));
 
 
 }

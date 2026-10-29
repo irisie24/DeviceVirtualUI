@@ -90,6 +90,11 @@ Rectangle
                 id: name
                 source: "../images/Add.png"
             }
+
+            onClicked:
+            {
+                applicationData.invokeAddCommand();
+            }
         }
 
         Rectangle

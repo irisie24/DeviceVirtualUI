@@ -11,7 +11,8 @@ typedef enum LogicalCondition
     EqualsOrLesser,
     EqualsOrGreater,
     Lesser,
-    Greater
+    Greater,
+    Unknown
 }LogicalCondition;
 
 typedef enum PhysicalTarget
@@ -22,6 +23,8 @@ typedef enum PhysicalTarget
     UART,
     BLE
 }PhysicalTarget;
+
+QString getLogicalConditionName(LogicalCondition logic);
 
 // Actuation rule fires when logical condition is satisfied by the threshold value parameter
 class ActuationRule
@@ -41,6 +44,7 @@ public:
     bool        IsChained_ = false;          // chained to next or another rule
     QString     RuleIdIfConditionFalse_;     // jump here if the condition was not met (empty = none)
     QString     RuleIdIfConditionTrue_;      // jump here as second pass even if the condition was met (empty = none)
+    QString     ConditionName_;      // jump here as second pass even if the condition was met (empty = none)
 
 public:
     Q_PROPERTY(QString RuleId MEMBER RuleId_)
@@ -54,6 +58,7 @@ public:
     Q_PROPERTY(bool IsChained MEMBER IsChained_)
     Q_PROPERTY(QString RuleIdIfConditionFalse MEMBER RuleIdIfConditionFalse_)
     Q_PROPERTY(QString RuleIdIfConditionTrue MEMBER RuleIdIfConditionTrue_)
+    Q_PROPERTY(QString ConditionName MEMBER ConditionName_)
 
 public:
     ActuationRule()
@@ -76,6 +81,7 @@ public:
         IsChained_ = iIsChained;
         RuleIdIfConditionFalse_ = iRuleIdIfConditionFalse;
         RuleIdIfConditionTrue_ = iRuleIdIfConditionTrue;
+        ConditionName_ = getLogicalConditionName(LogicalCondition(iCondition));
     }
 };
 
