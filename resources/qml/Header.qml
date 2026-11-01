@@ -14,19 +14,8 @@ Rectangle
     property bool progressIndicatorVisible: true
     property bool addIconVisible: true
 
-    property double fontSizeNormal: fontlabel.font.pointSize
-    property double fontSizeSmall: fontlabel.font.pointSize -  2.5
-    property double fontSizeTiny: fontlabel.font.pointSize - 5.0
-    property double fontSizeBig: fontlabel.font.pointSize +  2.5
-    property double fontSizeLarge: fontlabel.font.pointSize + 5.0
-
     Component.onCompleted:
     {
-        fontSizeNormal = fontlabel.font.pointSize
-        fontSizeSmall = fontlabel.font.pointSize -  2.5
-        fontSizeTiny = fontlabel.font.pointSize - 5.0
-        fontSizeBig = fontlabel.font.pointSize +  2.5
-        fontSizeLarge = fontlabel.font.pointSize + 5.0
         headerTitle = "Dashboard"
     }
 
@@ -63,6 +52,15 @@ Rectangle
             visible: connectionIndicatorVisible
         }
 
+        Rectangle
+        {
+            id: spacer2
+            anchors.verticalCenter: parent.verticalCenter
+            height: titleRect.height*0.5
+            width: titleRect.height*0.5
+            anchors.left: connectionStatusIcon.right
+        }
+
         Label
         {
             text: headerTitle
@@ -72,8 +70,7 @@ Rectangle
             horizontalAlignment: Qt.AlignHCenter
             verticalAlignment: Qt.AlignVCenter
             anchors.verticalCenter: parent.verticalCenter
-            anchors.horizontalCenter: parent.horizontalCenter
-            font.pointSize: fontSizeBig
+            anchors.left: spacer2.right
         }
 
         RoundButton
@@ -81,7 +78,7 @@ Rectangle
             height: titleRect.height*0.5
             width: titleRect.height*0.5
             anchors.verticalCenter: parent.verticalCenter
-            anchors.right: spacer2.left
+            anchors.right: spacer3.left
             visible: addIconVisible
             Image
             {
@@ -99,7 +96,7 @@ Rectangle
 
         Rectangle
         {
-            id: spacer2
+            id: spacer3
             anchors.verticalCenter: parent.verticalCenter
             height: titleRect.height*0.5
             width: titleRect.height*0.5

@@ -63,6 +63,8 @@ ApplicationWindow
                     applicationData.invokeSaveCurrentPage("Dashboard.qml")
                     stackView.pop()
                     stackView.push("Dashboard.qml")
+                    headerPanel.addIconVisible = false
+                    headerPanel.progressIndicatorVisible = false;
                 }
 
                 icon
@@ -310,7 +312,6 @@ ApplicationWindow
                 width: parent.width
                 onClicked:
                 {
-                    isClosing = true;
                     drawer.close();
                     applicationData.invokeExit();
                 }
@@ -360,6 +361,14 @@ ApplicationWindow
                 icon.source: "../images/Home.png"
                 icon.width:  iconWidth
                 icon.height: iconHeight
+                onClicked:
+                {
+                    stackView.pop()
+                    applicationData.invokeSaveCurrentPage("Dashboard.qml")
+                    stackView.push("Dashboard.qml")
+                    headerPanel.addIconVisible = false
+                    headerPanel.progressIndicatorVisible = false;
+                }
             }
 
             // spacer to push bottom items down
@@ -375,7 +384,6 @@ ApplicationWindow
                 icon.height: iconHeight
                 onClicked:
                 {
-                    isClosing = true;
                     drawer.close();
                     applicationData.invokeExit();
                 }
@@ -411,6 +419,8 @@ ApplicationWindow
             stackView.pop()
             applicationData.invokeSaveCurrentPage("Dashboard.qml")
             stackView.push("Dashboard.qml")
+            headerPanel.addIconVisible = false
+            headerPanel.progressIndicatorVisible = false;
         }
 
         function onOperationCancelled()
@@ -418,6 +428,8 @@ ApplicationWindow
             stackView.pop()
             applicationData.invokeSaveCurrentPage("Dashboard.qml")
             stackView.push("Dashboard.qml")
+            headerPanel.addIconVisible = false
+            headerPanel.progressIndicatorVisible = false;
         }
 
         function onUserLoginSucceeded()
@@ -425,6 +437,8 @@ ApplicationWindow
             stackView.pop();
             applicationData.invokeSaveCurrentPage("Dashboard.qml")
             stackView.push("Dashboard.qml");
+            headerPanel.addIconVisible = false
+            headerPanel.progressIndicatorVisible = false;
         }
 
         function onPageAction(pg)
@@ -432,6 +446,24 @@ ApplicationWindow
             stackView.pop();
             applicationData.invokeSaveCurrentPage(pg)
             stackView.push(pg);
+
+            if((pg) === "AddDevice.qml")
+            {
+                headerPanel.headerTitle = "New Device"
+                headerPanel.addIconVisible = false
+            }
+
+            if((pg) === "AddSensingFlow.qml")
+            {
+                headerPanel.headerTitle = "New Sensing Flow"
+                headerPanel.addIconVisible = false
+            }
+
+            if((pg) === "AddActuationRule.qml")
+            {
+                headerPanel.headerTitle = "New Activation Rule"
+                headerPanel.addIconVisible = false
+            }
         }
     }
 }

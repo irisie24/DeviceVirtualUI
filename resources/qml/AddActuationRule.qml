@@ -42,8 +42,8 @@ Page
             Label { text: "Flow Type" }  TextEdit { text: "" }
             Label { text: "Scale" }  TextEdit { text: "" }
             Label { text: "Duration" }  TextEdit { text: "" }
-            Label { text: "Flow Start" }  ToolButton { text: "" }
-            Label { text: "Flow End" }  ToolButton { text: "" }
+            Label { text: "Flow Start" }  ToolButton { icon.source: "../images/Calendar.png"; height: 32; width:32  }
+            Label { text: "Flow End" }  ToolButton { icon.source: "../images/Calendar.png"; height: 32; width:32  }
             Label { text: "Simulation Maximum" }  TextEdit { text: "" }
             Label { text: "Simulation Minimum" }  TextEdit { text: "" }
             Label { text: "Unit of Measurement" } TextEdit { text: "" }

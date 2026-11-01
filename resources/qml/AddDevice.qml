@@ -43,7 +43,7 @@ Page
             Label { text: "Model" }  TextEdit { text: "" }
             Label { text: "Simulation Flows" }  TextEdit { text: "" }
             Label { text: "Flows Repeatable" }  CheckBox { text: "" }
-            Label { text: "Flow Sequence End" }  ToolButton { text: "" }
+            Label { text: "Flow Sequence End" }  ToolButton { icon.source: "../images/Calendar.png"; height: 32; width:32  }
             Label { text: "Simulation Mode" }  TextEdit { text: "" }
             Label { text: "Operating Maximum" }  TextEdit { text: "" }
             Label { text: "Operating Minimum" }  TextEdit { text: "" }
