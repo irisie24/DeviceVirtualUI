@@ -1,160 +1,98 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
-import QtQuick.Controls.Material 2.3
-import QtQuick.Layouts 1.3
+import QtQuick.Layouts 1.15
 
 Page
 {
-    id: alarmsSettingsPage
+    id: addActuationRulePage
 
-    Material.theme: Material.Light
-    Material.accent: applicationData.Theme.AccentColor
-
-    property variant alarmFilterModel :  []
-
-
-    Component.onCompleted:
+    contentItem: Rectangle
     {
-        alarmFilterModel = applicationData.AlarmFilter
-    }
+        id: frame
+        color: applicationData.Theme.PanelUpperColor
+        anchors.fill: parent
+        border.color: applicationData.Theme.LineColor
 
-    Rectangle
-    {
-        id: background
-        width: parent.width
-        height: parent.height - headerPanel.height
-        anchors.top: headerPanel.bottom
-        color: applicationData.Theme.BackgroundColor
-    }
-
-    Header
-    {
-        id:headerPanel
-        headerTitle: "Alarm Filters"
-        isMenuButtonVisible: true
-        isConnectionIndicatorVisible: false
-        isMeterNameVisible: false
-        isSyncDateVisible: false
-    }
-
-    ListView
-    {
-        id: alarmSettingsListView
-        width: parent.width*0.90
-        anchors.top:headerPanel.bottom
-        anchors.topMargin: 10
-        anchors.bottom: btnRect.top
-        anchors.horizontalCenter: parent.horizontalCenter
-        visible: true
-        spacing: 10
-        clip: true
-        model: alarmFilterModel
-        delegate: alarmSettingsListDelegate
-    }
-
-    Component
-    {
-        id: alarmSettingsListDelegate
-
-        Rectangle
+        Text
         {
-            id: availableAlarmSettingsItemID
-            width: alarmSettingsListView.width
-            height: alarmsSettingsPage.width*0.1
-            radius: 5
-            color: applicationData.Theme.ControlColor
-
-            CheckBox
-            {
-                id:checkBoxId
-                anchors.verticalCenter: parent.verticalCenter
-                anchors.left: availableAlarmSettingsItemID.left
-                anchors.leftMargin: 30
-                checked: alarmFilterModel[index].IsSet
-                Material.accent: applicationData.Theme.AccentColor
-                Material.theme:
-                {
-                    if(applicationData.IsDarkTheme === true)
-                    {
-                        return Material.Dark;
-                    }
-                    else
-                    {
-                        return Material.Light;
-                    }
-                }
-                onCheckedChanged:
-                {
-                    applicationData.invokeUpdateAlarmFilterState(index, checkState)
-                }
-            }
-
-            Label
-            {
-                id:activeAlarmNamelbl
-                font.pointSize: headerPanel.fontSizeSmall
-                color: applicationData.Theme.FontColor
-                elide: Label.ElideRight
-                verticalAlignment: Qt.AlignVCenter
-                anchors.verticalCenter: parent.verticalCenter
-                anchors.left: checkBoxId.right
-                anchors.leftMargin: 30
-                text: alarmFilterModel[index].AlarmName
-            }
+            id: entityDetailsText
+            text: "Device Details"
+            font.bold: true
+            color: applicationData.Theme.TextPrimaryColor
+            wrapMode: "Wrap"
+            width: addActuationRulePage.width*0.9
+            anchors.right: parent.right
+            anchors.top: parent.top
+            anchors.topMargin: applicationData.Theme.BarHeight/2
         }
-    }
-
-    Rectangle
-    {
-        id: btnRect
-        width: alarmsSettingsPage.width
-        height: alarmsSettingsPage.width*0.2
-        anchors.bottom: parent.bottom
-        anchors.topMargin: 10
-        anchors.bottomMargin: 10
-        anchors.rightMargin: 0
-        anchors.right: parent.right
-        color: applicationData.Theme.NavigationBarColor
 
         Grid
         {
-            id: grid
-            rows: 1
-            columns: 3
-            spacing: 10
+            id: entityDetailsGridDlg
+            rows: 8
+            columns: 4
+            width: addActuationRulePage.width*0.9
             anchors.right: parent.right
-            anchors.verticalCenter: parent.verticalCenter
+            anchors.top: entityDetailsText.bottom
+            anchors.topMargin: applicationData.Theme.BarHeight/2
+            spacing: 10
+
+            Label { text: "Device Id" }
+            Label { text: "Flow Id" }  TextEdit { text: "" }
+            Label { text: "Flow Type" }  TextEdit { text: "" }
+            Label { text: "Scale" }  TextEdit { text: "" }
+            Label { text: "Duration" }  TextEdit { text: "" }
+            Label { text: "Flow Start" }  ToolButton { text: "" }
+            Label { text: "Flow End" }  ToolButton { text: "" }
+            Label { text: "Simulation Maximum" }  TextEdit { text: "" }
+            Label { text: "Simulation Minimum" }  TextEdit { text: "" }
+            Label { text: "Unit of Measurement" } TextEdit { text: "" }
+            Label { text: "Dataset Filename" }  TextEdit { text: "" }
+
+            Label { text: "Device Id" }  TextEdit { text: "" }
+            Label { text: "Rule Id" }  TextEdit { text: "" }
+            Label { text: "Condition" }  ComboBox { }
+            Label { text: "Activation Threshold" }  TextEdit { text: "" }
+            Label { text: "Scale" }  TextEdit { text: "" }
+            Label { text: "Target Type" }  ComboBox { }
+            Label { text: "Target I/O Device" }  TextEdit { text: "" }
+            Label { text: "Target Activation Value" }  TextEdit { text: "" }
+            Label { text: "Is Chained" }  CheckBox { text: "" }
+            Label { text: "Rule if condition fails" }  TextEdit { text: "" }
+            Label { text: "Rule if condition suceeds" }  TextEdit { text: "" }
+
+
+        }
+
+        Rectangle
+        {
+            width: addActuationRulePage.width
+            height: applicationData.Theme.BarHeight*2
+            anchors.bottom: frame.bottom
+            color: applicationData.Theme.PanelUpperColor
+            anchors.topMargin: applicationData.Theme.BarHeight/2
 
             CustomButton
             {
-                id:btnCancel
-                height: alarmsSettingsPage.width*0.125
-                width: (alarmsSettingsPage.width*0.2)*2
-                text: "Cancel"
-                isDefault: false
-                accentColor: applicationData.Theme.AccentColor
-                onClicked:
-                {
-                    applicationData.invokeReloadAlarmFilters();
-                    applicationData.invokeChangePage(3)
-                }
-            }
-
-            CustomButton
-            {
-                id:btnAdd
-                height: alarmsSettingsPage.width*0.125
-                width: (alarmsSettingsPage.width*0.2)*2
-                text: "OK"
+                id:btnEntityDetailsYes
+                width: addActuationRulePage.width*0.33
+                height: applicationData.Theme.BarHeight
+                text: "Save"
                 isDefault: true
-                accentColor: applicationData.Theme.AccentColor
+                accentColor: applicationData.Theme.AccentBaseColor
+                anchors.right: parent.right
+                anchors.verticalCenter: parent.verticalCenter
+                anchors.rightMargin: applicationData.Theme.BarHeight/2
                 onClicked:
                 {
-                    applicationData.invokeApplyAlarmFilters();
-                    applicationData.invokeChangePage(3)
                 }
             }
         }
     }
-}
 
+
+    Connections
+    {
+        target: applicationData
+    }
+}

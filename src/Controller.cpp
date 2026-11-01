@@ -151,6 +151,16 @@ void Controller::invokeAddCommand()
     {
         emit pageAction("AddDevice.qml");
     }
+
+    if(lastPage_ == "SensingFlows.qml")
+    {
+        emit pageAction("AddSensingFlow.qml");
+    }
+
+    if(lastPage_ == "ActuationRules.qml")
+    {
+        emit pageAction("AddActuationRule.qml");
+    }
 }
 
 bool Controller::getIsDemoMode()
