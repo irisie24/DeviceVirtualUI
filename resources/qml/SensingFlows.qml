@@ -6,8 +6,7 @@ Page
 {
     id: availableSensingFlowsPage
 
-    property string selectedSensingFlowName : ""
-    property string selectedSensingFlowId : ""
+    property int selectedIndex : 0
 
     Component.onCompleted:
     {
@@ -102,6 +101,7 @@ Page
                     anchors.right: spacer3.left
                     onClicked:
                     {
+                        selectedIndex = index
                         entityDetails.open()
                     }
                 }
@@ -128,8 +128,7 @@ Page
 
                     onClicked:
                     {
-                        selectedSensingFlowName = sensingFlowListView.model[index].FlowTypeName
-                        selectedSensingFlowId = sensingFlowListView.model[index].FlowId
+                        selectedIndex = index
                         confirm.open()
                     }
                 }
@@ -159,7 +158,7 @@ Page
             Text
             {
                 id: confirmText
-                text: "Do you want to remove the sensing flow type " + selectedSensingFlowName + " ?"
+                text: "Do you want to remove the sensing flow type " + sensingFlowListView.model[selectedIndex].FlowTypeName + " ?"
                 color: applicationData.Theme.TextPrimaryColor
                 wrapMode: "Wrap"
                 width: confirm.width*0.9
@@ -212,9 +211,9 @@ Page
     {
         id: entityDetails
         visible: false
-        width: availableSensingFlowsPage.width*0.5
+        width: availableSensingFlowsPage.width*0.75
         height: availableSensingFlowsPage.height
-        x: availableSensingFlowsPage.width*0.5
+        x: (availableSensingFlowsPage.width - availableSensingFlowsPage.width*0.75)
         y: 0
         padding: 0
         modal: true
@@ -223,6 +222,7 @@ Page
 
         contentItem: Rectangle
         {
+            id: frame
             color: applicationData.Theme.PanelUpperColor
             anchors.fill: parent
             border.color: applicationData.Theme.LineColor
@@ -230,46 +230,59 @@ Page
             Text
             {
                 id: entityDetailsText
-                text: "Under Development"
+                text: "Device Details"
+                font.bold: true
                 color: applicationData.Theme.TextPrimaryColor
                 wrapMode: "Wrap"
-                width: confirm.width*0.9
-                anchors.centerIn: parent
+                width: entityDetails.width*0.9
+                anchors.right: parent.right
+                anchors.top: parent.top
+                anchors.topMargin: applicationData.Theme.BarHeight/2
             }
 
             Grid
             {
                 id: entityDetailsGridDlg
-                rows: 1
-                columns: 2
-                anchors.bottom: parent.bottom
-                anchors.bottomMargin: 10
-                anchors.rightMargin: 10
+                rows: 8
+                columns: 4
+                width: entityDetails.width*0.9
                 anchors.right: parent.right
+                anchors.top: entityDetailsText.bottom
+                anchors.topMargin: applicationData.Theme.BarHeight/2
                 spacing: 10
 
-                CustomButton
-                {
-                    id:btnEntityDetailsNo
-                    width: confirm.width*0.33
-                    height: applicationData.Theme.BarHeight
-                    text: "No"
-                    isDefault: false
-                    accentColor: applicationData.Theme.AccentBaseColor
-                    onClicked:
-                    {
-                        entityDetails.close();
-                    }
-                }
+                Label { text: "Device Id" }  Label { text: sensingFlowListView.model[selectedIndex].DeviceId }
+                Label { text: "Flow Id" }  Label { text: sensingFlowListView.model[selectedIndex].FlowId }
+                Label { text: "Flow Type" }  Label { text: sensingFlowListView.model[selectedIndex].FlowTypeName }
+                Label { text: "Scale" }  Label { text: sensingFlowListView.model[selectedIndex].Scale }
+                Label { text: "Duration" }  Label { text: sensingFlowListView.model[selectedIndex].Duration }
+                Label { text: "Flow Start" }  Label { text: sensingFlowListView.model[selectedIndex].UnixEpochStartStr }
+                Label { text: "Flow End" }  Label { text: sensingFlowListView.model[selectedIndex].UnixEpochEndStr }
+                Label { text: "Simulation Maximum" }  Label { text: sensingFlowListView.model[selectedIndex].Maximum }
+                Label { text: "Simulation Minimum" }  Label { text: sensingFlowListView.model[selectedIndex].Minimum }
+                Label { text: "Unit of Measurement" }  Label { text: sensingFlowListView.model[selectedIndex].UnitOfMeasurement }
+                Label { text: "Dataset Filename" }  Label { text: sensingFlowListView.model[selectedIndex].DatasetFilename }
+            }
+
+            Rectangle
+            {
+                width: entityDetails.width
+                height: applicationData.Theme.BarHeight*2
+                anchors.bottom: frame.bottom
+                color: applicationData.Theme.PanelUpperColor
+                anchors.topMargin: applicationData.Theme.BarHeight/2
 
                 CustomButton
                 {
                     id:btnEntityDetailsYes
-                    width: confirm.width*0.33
+                    width: entityDetails.width*0.33
                     height: applicationData.Theme.BarHeight
-                    text: "Yes"
+                    text: "Close"
                     isDefault: true
                     accentColor: applicationData.Theme.AccentBaseColor
+                    anchors.right: parent.right
+                    anchors.verticalCenter: parent.verticalCenter
+                    anchors.rightMargin: applicationData.Theme.BarHeight/2
                     onClicked:
                     {
                         entityDetails.close()
@@ -291,12 +304,6 @@ Page
 
         function onSensingFlowMessage(fl, str)
         {
-        }
-
-        function onSensingFlowAdd()
-        {
-            console.log("SensingFlow add received")
-            entityDetails.open()
         }
     }
 }

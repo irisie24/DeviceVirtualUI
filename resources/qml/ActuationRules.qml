@@ -6,8 +6,7 @@ Page
 {
     id: availableActuationRulesPage
 
-    property string selectedActivationRuleName : ""
-    property string selectedActivationRuleId : ""
+    property int selectedIndex : 0
 
     Component.onCompleted:
     {
@@ -102,6 +101,7 @@ Page
                     anchors.right: spacer3.left
                     onClicked:
                     {
+                        selectedIndex = index
                         entityDetails.open()
                     }
                 }
@@ -128,8 +128,7 @@ Page
 
                     onClicked:
                     {
-                        selectedActivationRuleName = actuationRuleListView.model[index].ConditionName
-                        selectedActivationRuleId = actuationRuleListView.model[index].RuleId
+                        selectedIndex = index
                         confirm.open()
                     }
                 }
@@ -159,7 +158,7 @@ Page
             Text
             {
                 id: confirmText
-                text: "Do you want to remove the actuation rule for " + selectedActivationRuleName + " ?"
+                text: "Do you want to remove the actuation rule for " + actuationRuleListView.model[selectedIndex].ConditionName + " ?"
                 color: applicationData.Theme.TextPrimaryColor
                 wrapMode: "Wrap"
                 width: confirm.width*0.9
@@ -212,9 +211,9 @@ Page
     {
         id: entityDetails
         visible: false
-        width: availableActuationRulesPage.width*0.5
+        width: availableActuationRulesPage.width*0.75
         height: availableActuationRulesPage.height
-        x: availableActuationRulesPage.width*0.5
+        x: (availableActuationRulesPage.width - availableActuationRulesPage.width*0.75)
         y: 0
         padding: 0
         modal: true
@@ -223,6 +222,7 @@ Page
 
         contentItem: Rectangle
         {
+            id: frame
             color: applicationData.Theme.PanelUpperColor
             anchors.fill: parent
             border.color: applicationData.Theme.LineColor
@@ -230,46 +230,59 @@ Page
             Text
             {
                 id: entityDetailsText
-                text: "Under Development"
+                text: "Device Details"
+                font.bold: true
                 color: applicationData.Theme.TextPrimaryColor
                 wrapMode: "Wrap"
-                width: confirm.width*0.9
-                anchors.centerIn: parent
+                width: entityDetails.width*0.9
+                anchors.right: parent.right
+                anchors.top: parent.top
+                anchors.topMargin: applicationData.Theme.BarHeight/2
             }
 
             Grid
             {
                 id: entityDetailsGridDlg
-                rows: 1
-                columns: 2
-                anchors.bottom: parent.bottom
-                anchors.bottomMargin: 10
-                anchors.rightMargin: 10
+                rows: 8
+                columns: 4
+                width: entityDetails.width*0.9
                 anchors.right: parent.right
+                anchors.top: entityDetailsText.bottom
+                anchors.topMargin: applicationData.Theme.BarHeight/2
                 spacing: 10
 
-                CustomButton
-                {
-                    id:btnEntityDetailsNo
-                    width: confirm.width*0.33
-                    height: applicationData.Theme.BarHeight
-                    text: "No"
-                    isDefault: false
-                    accentColor: applicationData.Theme.AccentBaseColor
-                    onClicked:
-                    {
-                        entityDetails.close();
-                    }
-                }
+                Label { text: "Device Id" }  Label { text: actuationRuleListView.model[selectedIndex].DeviceId }
+                Label { text: "Rule Id" }  Label { text: actuationRuleListView.model[selectedIndex].RuleId }
+                Label { text: "Condition" }  Label { text: actuationRuleListView.model[selectedIndex].ConditionName }
+                Label { text: "Activation Threshold" }  Label { text: actuationRuleListView.model[selectedIndex].ValueThreshold }
+                Label { text: "Scale" }  Label { text: actuationRuleListView.model[selectedIndex].Scale }
+                Label { text: "Target Type" }  Label { text: actuationRuleListView.model[selectedIndex].TargetTypeStr }
+                Label { text: "Target I/O Device" }  Label { text: actuationRuleListView.model[selectedIndex].TargetDeviceName }
+                Label { text: "Target Activation Value" }  Label { text: actuationRuleListView.model[selectedIndex].TargetActionValue }
+                Label { text: "Is Chained" }  Label { text: actuationRuleListView.model[selectedIndex].IsChained }
+                Label { text: "Rule if condition fails" }  Label { text: actuationRuleListView.model[selectedIndex].RuleIdIfConditionFalse }
+                Label { text: "Rule if condition suceeds" }  Label { text: actuationRuleListView.model[selectedIndex].RuleIdIfConditionTrue }
+            }
+
+            Rectangle
+            {
+                width: entityDetails.width
+                height: applicationData.Theme.BarHeight*2
+                anchors.bottom: frame.bottom
+                color: applicationData.Theme.PanelUpperColor
+                anchors.topMargin: applicationData.Theme.BarHeight/2
 
                 CustomButton
                 {
                     id:btnEntityDetailsYes
-                    width: confirm.width*0.33
+                    width: entityDetails.width*0.33
                     height: applicationData.Theme.BarHeight
-                    text: "Yes"
+                    text: "Close"
                     isDefault: true
                     accentColor: applicationData.Theme.AccentBaseColor
+                    anchors.right: parent.right
+                    anchors.verticalCenter: parent.verticalCenter
+                    anchors.rightMargin: applicationData.Theme.BarHeight/2
                     onClicked:
                     {
                         entityDetails.close()
@@ -292,12 +305,5 @@ Page
         function onActuationRuleMessage(fl, str)
         {
         }
-
-        function onActuationRuleAdd()
-        {
-            console.log("ActuationRule add received")
-            entityDetails.open()
-        }
-
     }
 }

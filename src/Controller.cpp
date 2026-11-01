@@ -78,7 +78,6 @@ void Controller::OnAppInitializationComplete()
     emit initializationComplete();
     emit DeviceListChanged();
     emit deviceAction(true);
-    qDebug() << devices_.size() << " devices in C++";
 }
 
 void Controller::setIsAppConnected(bool isappconnected)
@@ -110,7 +109,7 @@ QString  Controller::getAppSyncTime()
 
 void Controller::invokeChangePage(int ipage)
 {
-    emit pageAction(ipage);
+    //emit pageAction(ipage);
 }
 
 void Controller::invokeThemeUpdate()
@@ -150,20 +149,7 @@ void Controller::invokeAddCommand()
 {
     if(lastPage_ == "Devices.qml")
     {
-        emit deviceAdd();
-        return;
-    }
-
-    if(lastPage_ == "SensingFlows.qml")
-    {
-        emit sensingFlowAdd();
-        return;
-    }
-
-    if(lastPage_ == "ActuationRules.qml")
-    {
-        emit actuationRuleAdd();
-        return;
+        emit pageAction("AddDevice.qml");
     }
 }
 
@@ -329,7 +315,7 @@ void Controller::invokeChangePassword(QString userid, QString pass)
 
     users_.clear();
 
-    emit pageAction(9);
+    emit pageAction("Login.qml");
 }
 
 void Controller::invokeCreateUserStage1(QString userid)
@@ -363,13 +349,13 @@ void Controller::invokeCreateUserStage1(QString userid)
 
     newUserId = userid;
 
-    emit pageAction(11);
+    emit pageAction("CreateUserStage2.qml");
 }
 
 void Controller::invokeCreateUserStage2(QString passcode)
 {
     newPassCode1 = passcode;
-    emit pageAction(12);
+    emit pageAction("CreateUserStage3.qml");
 }
 
 void Controller::invokeCreateUserStage3(QString passcode)
@@ -394,19 +380,19 @@ void Controller::invokeCreateUserStage3(QString passcode)
     currentUser_ = u1;
     emit CurrentUserChanged();
 
-    emit pageAction(9);
+    emit pageAction("Login.qml");
 }
 
 void Controller::invokeResetPasscodeStage1(QString userid)
 {
     resetUserId = userid;
-    emit pageAction(15);
+    emit pageAction("ResetPasscodeStage2.qml");
 }
 
 void Controller::invokeResetPasscodeStage2(QString passcode)
 {
     resetPassCode1 = passcode;
-    emit pageAction(16);
+    emit pageAction("ResetPasscodeStage3.qml");
 }
 
 void Controller::invokeResetPasscodeStage3(QString passcode)
@@ -436,7 +422,7 @@ void Controller::invokeResetPasscodeStage3(QString passcode)
     }
 
     emit CurrentUserChanged();
-    emit pageAction(9);
+    emit pageAction("Login.qml");
 }
 
 void Controller::setCurrentUser(UserInfo iuser)
@@ -505,11 +491,11 @@ void Controller::initializeDatabase()
 {
     users_.append(UserInfo(true, "USER001", "1234", "1234"));
 
-    devices_.append(Device("DEV-001", "USER001", "Boiler Temperature Probe", "Acme", "T-100", 3, true, 1900000000ULL, SimulationModeRealtime, 15000ULL, 0ULL, 2257ULL, 8836ULL, 1100ULL, MarkovTwoState));
-    devices_.append(Device("DEV-002", "USER001", "Line Pressure Transducer", "Borealis", "P-250", 5, false, 1895000000ULL,SimulationModeDataset, 40000ULL, 500ULL, 1908ULL, 7288ULL, 1400ULL, Bernoulli));
-    devices_.append(Device("DEV-003", "USER001", "Coolant Flow Meter", "Cirrus", "F-30", 2, true, 1910000000ULL, SimulationModeRealtime, 9000ULL, 100ULL, 1308ULL, 8027ULL, 600ULL, PoissonOnset));
-    devices_.append(Device("DEV-004", "USER001", "Motor Vibration Sensor", "Delta", "V-8", 4, true, 1905000000ULL, SimulationModeDataset, 2000ULL, 0ULL, 2861ULL, 7721ULL, 21600ULL, HiddenMarkov));
-    devices_.append(Device("DEV-005", "USER001", "Tank Level Switch", "Eon", "L-5", 1, false, 1890000000ULL, SimulationModeRealtime, 1000ULL, 0ULL, 1297ULL, 7759ULL, 92000ULL, DeterministicPattern));
+    devices_.append(Device("DEV-001", "USER001", "Boiler Temperature Probe", "Acme", "T-100", 3, true, 1900000000ULL, SimulationModeRealtime, 15000ULL, 0ULL, 2257ULL, 8836ULL, 1100ULL, MarkovTwoState, "degC", 10));
+    devices_.append(Device("DEV-002", "USER001", "Line Pressure Transducer", "Borealis", "P-250", 5, false, 1895000000ULL,SimulationModeDataset, 40000ULL, 500ULL, 1908ULL, 7288ULL, 1400ULL, Bernoulli, "bar", 10));
+    devices_.append(Device("DEV-003", "USER001", "Coolant Flow Meter", "Cirrus", "F-30", 2, true, 1910000000ULL, SimulationModeRealtime, 9000ULL, 100ULL, 1308ULL, 8027ULL, 600ULL, PoissonOnset, "cusec", 10));
+    devices_.append(Device("DEV-004", "USER001", "Motor Vibration Sensor", "Delta", "V-8", 4, true, 1905000000ULL, SimulationModeDataset, 2000ULL, 0ULL, 2861ULL, 7721ULL, 21600ULL, HiddenMarkov, "khz", 10));
+    devices_.append(Device("DEV-005", "USER001", "Tank Level Switch", "Eon", "L-5", 1, false, 1890000000ULL, SimulationModeRealtime, 1000ULL, 0ULL, 1297ULL, 7759ULL, 92000ULL, DeterministicPattern, "cm", 10));
 
     sensingFlows_.append(SensingFlow("10001", "DEV-001", 1, 100, 300, 1790812800, 1793404800, 18, 35, "degC", "Boiler.csv"));
     sensingFlows_.append(SensingFlow("10002", "DEV-001", 2, 100, 300, 1790812800, 1793404800, 18, 35, "degC", "Boiler.csv"));
@@ -522,16 +508,16 @@ void Controller::initializeDatabase()
     sensingFlows_.append(SensingFlow("10009", "DEV-005", 1, 100, 300, 1790812800, 1793404800, 18, 35, "degC", "Boiler.csv"));
     sensingFlows_.append(SensingFlow("10010", "DEV-005", 2, 100, 300, 1790812800, 1793404800, 18, 35, "degC", "Boiler.csv"));
 
-    actuationRules_.append(ActuationRule("10001", "DEV-001",  1, 40, 100, 3, "/dev/USB0", 5, false, "",""));
-    actuationRules_.append(ActuationRule("10002", "DEV-001",  2, 40, 100, 4, "/dev/USB0", 7, false, "",""));
-    actuationRules_.append(ActuationRule("10003", "DEV-002",  1, 40, 100, 3, "/dev/USB0", 5, false, "",""));
-    actuationRules_.append(ActuationRule("10004", "DEV-002",  2, 40, 100, 4, "/dev/USB0", 7, false, "",""));
-    actuationRules_.append(ActuationRule("10005", "DEV-003",  1, 40, 100, 3, "/dev/USB0", 5, false, "",""));
-    actuationRules_.append(ActuationRule("10006", "DEV-003",  2, 40, 100, 4, "/dev/USB0", 7, false, "",""));
-    actuationRules_.append(ActuationRule("10007", "DEV-004",  1, 40, 100, 3, "/dev/USB0", 5, false, "",""));
-    actuationRules_.append(ActuationRule("10008", "DEV-004",  2, 40, 100, 4, "/dev/USB0", 7, false, "",""));
-    actuationRules_.append(ActuationRule("10009", "DEV-005",  1, 40, 100, 3, "/dev/USB0", 5, false, "",""));
-    actuationRules_.append(ActuationRule("10010", "DEV-005",  2, 40, 100, 4, "/dev/USB0", 7, false, "",""));
+    actuationRules_.append(ActuationRule("10001", "DEV-001",  1, 40, 100, 3, "/dev/USB0", 5, false, " "," "));
+    actuationRules_.append(ActuationRule("10002", "DEV-001",  2, 40, 100, 4, "/dev/USB0", 7, false, " "," "));
+    actuationRules_.append(ActuationRule("10003", "DEV-002",  1, 40, 100, 3, "/dev/USB0", 5, false, " "," "));
+    actuationRules_.append(ActuationRule("10004", "DEV-002",  2, 40, 100, 4, "/dev/USB0", 7, false, " "," "));
+    actuationRules_.append(ActuationRule("10005", "DEV-003",  1, 40, 100, 3, "/dev/USB0", 5, false, " "," "));
+    actuationRules_.append(ActuationRule("10006", "DEV-003",  2, 40, 100, 4, "/dev/USB0", 7, false, " "," "));
+    actuationRules_.append(ActuationRule("10007", "DEV-004",  1, 40, 100, 3, "/dev/USB0", 5, false, " "," "));
+    actuationRules_.append(ActuationRule("10008", "DEV-004",  2, 40, 100, 4, "/dev/USB0", 7, false, " "," "));
+    actuationRules_.append(ActuationRule("10009", "DEV-005",  1, 40, 100, 3, "/dev/USB0", 5, false, " "," "));
+    actuationRules_.append(ActuationRule("10010", "DEV-005",  2, 40, 100, 4, "/dev/USB0", 7, false, " "," "));
 
 
 }

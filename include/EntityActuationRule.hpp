@@ -25,6 +25,7 @@ typedef enum PhysicalTarget
 }PhysicalTarget;
 
 QString getLogicalConditionName(LogicalCondition logic);
+QString getPhysicalTargetName(PhysicalTarget target);
 
 // Actuation rule fires when logical condition is satisfied by the threshold value parameter
 class ActuationRule
@@ -45,6 +46,7 @@ public:
     QString     RuleIdIfConditionFalse_;     // jump here if the condition was not met (empty = none)
     QString     RuleIdIfConditionTrue_;      // jump here as second pass even if the condition was met (empty = none)
     QString     ConditionName_;      // jump here as second pass even if the condition was met (empty = none)
+    QString     TargetTypeStr_;      // jump here as second pass even if the condition was met (empty = none)
 
 public:
     Q_PROPERTY(QString RuleId MEMBER RuleId_)
@@ -59,6 +61,7 @@ public:
     Q_PROPERTY(QString RuleIdIfConditionFalse MEMBER RuleIdIfConditionFalse_)
     Q_PROPERTY(QString RuleIdIfConditionTrue MEMBER RuleIdIfConditionTrue_)
     Q_PROPERTY(QString ConditionName MEMBER ConditionName_)
+    Q_PROPERTY(QString TargetTypeStr MEMBER TargetTypeStr_)
 
 public:
     ActuationRule()
@@ -82,6 +85,7 @@ public:
         RuleIdIfConditionFalse_ = iRuleIdIfConditionFalse;
         RuleIdIfConditionTrue_ = iRuleIdIfConditionTrue;
         ConditionName_ = getLogicalConditionName(LogicalCondition(iCondition));
+        TargetTypeStr_ = getPhysicalTargetName(PhysicalTarget(iTargetType));
     }
 };
 

@@ -26,6 +26,9 @@ typedef enum GeneratorModelType
     ModelUnknown
 }GeneratorModelType;
 
+QString getSimulationModeName(SimulationMode smode);
+QString getGeneratorModelName(GeneratorModelType gmode);
+
 class Device
 {
 public:
@@ -47,6 +50,11 @@ public:
     quint64     Longitude_ = 0;              // scale 100
     quint64     Altitude_ = 0;               // scale 100
     int         GenModel_ = ModelUnknown;    // GeneratorModelType
+    QString     ModeStr_ = "";
+    QString     GenModelStr_ = "";
+    QString     UnitOfMeasurement_ = "";
+    int         Scale_ = 10;
+    QString     FlowSequenceEndStr_ = 0;
 
 public:
     Q_PROPERTY(QString DeviceId MEMBER DeviceId_)
@@ -64,6 +72,11 @@ public:
     Q_PROPERTY(quint64 Longitude MEMBER Longitude_)
     Q_PROPERTY(quint64 Altitude MEMBER Altitude_)
     Q_PROPERTY(int GenModel MEMBER GenModel_)
+    Q_PROPERTY(QString ModeStr MEMBER ModeStr_)
+    Q_PROPERTY(QString GenModelStr MEMBER GenModelStr_)
+    Q_PROPERTY(QString UnitOfMeasurement MEMBER UnitOfMeasurement_)
+    Q_PROPERTY(int Scale MEMBER Scale_)
+    Q_PROPERTY(QString FlowSequenceEndStr MEMBER FlowSequenceEndStr_)
 
 public:
     Device()
@@ -73,7 +86,7 @@ public:
     Device(QString iDeviceId, QString iUserId, QString iDeviceName, QString iMake, QString iModel,
                quint32 iNumberOfFlows, bool iRepeatFlowSequence, quint64 iFlowSequenceEnd,
                int iMode, quint64 iOperatingMax, quint64 iOperatingMin,
-               quint64 iLatitude, quint64 iLongitude, quint64 iAltitude, int iGenModel)
+               quint64 iLatitude, quint64 iLongitude, quint64 iAltitude, int iGenModel, QString iuom, int iscale)
     {
         DeviceId_ = iDeviceId;
         UserId_ = iUserId;
@@ -90,6 +103,14 @@ public:
         Longitude_ = iLongitude;
         Altitude_ = iAltitude;
         GenModel_ = iGenModel;
+        UnitOfMeasurement_ = iuom;
+        Scale_ = iscale;
+
+        ModeStr_ = getSimulationModeName((SimulationMode)iMode);
+        GenModelStr_ = getGeneratorModelName((GeneratorModelType)iGenModel);
+
+        QDateTime dateTime = QDateTime::fromSecsSinceEpoch(iFlowSequenceEnd);
+        FlowSequenceEndStr_ = dateTime.toString("yyyy/MM/dd hh:mm:ss");
     }
 };
 

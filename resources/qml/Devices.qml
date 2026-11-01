@@ -6,8 +6,7 @@ Page
 {
     id: availableDevicesPage
 
-    property string selectedDeviceName : ""
-    property string selectedDeviceId : ""
+    property int selectedIndex : 0
 
     Component.onCompleted:
     {
@@ -102,6 +101,7 @@ Page
                     anchors.right: spacer3.left
                     onClicked:
                     {
+                        selectedIndex = index
                         entityDetails.open()
                     }
                 }
@@ -128,8 +128,7 @@ Page
 
                     onClicked:
                     {
-                        selectedDeviceName = deviceListView.model[index].DeviceName
-                        selectedDeviceId = deviceListView.model[index].DeviceId
+                        selectedIndex = index
                         confirm.open()
                     }
                 }
@@ -159,7 +158,7 @@ Page
             Text
             {
                 id: confirmText
-                text: "Do you want to remove the device " + selectedDeviceName + " ?"
+                text: "Do you want to remove the device " + deviceListView.model[selectedIndex].DeviceName + " ?"
                 color: applicationData.Theme.TextPrimaryColor
                 wrapMode: "Wrap"
                 width: confirm.width*0.9
@@ -212,9 +211,9 @@ Page
     {
         id: entityDetails
         visible: false
-        width: availableDevicesPage.width*0.5
+        width: availableDevicesPage.width*0.75
         height: availableDevicesPage.height
-        x: availableDevicesPage.width*0.5
+        x: (availableDevicesPage.width - availableDevicesPage.width*0.75)
         y: 0
         padding: 0
         modal: true
@@ -223,6 +222,7 @@ Page
 
         contentItem: Rectangle
         {
+            id: frame
             color: applicationData.Theme.PanelUpperColor
             anchors.fill: parent
             border.color: applicationData.Theme.LineColor
@@ -230,46 +230,64 @@ Page
             Text
             {
                 id: entityDetailsText
-                text: "Under Development"
+                text: "Device Details"
+                font.bold: true
                 color: applicationData.Theme.TextPrimaryColor
                 wrapMode: "Wrap"
-                width: confirm.width*0.9
-                anchors.centerIn: parent
+                width: entityDetails.width*0.9
+                anchors.right: parent.right
+                anchors.top: parent.top
+                anchors.topMargin: applicationData.Theme.BarHeight/2
             }
 
             Grid
             {
                 id: entityDetailsGridDlg
-                rows: 1
-                columns: 2
-                anchors.bottom: parent.bottom
-                anchors.bottomMargin: 10
-                anchors.rightMargin: 10
+                rows: 8
+                columns: 4
+                width: entityDetails.width*0.9
                 anchors.right: parent.right
+                anchors.top: entityDetailsText.bottom
+                anchors.topMargin: applicationData.Theme.BarHeight/2
                 spacing: 10
 
-                CustomButton
-                {
-                    id:btnEntityDetailsNo
-                    width: confirm.width*0.33
-                    height: applicationData.Theme.BarHeight
-                    text: "No"
-                    isDefault: false
-                    accentColor: applicationData.Theme.AccentBaseColor
-                    onClicked:
-                    {
-                        entityDetails.close();
-                    }
-                }
+                Label { text: "Device Id" }  Label { text: deviceListView.model[selectedIndex].DeviceId }
+                Label { text: "Device Name" }  Label { text: deviceListView.model[selectedIndex].DeviceName }
+                Label { text: "Make" }  Label { text: deviceListView.model[selectedIndex].Make }
+                Label { text: "Model" }  Label { text: deviceListView.model[selectedIndex].Model }
+                Label { text: "Simulation Flows" }  Label { text: deviceListView.model[selectedIndex].NumberOfFlows }
+                Label { text: "Flows Repeatable" }  Label { text: deviceListView.model[selectedIndex].RepeatFlowSequence }
+                Label { text: "Flow Sequence End" }  Label { text: deviceListView.model[selectedIndex].FlowSequenceEndStr }
+                Label { text: "Simulation Mode" }  Label { text: deviceListView.model[selectedIndex].Mode }
+                Label { text: "Operating Maximum" }  Label { text: deviceListView.model[selectedIndex].OperatingMax }
+                Label { text: "Operating Minimum" }  Label { text: deviceListView.model[selectedIndex].OperatingMin }
+                Label { text: "Latitude" }  Label { text: deviceListView.model[selectedIndex].Latitude }
+                Label { text: "Longitude" }  Label { text: deviceListView.model[selectedIndex].Longitude }
+                Label { text: "Altitude" }  Label { text: deviceListView.model[selectedIndex].Altitude }
+                Label { text: "Generator Model" }  Label { text: deviceListView.model[selectedIndex].GenModelStr }
+                Label { text: "Unit of Measurement" }  Label { text: deviceListView.model[selectedIndex].UnitOfMeasurement }
+                Label { text: "Scale" }  Label { text: deviceListView.model[selectedIndex].Scale }
+            }
+
+            Rectangle
+            {
+                width: entityDetails.width
+                height: applicationData.Theme.BarHeight*2
+                anchors.bottom: frame.bottom
+                color: applicationData.Theme.PanelUpperColor
+                anchors.topMargin: applicationData.Theme.BarHeight/2
 
                 CustomButton
                 {
                     id:btnEntityDetailsYes
-                    width: confirm.width*0.33
+                    width: entityDetails.width*0.33
                     height: applicationData.Theme.BarHeight
-                    text: "Yes"
+                    text: "Close"
                     isDefault: true
                     accentColor: applicationData.Theme.AccentBaseColor
+                    anchors.right: parent.right
+                    anchors.verticalCenter: parent.verticalCenter
+                    anchors.rightMargin: applicationData.Theme.BarHeight/2
                     onClicked:
                     {
                         entityDetails.close()
@@ -292,12 +310,6 @@ Page
 
         function onDeviceMessage(fl, str)
         {
-        }
-
-        function onDeviceAdd()
-        {
-            console.log("Device add received")
-            entityDetails.open()
         }
     }
 }

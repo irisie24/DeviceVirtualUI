@@ -42,6 +42,8 @@ public:
     QString     UnitOfMeasurement_;          // max 16 characters
     QString     DatasetFilename_;
     QString     FlowTypeName_;
+    QString     UnixEpochStartStr_ = "";
+    QString     UnixEpochEndStr_ = "";
 
 public:
     Q_PROPERTY(QString FlowId MEMBER FlowId_)
@@ -56,6 +58,8 @@ public:
     Q_PROPERTY(QString UnitOfMeasurement MEMBER UnitOfMeasurement_)
     Q_PROPERTY(QString DatasetFilename MEMBER DatasetFilename_)
     Q_PROPERTY(QString FlowTypeName MEMBER FlowTypeName_)
+    Q_PROPERTY(QString UnixEpochStartStr MEMBER UnixEpochStartStr_)
+    Q_PROPERTY(QString UnixEpochEndStr MEMBER UnixEpochEndStr_)
 
 public:
     SensingFlow()
@@ -78,6 +82,12 @@ public:
         UnitOfMeasurement_ = iUnitOfMeasurement;
         DatasetFilename_ = iDatasetFilename;
         FlowTypeName_ = getFlowTypeName((FlowType)iType);
+
+        QDateTime dateTime1 = QDateTime::fromSecsSinceEpoch(iUnixEpochStart);
+        UnixEpochStartStr_ = dateTime1.toString("yyyy/MM/dd hh:mm:ss");
+
+        QDateTime dateTime2 = QDateTime::fromSecsSinceEpoch(iUnixEpochEnd);
+        UnixEpochEndStr_ = dateTime1.toString("yyyy/MM/dd hh:mm:ss");
     }
 };
 

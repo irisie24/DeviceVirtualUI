@@ -47,6 +47,7 @@ ActuationRule EntityActuationRule::fromRecord(const QSqlRecord &rec)
     struc.RuleIdIfConditionFalse_ = rec.value("RuleIdIfConditionFalse").toString();
     struc.RuleIdIfConditionTrue_ = rec.value("RuleIdIfConditionTrue").toString();
     struc.ConditionName_ = getLogicalConditionName(LogicalCondition(struc.Condition_));
+    struc.TargetTypeStr_ = getPhysicalTargetName(PhysicalTarget(struc.TargetType_));
 
     return struc;
 }
@@ -98,4 +99,18 @@ QString getLogicalConditionName(LogicalCondition logic)
     }
 
     return "Unknown";   // out-of-range value, e.g. a bad int read back from Type_
+}
+
+QString getPhysicalTargetName(PhysicalTarget target)
+{
+    switch(target)
+    {
+    case GPIO: return "GPIO";
+    case I2C: return "I2C";
+    case SPI: return "SPI";
+    case UART: return "UART";
+    case BLE: return "BLE";
+    }
+
+    return "UART";   // out-of-range value, e.g. a bad int read back from Type_
 }

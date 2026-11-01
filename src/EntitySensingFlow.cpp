@@ -47,6 +47,12 @@ SensingFlow EntityFlow::fromRecord(const QSqlRecord &rec)
     struc.DatasetFilename_ = rec.value("DatasetFilename").toString();
     struc.FlowTypeName_ = getFlowTypeName((FlowType)struc.Type_);
 
+    QDateTime dateTime1 = QDateTime::fromSecsSinceEpoch(struc.UnixEpochStart_);
+    struc.UnixEpochStartStr_ = dateTime1.toString("yyyy/MM/dd hh:mm:ss");
+
+    QDateTime dateTime2 = QDateTime::fromSecsSinceEpoch(struc.UnixEpochEnd_);
+    struc.UnixEpochEndStr_ = dateTime1.toString("yyyy/MM/dd hh:mm:ss");
+
     return struc;
 }
 

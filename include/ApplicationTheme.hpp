@@ -44,10 +44,16 @@ public:
     QString ErrorColor_;
     QString InfoColor_;
 
-    // ---- Dimensions (derived from primary screen height) ------------------
+    // ---- Dimensions & Fonts (derived from primary screen height) ----------
     uint32_t BarHeight_ = 0;
     uint32_t SideMenuExpandedWidth_ = 0;
     uint32_t SideMenuCollapsedWidth_ = 0;
+
+    uint32_t FontTiny_ = 0;
+    uint32_t FontSmall_ = 0;
+    uint32_t FontNormal_ = 0;
+    uint32_t FontLarge_ = 0;
+    uint32_t FontHuge_ = 0;
 
     Q_PROPERTY(bool IsDarkMode MEMBER IsDarkMode_)
 
@@ -79,8 +85,18 @@ public:
     Q_PROPERTY(uint32_t SideMenuExpandedWidth MEMBER SideMenuExpandedWidth_)
     Q_PROPERTY(uint32_t SideMenuCollapsedWidth MEMBER SideMenuCollapsedWidth_)
 
+    Q_PROPERTY(uint32_t FontTiny MEMBER FontTiny_)
+    Q_PROPERTY(uint32_t FontSmall MEMBER FontSmall_)
+    Q_PROPERTY(uint32_t FontNormal MEMBER FontNormal_)
+    Q_PROPERTY(uint32_t FontLarge MEMBER FontLarge_)
+    Q_PROPERTY(uint32_t FontHuge MEMBER FontHuge_)
+
 public:
-    ApplicationTheme() { EnableDarkMode(); }
+    ApplicationTheme()
+    {
+        EnableDarkMode();
+    }
+
     ~ApplicationTheme() = default;
     ApplicationTheme(const ApplicationTheme&) = default;
     ApplicationTheme& operator=(const ApplicationTheme&) = default;
@@ -157,6 +173,12 @@ public:
         BarHeight_              = static_cast<uint32_t>(sh * 0.045);
         SideMenuExpandedWidth_  = static_cast<uint32_t>(sh * 0.180);
         SideMenuCollapsedWidth_ = static_cast<uint32_t>(sh * 0.045);
+
+        FontTiny_               = static_cast<uint32_t>(sh * 0.016);
+        FontSmall_              = static_cast<uint32_t>(sh * 0.019);
+        FontNormal_             = static_cast<uint32_t>(sh * 0.022);
+        FontLarge_              = static_cast<uint32_t>(sh * 0.028);
+        FontHuge_               = static_cast<uint32_t>(sh * 0.036);
     }
 };
 

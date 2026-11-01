@@ -139,20 +139,17 @@ signals:
     void authenticationSuccessfull();
     void authenticationFailed();
     void operationCancelled();
-    void pageAction(int ipage);
+    void pageAction(QString ipage);
     void userLoginSucceeded();
     void userLoginFailed(QString reason);
 
     //Data related
     void deviceAction(bool fl);
     void deviceMessage(bool fl, QString str);
-    void deviceAdd();
     void sensingFlowAction(bool fl);
     void sensingFlowMessage(bool fl, QString str);
-    void sensingFlowAdd();
     void actuationRuleAction(bool fl);
     void actuationRuleMessage(bool fl, QString str);
-    void actuationRuleAdd();
 
     //User management errors
     void userNameError();

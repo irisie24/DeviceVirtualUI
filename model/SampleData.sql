@@ -16,13 +16,13 @@ VALUES
 
 INSERT INTO "Devices"
     ("DeviceId", "UserId", "DeviceName", "Make", "Model", "NumberOfFlows", "RepeatFlowSequence", "FlowSequenceEnd",
-     "Mode", "OperatingMax", "OperatingMin", "Latitude", "Longitude", "Altitude", "GenModel")
+     "Mode", "OperatingMax", "OperatingMin", "Latitude", "Longitude", "Altitude", "GenModel", "UnitOfMeasurement", "Scale")
 VALUES
-    ('DEV-001', 'USR-001', 'Boiler Temperature Probe', 'Acme',     'T-100', 2, true,  1900000000, 1, 15000,   0, 2257, 8836,  1100, 1),
-    ('DEV-002', 'USR-001', 'Line Pressure Transducer',  'Borealis', 'P-250', 2, false, 1895000000, 0, 40000, 500, 1908, 7288,  1400, 0),
-    ('DEV-003', 'USR-001', 'Coolant Flow Meter',        'Cirrus',   'F-30',  2, true,  1910000000, 1,  9000, 100, 1308, 8027,   600, 4),
-    ('DEV-004', 'USR-001', 'Motor Vibration Sensor',    'Delta',    'V-8',   2, true,  1905000000, 0,  2000,   0, 2861, 7721, 21600, 6),
-    ('DEV-005', 'USR-001', 'Tank Level Switch',         'Eon',      'L-5',   2, false, 1890000000, 1,  1000,   0, 1297, 7759, 92000, 9);
+    ('DEV-001', 'USR-001', 'Boiler Temperature Probe', 'Acme',     'T-100', 2, true,  1900000000, 1, 15000,   0, 2257, 8836,  1100, 1, "degC", 10),
+    ('DEV-002', 'USR-001', 'Line Pressure Transducer',  'Borealis', 'P-250', 2, false, 1895000000, 0, 40000, 500, 1908, 7288,  1400, 0, "bar", 10),
+    ('DEV-003', 'USR-001', 'Coolant Flow Meter',        'Cirrus',   'F-30',  2, true,  1910000000, 1,  9000, 100, 1308, 8027,   600, 4, "cusec", 10),
+    ('DEV-004', 'USR-001', 'Motor Vibration Sensor',    'Delta',    'V-8',   2, true,  1905000000, 0,  2000,   0, 2861, 7721, 21600, 6, "khz", 10),
+    ('DEV-005', 'USR-001', 'Tank Level Switch',         'Eon',      'L-5',   2, false, 1890000000, 1,  1000,   0, 1297, 7759, 92000, 9, "cm", 10);
 
 INSERT INTO "SensingFlows"
     ("FlowId", "DeviceId", "FlowType", "Scale", "Duration", "UnixEpochStart", "UnixEpochEnd", "Minimum", "Maximum", "UnitOfMeasurement", "DatasetFilename")

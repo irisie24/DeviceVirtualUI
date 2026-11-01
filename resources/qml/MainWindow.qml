@@ -415,139 +415,23 @@ ApplicationWindow
 
         function onOperationCancelled()
         {
-            //stackView.pop()
+            stackView.pop()
             applicationData.invokeSaveCurrentPage("Dashboard.qml")
-            //stackView.push("Dashboard.qml")
+            stackView.push("Dashboard.qml")
         }
 
         function onUserLoginSucceeded()
         {
-            //stackView.pop();
-            applicationData.invokeSaveCurrentPage("AvailableMeters.qml")
-            //stackView.push("AvailableMeters.qml");
+            stackView.pop();
+            applicationData.invokeSaveCurrentPage("Dashboard.qml")
+            stackView.push("Dashboard.qml");
         }
 
         function onPageAction(pg)
         {
-            if(pg === 0)
-            {
-                //stackView.pop();
-                oldPage = applicationData.invokeRetreiveLastPage()
-                applicationData.invokeSaveCurrentPage(oldPage)
-                //stackView.push(oldPage);
-            }
-
-            if(pg === 1)
-            {
-                //stackView.pop();
-                applicationData.invokeSaveCurrentPage("Energy.qml")
-                //stackView.push("Energy.qml");
-            }
-
-            if(pg === 3)
-            {
-                //stackView.pop();
-                applicationData.invokeSaveCurrentPage("Alarms.qml")
-                //stackView.push("Alarms.qml");
-            }
-
-            if(pg === 4)
-            {
-                //stackView.pop();
-                applicationData.invokeSaveCurrentPage("AvailableMeters.qml")
-                //stackView.push("AvailableMeters.qml");
-            }
-
-            if(pg === 5)
-            {
-                //stackView.pop();
-                applicationData.invokeSaveCurrentPage("AvailableTokens.qml")
-                //stackView.push("AvailableTokens.qml");
-            }
-
-            if(pg === 6)
-            {
-                //stackView.pop();
-                applicationData.invokeSaveCurrentPage("QRCodeScanner.qml")
-                //stackView.push("QRCodeScanner.qml");
-            }
-
-            if(pg === 7)
-            {
-                //stackView.pop();
-                applicationData.invokeSaveCurrentPage("AddMeter.qml")
-                //stackView.push("AddMeter.qml");
-            }
-
-            if(pg === 8)
-            {
-                //stackView.pop();
-                applicationData.invokeSaveCurrentPage("AddToken.qml")
-                //stackView.push("AddToken.qml");
-            }
-
-            if(pg === 9)
-            {
-                //stackView.pop();
-                applicationData.invokeSaveCurrentPage("Login.qml")
-                //stackView.push("Login.qml");
-            }
-
-            if(pg === 10)
-            {
-                //stackView.pop();
-                applicationData.invokeSaveCurrentPage("CreateUserStage1.qml")
-                //stackView.push("CreateUserStage1.qml");
-            }
-
-            if(pg === 11)
-            {
-                //stackView.pop();
-                applicationData.invokeSaveCurrentPage("CreateUserStage2.qml")
-                //stackView.push("CreateUserStage2.qml");
-            }
-
-            if(pg === 12)
-            {
-                //stackView.pop();
-                applicationData.invokeSaveCurrentPage("CreateUserStage3.qml")
-                //stackView.push("CreateUserStage3.qml");
-            }
-
-            if(pg === 13)
-            {
-                //stackView.pop();
-                applicationData.invokeSaveCurrentPage("Dashboard.qml")
-                //stackView.push("Dashboard.qml")
-            }
-
-            if(pg === 14)
-            {
-                //stackView.pop();
-                applicationData.invokeSaveCurrentPage("ResetPasscodeStage1.qml")
-                //stackView.push("ResetPasscodeStage1.qml");
-            }
-
-            if(pg === 15)
-            {
-                //stackView.pop();
-                applicationData.invokeSaveCurrentPage("ResetPasscodeStage2.qml")
-                //stackView.push("ResetPasscodeStage2.qml");
-            }
-
-            if(pg === 16)
-            {
-                //stackView.pop();
-                applicationData.invokeSaveCurrentPage("ResetPasscodeStage3.qml")
-                //stackView.push("ResetPasscodeStage3.qml");
-            }
-
-            if(pg === 19)
-            {
-                //stackView.pop();
-                applicationData.invokeSaveCurrentPage("Help.qml")
-                //stackView.push("Help.qml");
-            }
+            stackView.pop();
+            applicationData.invokeSaveCurrentPage(pg)
+            stackView.push(pg);
         }
     }
 }
