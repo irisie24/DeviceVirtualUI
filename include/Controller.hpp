@@ -17,6 +17,11 @@
 #include "EntitySensingFlow.hpp"
 #include "EntityActuationRule.hpp"
 #include "Logger.hpp"
+#include "Mqtt.hpp"
+#include "DataInterface.hpp"
+#include "EntityDevice.hpp"
+#include "EntitySensingFlow.hpp"
+#include "EntityActuationRule.hpp"
 
 typedef enum ScanMode
 {
@@ -36,9 +41,10 @@ public:
     void ClearTrace();
     void initializeDatabase();
     void generateDashboardData();
+    void connectToMqttBroker();
 
     Q_INVOKABLE void invokeThemeUpdate();
-    Q_INVOKABLE void invokeChangePage(int ipage);
+    Q_INVOKABLE void invokeChangePage(QString ipage);
     Q_INVOKABLE void invokeApplicationInitialization();
 
     Q_INVOKABLE void invokeCancel();
@@ -114,6 +120,12 @@ public:
     Q_PROPERTY (QList<QString> DeviceNames READ getDeviceNames NOTIFY DeviceNamesChanged)
     QList<QString> getDeviceNames();
 
+    Q_PROPERTY (QList<QString> FlowNames READ getFlowNames NOTIFY FlowNamesChanged)
+    QList<QString> getFlowNames();
+
+    Q_PROPERTY (QList<QString> RuleNames READ getRuleNames NOTIFY RuleNamesChanged)
+    QList<QString> getRuleNames();
+
 signals:
 
     void ThemeChanged();
@@ -168,13 +180,22 @@ signals:
     void SensingFlowListChanged();
     void ActuationRuleListChanged();
     void DeviceNamesChanged();
+    void FlowNamesChanged();
+    void RuleNamesChanged();
 
 private slots:
     void OnAppInitializationComplete();
 
+    void OnMqttConnected();
+    void OnMqttDisconnected();
+    void OnMqttMessageReceived(const QString &topic, const QString &message);
+
 private:
 
     QGuiApplication* app;
+
+    Mqtt mqttClient;
+    DataInterface dbInterface;
 
     //Globals / Miscellanous
     bool is_first_run_;
@@ -202,7 +223,9 @@ private:
     QList<Device> devices_;
     QList<SensingFlow> sensingFlows_;
     QList<ActuationRule> actuationRules_;
-    QList<QString> devicesNames_;
+    QList<QString> deviceNames_;
+    QList<QString> ruleNames_;
+    QList<QString> flowNames_;
 };
 
 extern Controller* controllerPtr;

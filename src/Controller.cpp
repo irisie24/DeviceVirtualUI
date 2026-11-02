@@ -27,8 +27,8 @@ Controller::Controller(QGuiApplication *appPtr, QObject *parent)
     lastPage_ = "";
     isDarkTheme_ = true;
     isDemoMode_ = true;
-    isTraceEnabled_ = false;
-    isDumpRxTxEnabled_ = false;
+    isTraceEnabled_ = true;
+    isDumpRxTxEnabled_ = true;
 
     if(app->palette().window().color().value() > app->palette().windowText().color().value())
     {
@@ -39,6 +39,26 @@ Controller::Controller(QGuiApplication *appPtr, QObject *parent)
     {
         isDarkTheme_ = true;
         theme_.EnableDarkMode();
+    }
+
+    connect(&mqttClient, &Mqtt::connected, this, &Controller::OnMqttConnected);
+    connect(&mqttClient, &Mqtt::disconnected, this, &Controller::OnMqttDisconnected);
+    connect(&mqttClient, &Mqtt::messageReceived, this, &Controller::OnMqttMessageReceived);
+    connectToMqttBroker();
+
+    dbInterface.setParameters(QSqlDriver::PostgreSQL, "127.0.0.1", "postgres", "postgres", "postgres", 5432);
+    bool ret = dbInterface.open();
+
+    if(ret)
+    {
+        Trace("Database opened");
+        new EntityDevice(dbInterface.getDatabase());
+        new EntitySensingFlow(dbInterface.getDatabase());
+        new EntityActuationRule(dbInterface.getDatabase());
+    }
+    else
+    {
+        Trace("Database failure : could NOT open");
     }
 
     controllerPtr = this;
@@ -57,6 +77,7 @@ void Controller::invokeApplicationInitialization()
     ApplicationInitializationThread *workerThread = new ApplicationInitializationThread(this);
     connect(workerThread, &ApplicationInitializationThread::resultReady, this, &Controller::OnAppInitializationComplete);
     connect(workerThread, &ApplicationInitializationThread::finished, workerThread, &QObject::deleteLater);
+
     workerThread->start();
 }
 
@@ -106,9 +127,9 @@ QString  Controller::getAppSyncTime()
     return appSyncTime_;
 }
 
-void Controller::invokeChangePage(int ipage)
+void Controller::invokeChangePage(QString ipage)
 {
-    //emit pageAction(ipage);
+    emit pageAction(ipage);
 }
 
 void Controller::invokeThemeUpdate()
@@ -225,7 +246,7 @@ void Controller::Trace(QString str)
         traceString_.clear();
     }
 
-    traceString_ = str + traceString_;
+    traceString_ = traceString_ + str;
     emit TraceStringChanged();
 }
 
@@ -434,12 +455,12 @@ UserInfo Controller::getCurrentUser()
 void Controller::setDeviceList(QList<Device> devicelist)
 {
     devices_.clear();
-    devicesNames_.clear();
+    deviceNames_.clear();
 
     foreach(Device d , devicelist)
     {
         devices_.append(d);
-        devicesNames_.append(" [ " + d.DeviceId_ + " ] " + d.DeviceName_);
+        deviceNames_.append(" [ " + d.DeviceId_ + " ] " + d.DeviceName_);
     }
 
     emit DeviceListChanged();
@@ -453,16 +474,18 @@ QList<Device> Controller::getDeviceList()
 
 QList<QString> Controller::getDeviceNames()
 {
-    return devicesNames_;
+    return deviceNames_;
 }
 
 void Controller::setSensingFlowList(QList<SensingFlow> sensingFlowlist)
 {
     sensingFlows_.clear();
+    flowNames_.clear();
 
     foreach(SensingFlow s , sensingFlowlist)
     {
         sensingFlows_.append(s);
+        flowNames_.append(" [ " + s.FlowId_ + " ] " + s.FlowTypeName_);
     }
 
     emit SensingFlowListChanged();
@@ -473,13 +496,20 @@ QList<SensingFlow> Controller::getSensingFlowList()
     return sensingFlows_;
 }
 
+QList<QString> Controller::getFlowNames()
+{
+    return flowNames_;
+}
+
 void Controller::setActuationRuleList(QList<ActuationRule> actuationRulelist)
 {
     actuationRules_.clear();
+    ruleNames_.clear();
 
     foreach(ActuationRule a , actuationRulelist)
     {
         actuationRules_.append(a);
+        ruleNames_.append(" [ " + a.RuleId_ + " ] " + a.ConditionName_);
     }
 
     emit ActuationRuleListChanged();
@@ -490,57 +520,70 @@ QList<ActuationRule> Controller::getActuationRuleList()
     return actuationRules_;
 }
 
+QList<QString> Controller::getRuleNames()
+{
+    return ruleNames_;
+}
+
 void Controller::initializeDatabase()
 {
     users_.clear();
-    devicesNames_.clear();
+    deviceNames_.clear();
+    flowNames_.clear();
+    ruleNames_.clear();
     devices_.clear();
     actuationRules_.clear();
     sensingFlows_.clear();
 
     users_.append(UserInfo(true, "USER001", "1234", "1234"));
 
-    devices_.append(Device("DEV-001", "USER001", "Boiler Temperature Probe", "Acme", "T-100", 3, true, 1900000000ULL, SimulationModeRealtime, 15000ULL, 0ULL, 2257ULL, 8836ULL, 1100ULL, MarkovTwoState, "degC", 10));
-    devices_.append(Device("DEV-002", "USER001", "Line Pressure Transducer", "Borealis", "P-250", 5, false, 1895000000ULL,SimulationModeDataset, 40000ULL, 500ULL, 1908ULL, 7288ULL, 1400ULL, Bernoulli, "bar", 10));
-    devices_.append(Device("DEV-003", "USER001", "Coolant Flow Meter", "Cirrus", "F-30", 2, true, 1910000000ULL, SimulationModeRealtime, 9000ULL, 100ULL, 1308ULL, 8027ULL, 600ULL, PoissonOnset, "cusec", 10));
-    devices_.append(Device("DEV-004", "USER001", "Motor Vibration Sensor", "Delta", "V-8", 4, true, 1905000000ULL, SimulationModeDataset, 2000ULL, 0ULL, 2861ULL, 7721ULL, 21600ULL, HiddenMarkov, "khz", 10));
-    devices_.append(Device("DEV-005", "USER001", "Tank Level Switch", "Eon", "L-5", 1, false, 1890000000ULL, SimulationModeRealtime, 1000ULL, 0ULL, 1297ULL, 7759ULL, 92000ULL, DeterministicPattern, "cm", 10));
+    deviceEntityPtr->allDevice(devices_);
 
-    sensingFlows_.append(SensingFlow("10001", "DEV-001", 1, 100, 300, 1790812800, 1793404800, 18, 35, "degC", "Boiler.csv"));
-    sensingFlows_.append(SensingFlow("10002", "DEV-001", 2, 100, 300, 1790812800, 1793404800, 18, 35, "degC", "Boiler.csv"));
-    sensingFlows_.append(SensingFlow("10003", "DEV-002", 1, 100, 300, 1790812800, 1793404800, 18, 35, "bar", "Pressure_Transducer.csv"));
-    sensingFlows_.append(SensingFlow("10004", "DEV-002", 2, 100, 300, 1790812800, 1793404800, 18, 35, "bar", "Pressure_Transducer.csv"));
-    sensingFlows_.append(SensingFlow("10005", "DEV-003", 1, 100, 300, 1790812800, 1793404800, 18, 35, "cusec", "Flow_Meter.csv"));
-    sensingFlows_.append(SensingFlow("10006", "DEV-003", 2, 100, 300, 1790812800, 1793404800, 18, 35, "cusec", "Flow_Meter.csv"));
-    sensingFlows_.append(SensingFlow("10007", "DEV-004", 1, 100, 300, 1790812800, 1793404800, 18, 35, "khz", "Vibration_Sensor.csv"));
-    sensingFlows_.append(SensingFlow("10008", "DEV-004", 2, 100, 300, 1790812800, 1793404800, 18, 35, "khz", "Vibration_Sensor.csv"));
-    sensingFlows_.append(SensingFlow("10009", "DEV-005", 1, 100, 300, 1790812800, 1793404800, 18, 35, "cm", "Level_Switch.csv"));
-    sensingFlows_.append(SensingFlow("10010", "DEV-005", 2, 100, 300, 1790812800, 1793404800, 18, 35, "cm", "Level_Switch.csv"));
+    sensingFlowEntityPtr->allFlow(sensingFlows_);
 
-    actuationRules_.append(ActuationRule("10001", "DEV-001",  1, 40, 100, 3, "/dev/USB0", 5, false, "-","-"));
-    actuationRules_.append(ActuationRule("10002", "DEV-001",  2, 40, 100, 4, "/dev/USB0", 7, false, "-","-"));
-    actuationRules_.append(ActuationRule("10003", "DEV-002",  1, 40, 100, 3, "/dev/USB0", 5, false, "-","-"));
-    actuationRules_.append(ActuationRule("10004", "DEV-002",  2, 40, 100, 4, "/dev/USB0", 7, false, "-","-"));
-    actuationRules_.append(ActuationRule("10005", "DEV-003",  1, 40, 100, 3, "/dev/USB0", 5, false, "-","-"));
-    actuationRules_.append(ActuationRule("10006", "DEV-003",  2, 40, 100, 4, "/dev/USB0", 7, false, "-","-"));
-    actuationRules_.append(ActuationRule("10007", "DEV-004",  1, 40, 100, 3, "/dev/USB0", 5, false, "-","-"));
-    actuationRules_.append(ActuationRule("10008", "DEV-004",  2, 40, 100, 4, "/dev/USB0", 7, false, "-","-"));
-    actuationRules_.append(ActuationRule("10009", "DEV-005",  1, 40, 100, 3, "/dev/USB0", 5, false, "-","-"));
-    actuationRules_.append(ActuationRule("10010", "DEV-005",  2, 40, 100, 4, "/dev/USB0", 7, false, "-","-"));
+    actuationRuleEntityPtr->allActuationRule(actuationRules_);
 
     foreach(Device d , devices_)
     {
-        devices_.append(d);
-        devicesNames_.append(" [ " + d.DeviceId_ + " ] " + d.DeviceName_);
+        deviceNames_.append(" [ " + d.DeviceId_ + " ] " + d.DeviceName_);
     }
 
-    for(int x = 0; x <5; x++)
+    foreach(SensingFlow s , sensingFlows_)
     {
-        QThread::sleep(1);
+        flowNames_.append(" [ " + s.FlowId_ + " ] " + s.FlowTypeName_);
+    }
+
+    foreach(ActuationRule a , actuationRules_)
+    {
+        ruleNames_.append(" [ " + a.RuleId_ + " ] " + a.ConditionName_);
     }
 }
 
 void Controller::generateDashboardData()
 {
 
+}
+
+void Controller::connectToMqttBroker()
+{
+    mqttClient.Initialize("127.0.0.1", 1883, "DeviceVrtualUI", "", "");
+    mqttClient.connect(1, 3600);
+}
+
+void Controller::OnMqttConnected()
+{
+    Trace("MQTT Connected");
+    mqttClient.subscribe("devicevirtual/telemetry");
+}
+
+void Controller::OnMqttDisconnected()
+{
+    Trace("MQTT Disonnected");
+    QThread::sleep(5);
+    mqttClient.connect(1, 3600);
+}
+
+void Controller::OnMqttMessageReceived(const QString &topic, const QString &message)
+{
+    Trace("MQTT Message Received => " + message);
 }

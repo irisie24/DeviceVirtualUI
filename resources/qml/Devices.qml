@@ -179,7 +179,7 @@ Page
                 CustomButton
                 {
                     id:btnNo
-                    width: confirm.width*0.33
+                    width: 105
                     height: applicationData.Theme.BarHeight
                     text: "No"
                     isDefault: false
@@ -193,7 +193,7 @@ Page
                 CustomButton
                 {
                     id:btnYes
-                    width: confirm.width*0.33
+                    width: 105
                     height: applicationData.Theme.BarHeight
                     text: "Yes"
                     isDefault: true
@@ -280,7 +280,7 @@ Page
                 CustomButton
                 {
                     id:btnEntityDetailsYes
-                    width: entityDetails.width*0.33
+                    width: 105
                     height: applicationData.Theme.BarHeight
                     text: "Close"
                     isDefault: true

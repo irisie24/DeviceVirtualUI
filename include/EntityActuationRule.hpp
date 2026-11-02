@@ -38,7 +38,6 @@ public:
     QString     DeviceId_;
     int         Condition_ = Equals;         // LogicalCondition
     qint64      ValueThreshold_ = 0;
-    quint64     Scale_ = 0;
     int         TargetType_ = GPIO;          // PhysicalTarget, type of device to actuate
     QString     TargetDeviceName_;           // device to be actuated (descriptor only, traced not driven)
     qint64      TargetActionValue_ = 0;      // value written to the device being actuated
@@ -53,7 +52,6 @@ public:
     Q_PROPERTY(QString DeviceId MEMBER DeviceId_)
     Q_PROPERTY(int Condition MEMBER Condition_)
     Q_PROPERTY(qint64 ValueThreshold MEMBER ValueThreshold_)
-    Q_PROPERTY(quint64 Scale MEMBER Scale_)
     Q_PROPERTY(int TargetType MEMBER TargetType_)
     Q_PROPERTY(QString TargetDeviceName MEMBER TargetDeviceName_)
     Q_PROPERTY(qint64 TargetActionValue MEMBER TargetActionValue_)
@@ -69,7 +67,7 @@ public:
     }
 
     ActuationRule(QString iRuleId, QString iDeviceId, int iCondition, qint64 iValueThreshold,
-                      quint64 iScale, int iTargetType, QString iTargetDeviceName,
+                      int iTargetType, QString iTargetDeviceName,
                       qint64 iTargetActionValue, bool iIsChained,
                       QString iRuleIdIfConditionFalse, QString iRuleIdIfConditionTrue)
     {
@@ -77,7 +75,6 @@ public:
         DeviceId_ = iDeviceId;
         Condition_ = iCondition;
         ValueThreshold_ = iValueThreshold;
-        Scale_ = iScale;
         TargetType_ = iTargetType;
         TargetDeviceName_ = iTargetDeviceName;
         TargetActionValue_ = iTargetActionValue;
@@ -93,7 +90,7 @@ public:
 class EntityActuationRule : public DataEntity
 {
 public:
-    EntityActuationRule(QSqlDatabase* db, QString tabname);
+    EntityActuationRule(QSqlDatabase* db);
     virtual ~EntityActuationRule();
     bool createTable();
     bool createActuationRule(const ActuationRule &rec);

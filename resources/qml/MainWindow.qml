@@ -484,6 +484,24 @@ ApplicationWindow
                 headerPanel.headerTitle = "New Activation Rule"
                 headerPanel.addIconVisible = false
             }
+
+            if((pg) === "Devices.qml")
+            {
+                headerPanel.headerTitle = "Devices"
+                headerPanel.addIconVisible = true
+            }
+
+            if((pg) === "SensingFlows.qml")
+            {
+                headerPanel.headerTitle = "Sensing Flows"
+                headerPanel.addIconVisible = true
+            }
+
+            if((pg) === "AddActuationRule.qml")
+            {
+                headerPanel.headerTitle = "Activation Rules"
+                headerPanel.addIconVisible = true
+            }
         }
     }
 }

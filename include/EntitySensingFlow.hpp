@@ -33,13 +33,11 @@ public:
     QString     FlowId_ = 0;                 // surrogate key, assigned by the database (0 = not yet stored)
     QString     DeviceId_;
     int         Type_ = FlowUnknown;         // FlowType
-    quint64     Scale_ = 0;
     quint64     Duration_ = 0;
     quint64     UnixEpochStart_ = 0;
     quint64     UnixEpochEnd_ = 0;
     quint64     Minimum_ = 0;
     quint64     Maximum_ = 0;
-    QString     UnitOfMeasurement_;          // max 16 characters
     QString     DatasetFilename_;
     QString     FlowTypeName_;
     QString     UnixEpochStartStr_ = "";
@@ -49,13 +47,11 @@ public:
     Q_PROPERTY(QString FlowId MEMBER FlowId_)
     Q_PROPERTY(QString DeviceId MEMBER DeviceId_)
     Q_PROPERTY(int Type MEMBER Type_)
-    Q_PROPERTY(quint64 Scale MEMBER Scale_)
     Q_PROPERTY(quint64 Duration MEMBER Duration_)
     Q_PROPERTY(quint64 UnixEpochStart MEMBER UnixEpochStart_)
     Q_PROPERTY(quint64 UnixEpochEnd MEMBER UnixEpochEnd_)
     Q_PROPERTY(quint64 Minimum MEMBER Minimum_)
     Q_PROPERTY(quint64 Maximum MEMBER Maximum_)
-    Q_PROPERTY(QString UnitOfMeasurement MEMBER UnitOfMeasurement_)
     Q_PROPERTY(QString DatasetFilename MEMBER DatasetFilename_)
     Q_PROPERTY(QString FlowTypeName MEMBER FlowTypeName_)
     Q_PROPERTY(QString UnixEpochStartStr MEMBER UnixEpochStartStr_)
@@ -66,20 +62,18 @@ public:
     {
     }
 
-    SensingFlow(QString iFlowId, QString iDeviceId, int iType, quint64 iScale, quint64 iDuration,
+    SensingFlow(QString iFlowId, QString iDeviceId, int iType, quint64 iDuration,
              quint64 iUnixEpochStart, quint64 iUnixEpochEnd, quint64 iMinimum, quint64 iMaximum,
-             QString iUnitOfMeasurement, QString iDatasetFilename)
+             QString iDatasetFilename)
     {
         FlowId_ = iFlowId;
         DeviceId_ = iDeviceId;
         Type_ = iType;
-        Scale_ = iScale;
         Duration_ = iDuration;
         UnixEpochStart_ = iUnixEpochStart;
         UnixEpochEnd_ = iUnixEpochEnd;
         Minimum_ = iMinimum;
         Maximum_ = iMaximum;
-        UnitOfMeasurement_ = iUnitOfMeasurement;
         DatasetFilename_ = iDatasetFilename;
         FlowTypeName_ = getFlowTypeName((FlowType)iType);
 
@@ -92,11 +86,11 @@ public:
 };
 
 // Table: "SensingFlows"
-class EntityFlow : public DataEntity
+class EntitySensingFlow : public DataEntity
 {
 public:
-    EntityFlow(QSqlDatabase* db, QString tabname);
-    virtual ~EntityFlow();
+    EntitySensingFlow(QSqlDatabase* db);
+    virtual ~EntitySensingFlow();
     bool createTable();
     bool createFlow(const SensingFlow &rec);
     bool allFlow(QList<SensingFlow> &list);
@@ -105,6 +99,6 @@ private:
     static SensingFlow fromRecord(const QSqlRecord &rec);
 };
 
-extern EntityFlow* flowEntityPtr;
+extern EntitySensingFlow* sensingFlowEntityPtr;
 
 #endif

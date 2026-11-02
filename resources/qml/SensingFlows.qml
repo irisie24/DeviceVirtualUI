@@ -179,7 +179,7 @@ Page
                 CustomButton
                 {
                     id:btnNo
-                    width: confirm.width*0.33
+                    width: 105
                     height: applicationData.Theme.BarHeight
                     text: "No"
                     isDefault: false
@@ -193,7 +193,7 @@ Page
                 CustomButton
                 {
                     id:btnYes
-                    width: confirm.width*0.33
+                    width: 105
                     height: applicationData.Theme.BarHeight
                     text: "Yes"
                     isDefault: true
@@ -254,13 +254,11 @@ Page
                 Label { font.pointSize: applicationData.Theme.FontSmall; text: "Device Id" }            Label { font.pointSize: applicationData.Theme.FontSmall; text: sensingFlowListView.model[selectedIndex].DeviceId }
                 Label { font.pointSize: applicationData.Theme.FontSmall; text: "Flow Id" }              Label { font.pointSize: applicationData.Theme.FontSmall; text: sensingFlowListView.model[selectedIndex].FlowId }
                 Label { font.pointSize: applicationData.Theme.FontSmall; text: "Flow Type" }            Label { font.pointSize: applicationData.Theme.FontSmall; text: sensingFlowListView.model[selectedIndex].FlowTypeName }
-                Label { font.pointSize: applicationData.Theme.FontSmall; text: "Scale" }                Label { font.pointSize: applicationData.Theme.FontSmall; text: sensingFlowListView.model[selectedIndex].Scale }
                 Label { font.pointSize: applicationData.Theme.FontSmall; text: "Duration" }             Label { font.pointSize: applicationData.Theme.FontSmall; text: sensingFlowListView.model[selectedIndex].Duration }
                 Label { font.pointSize: applicationData.Theme.FontSmall; text: "Flow Start" }           Label { font.pointSize: applicationData.Theme.FontSmall; text: sensingFlowListView.model[selectedIndex].UnixEpochStartStr }
                 Label { font.pointSize: applicationData.Theme.FontSmall; text: "Flow End" }             Label { font.pointSize: applicationData.Theme.FontSmall; text: sensingFlowListView.model[selectedIndex].UnixEpochEndStr }
                 Label { font.pointSize: applicationData.Theme.FontSmall; text: "Simulation Maximum" }   Label { font.pointSize: applicationData.Theme.FontSmall; text: sensingFlowListView.model[selectedIndex].Maximum }
                 Label { font.pointSize: applicationData.Theme.FontSmall; text: "Simulation Minimum" }   Label { font.pointSize: applicationData.Theme.FontSmall; text: sensingFlowListView.model[selectedIndex].Minimum }
-                Label { font.pointSize: applicationData.Theme.FontSmall; text: "Unit of Measurement" }  Label { font.pointSize: applicationData.Theme.FontSmall; text: sensingFlowListView.model[selectedIndex].UnitOfMeasurement }
                 Label { font.pointSize: applicationData.Theme.FontSmall; text: "Dataset Filename" }     Label { font.pointSize: applicationData.Theme.FontSmall; text: sensingFlowListView.model[selectedIndex].DatasetFilename }
             }
 
@@ -275,7 +273,7 @@ Page
                 CustomButton
                 {
                     id:btnEntityDetailsYes
-                    width: entityDetails.width*0.33
+                    width: 105
                     height: applicationData.Theme.BarHeight
                     text: "Close"
                     isDefault: true

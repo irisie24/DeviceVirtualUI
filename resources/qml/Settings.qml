@@ -68,7 +68,7 @@ Page
     {
         id: demoSelector
         anchors.top:  line0.bottom
-        anchors.topMargin: applicationData.Theme.BarHeight
+        anchors.topMargin: applicationData.Theme.BarHeight/3
         anchors.left: line0.left
         selectorSize: 32
         text: "Demo Mode"
@@ -89,7 +89,7 @@ Page
         height: 2
         border.width: 1
         anchors.top: demoSelector.bottom
-        anchors.topMargin: applicationData.Theme.BarHeight
+        anchors.topMargin: applicationData.Theme.BarHeight/3
         anchors.horizontalCenter: parent.horizontalCenter
         border.color: applicationData.Theme.AccentBaseColor
     }
@@ -98,7 +98,7 @@ Page
     {
         id: traceSelector
         anchors.top:  line2.bottom
-        anchors.topMargin: applicationData.Theme.BarHeight
+        anchors.topMargin: applicationData.Theme.BarHeight/3
         anchors.left: line0.left
         selectorSize: 32
         text: "Trace"
@@ -128,7 +128,7 @@ Page
         height: 2
         border.width: 1
         anchors.top: traceSelector.bottom
-        anchors.topMargin: applicationData.Theme.BarHeight
+        anchors.topMargin: applicationData.Theme.BarHeight/3
         anchors.horizontalCenter: parent.horizontalCenter
         border.color: applicationData.Theme.AccentBaseColor
     }
@@ -137,7 +137,7 @@ Page
     {
         id: dumpSelector
         anchors.top:  line3.bottom
-        anchors.topMargin: applicationData.Theme.BarHeight
+        anchors.topMargin: applicationData.Theme.BarHeight/3
         anchors.left: line0.left
         selectorSize: 32
         text: "Dump Rx/Tx"
@@ -158,69 +158,27 @@ Page
         height: 2
         border.width: 1
         anchors.top: dumpSelector.bottom
-        anchors.topMargin: applicationData.Theme.BarHeight
+        anchors.topMargin: applicationData.Theme.BarHeight/3
         anchors.horizontalCenter: parent.horizontalCenter
         border.color: applicationData.Theme.AccentBaseColor
     }
 
-    Rectangle
+    Grid
     {
-        id: rect1
-        width: settingsPage.width*0.9
-        height: applicationData.Theme.BarHeight*2
-        anchors.horizontalCenter: parent.horizontalCenter
+        id: mqttDetailsGrid
+        rows: 3
+        columns: 4
+        width: parent.width*0.9
+        anchors.right: parent.right
+        anchors.topMargin: applicationData.Theme.BarHeight/3
         anchors.top: line4.bottom
+        spacing: 10
 
-        Label
-        {
-            id: lbl1
-            height: applicationData.Theme.BarHeight
-            width: 200
-            text: "MQTT Host IP Address"
-            anchors.verticalCenter: parent.verticalCenter
-            anchors.left: parent.left
-        }
-
-        TextField
-        {
-            id: inp1
-            height: applicationData.Theme.BarHeight
-            width: 200
-            anchors.verticalCenter: parent.verticalCenter
-            anchors.left: lbl1.right
-            maximumLength: 15
-            placeholderText: "IPv4 Address"
-        }
-    }
-
-    Rectangle
-    {
-        id: rect2
-        width: settingsPage.width*0.9
-        height: applicationData.Theme.BarHeight*2
-        anchors.horizontalCenter: parent.horizontalCenter
-        anchors.top: rect1.bottom
-
-        Label
-        {
-            id: lbl2
-            height: applicationData.Theme.BarHeight
-            width: 200
-            text: "MQTT Host Port"
-            anchors.verticalCenter: parent.verticalCenter
-            anchors.left: parent.left
-        }
-
-        TextField
-        {
-            id: inp2
-            height: applicationData.Theme.BarHeight
-            width: 200
-            anchors.verticalCenter: parent.verticalCenter
-            anchors.left: lbl2.right
-            maximumLength: 5
-            placeholderText: "Port"
-        }
+        Label { text: "MQTT Host Address" }  TextField { width: 200; height:applicationData.Theme.BarHeight/2 }
+        Label { text: "MQTT Port" }  TextField { width: 200; height:applicationData.Theme.BarHeight/2 }
+        Label { text: "MQTT Client ID" }  TextField { width: 200; height:applicationData.Theme.BarHeight/2  }
+        Label { text: "MQTT User" }  TextField { width: 200; height:applicationData.Theme.BarHeight/2 }
+        Label { text: "MQTT Password" }  TextField { width: 200; height:applicationData.Theme.BarHeight/2 }
     }
 
     Rectangle
@@ -229,10 +187,90 @@ Page
         width: settingsPage.width*0.9
         height: 2
         border.width: 1
-        anchors.top: rect2.bottom
-        anchors.topMargin: applicationData.Theme.BarHeight
+        anchors.top: mqttDetailsGrid.bottom
+        anchors.topMargin: applicationData.Theme.BarHeight/3
         anchors.horizontalCenter: parent.horizontalCenter
         border.color: applicationData.Theme.AccentBaseColor
+    }
+
+    Grid
+    {
+        id: dbDetailsGrid
+        rows: 3
+        columns: 4
+        width: parent.width*0.9
+        anchors.right: parent.right
+        anchors.topMargin: applicationData.Theme.BarHeight/3
+        anchors.top: line5.bottom
+        spacing: 10
+
+        Label { text: "Database Name" }  TextField { width: 200; height:applicationData.Theme.BarHeight/2  }
+        Label { text: "Database Host Address" }  TextField { width: 200; height:applicationData.Theme.BarHeight/2 }
+        Label { text: "Database Port" }  TextField { width: 200; height:applicationData.Theme.BarHeight/2 }
+        Label { text: "Database User" }  TextField { width: 200; height:applicationData.Theme.BarHeight/2 }
+        Label { text: "Database Password" }  TextField { width: 200; height:applicationData.Theme.BarHeight/2 }
+    }
+
+
+    Rectangle
+    {
+        id: line6
+        width: settingsPage.width*0.9
+        height: 2
+        border.width: 1
+        anchors.top: dbDetailsGrid.bottom
+        anchors.topMargin: applicationData.Theme.BarHeight/3
+        anchors.horizontalCenter: parent.horizontalCenter
+        border.color: applicationData.Theme.AccentBaseColor
+    }
+
+    Rectangle
+    {
+        id: rect4
+        width: settingsPage.width
+        height: applicationData.Theme.BarHeight*2
+        anchors.top: line6.bottom
+        anchors.topMargin: 10
+
+        CustomButton
+        {
+            id:btnSave
+            width: 105
+            height: applicationData.Theme.BarHeight
+            text: "Save"
+            isDefault: true
+            accentColor: applicationData.Theme.AccentBaseColor
+            anchors.right: parent.right
+            anchors.verticalCenter: parent.verticalCenter
+            anchors.rightMargin: applicationData.Theme.BarHeight/2
+            onClicked:
+            {
+            }
+        }
+
+        Rectangle
+        {
+            id: filler
+            color: "transparent"
+            anchors.verticalCenter: parent.verticalCenter
+            anchors.right: btnSave.left
+        }
+
+        CustomButton
+        {
+            id:btnCancel
+            width: 105
+            height: applicationData.Theme.BarHeight
+            text: "Cancel"
+            isDefault: false
+            accentColor: applicationData.Theme.AccentBaseColor
+            anchors.right: filler.left
+            anchors.verticalCenter: parent.verticalCenter
+            anchors.rightMargin: applicationData.Theme.BarHeight/2
+            onClicked:
+            {
+            }
+        }
     }
 
     Label
@@ -240,9 +278,9 @@ Page
         id: swVersion
         text: "Version " + applicationData.AppVersion
         color: "darkgrey"
-        anchors.top: line5.bottom
+        anchors.bottom: parent.bottom
         anchors.horizontalCenter: parent.horizontalCenter
-        anchors.topMargin: 10
+        anchors.bottomMargin: 10
     }
 }
 

@@ -118,7 +118,7 @@ public:
 class EntityDevice : public DataEntity
 {
 public:
-    EntityDevice(QSqlDatabase* db, QString tabname);
+    EntityDevice(QSqlDatabase* db);
     virtual ~EntityDevice();
     bool createTable();
     bool createDevice(const Device &rec);

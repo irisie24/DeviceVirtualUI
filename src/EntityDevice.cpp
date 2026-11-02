@@ -2,7 +2,7 @@
 
 EntityDevice* deviceEntityPtr = nullptr;
 
-EntityDevice::EntityDevice(QSqlDatabase *db, QString tabname) : DataEntity(db, tabname)
+EntityDevice::EntityDevice(QSqlDatabase *db) : DataEntity(db, "Devices")
 {
     deviceEntityPtr = this;
 }

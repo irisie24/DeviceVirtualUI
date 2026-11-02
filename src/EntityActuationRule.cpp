@@ -2,7 +2,7 @@
 
 EntityActuationRule* actuationRuleEntityPtr = nullptr;
 
-EntityActuationRule::EntityActuationRule(QSqlDatabase *db, QString tabname) : DataEntity(db, tabname)
+EntityActuationRule::EntityActuationRule(QSqlDatabase *db) : DataEntity(db, "ActuationRules")
 {
     actuationRuleEntityPtr = this;
 }
@@ -13,7 +13,7 @@ EntityActuationRule::~EntityActuationRule()
 
 bool EntityActuationRule::createTable()
 {
-    QString sqlString = QString(R"SQL(CREATE TABLE IF NOT EXISTS %1 ("RuleId" text NOT NULL PRIMARY KEY, "DeviceId" text NOT NULL REFERENCES "Devices"("DeviceId") ON DELETE CASCADE, "ConditionType" integer NOT NULL, "ValueThreshold" bigint NOT NULL, "Scale" bigint NOT NULL, "TargetType" integer NOT NULL, "TargetDeviceName" text NOT NULL, "TargetActionValue" bigint NOT NULL, "IsChained" boolean NOT NULL, "RuleIdIfConditionFalse" text NOT NULL DEFAULT '', "RuleIdIfConditionTrue" text NOT NULL DEFAULT ''))SQL")
+    QString sqlString = QString(R"SQL(CREATE TABLE IF NOT EXISTS %1 ("RuleId" text NOT NULL PRIMARY KEY, "DeviceId" text NOT NULL REFERENCES "Devices"("DeviceId") ON DELETE CASCADE, "ConditionType" integer NOT NULL, "ValueThreshold" bigint NOT NULL, "TargetType" integer NOT NULL, "TargetDeviceName" text NOT NULL, "TargetActionValue" bigint NOT NULL, "IsChained" boolean NOT NULL, "RuleIdIfConditionFalse" text NOT NULL DEFAULT '', "RuleIdIfConditionTrue" text NOT NULL DEFAULT ''))SQL")
     .arg(quotedTable());
 
     return executeQuery(sqlString);
@@ -21,12 +21,12 @@ bool EntityActuationRule::createTable()
 
 bool EntityActuationRule::createActuationRule(const ActuationRule &rec)
 {
-    QString sqlString = QString(R"SQL(INSERT INTO %1 ("RuleId", "DeviceId", "ConditionType", "ValueThreshold", "Scale", "TargetType", "TargetDeviceName", "TargetActionValue", "IsChained", "RuleIdIfConditionFalse", "RuleIdIfConditionTrue") VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?))SQL")
+    QString sqlString = QString(R"SQL(INSERT INTO %1 ("RuleId", "DeviceId", "ConditionType", "ValueThreshold", "TargetType", "TargetDeviceName", "TargetActionValue", "IsChained", "RuleIdIfConditionFalse", "RuleIdIfConditionTrue") VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?))SQL")
     .arg(quotedTable());
 
     return executeQuery(sqlString,
                         QVariantList() << rec.RuleId_ << rec.DeviceId_ << rec.Condition_ << rec.ValueThreshold_
-                                       << rec.Scale_ << rec.TargetType_ << rec.TargetDeviceName_
+                                       << rec.TargetType_ << rec.TargetDeviceName_
                                        << rec.TargetActionValue_ << rec.IsChained_
                                        << rec.RuleIdIfConditionFalse_ << rec.RuleIdIfConditionTrue_);
 }
@@ -39,7 +39,6 @@ ActuationRule EntityActuationRule::fromRecord(const QSqlRecord &rec)
     struc.DeviceId_ = rec.value("DeviceId").toString();
     struc.Condition_ = rec.value("ConditionType").toInt();
     struc.ValueThreshold_ = rec.value("ValueThreshold").toLongLong();
-    struc.Scale_ = rec.value("Scale").toULongLong();
     struc.TargetType_ = rec.value("TargetType").toInt();
     struc.TargetDeviceName_ = rec.value("TargetDeviceName").toString();
     struc.TargetActionValue_ = rec.value("TargetActionValue").toLongLong();
