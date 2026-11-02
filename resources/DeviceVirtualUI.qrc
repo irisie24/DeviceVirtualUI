@@ -29,7 +29,6 @@
         <file>qml/ResetPasscodeStage1.qml</file>
         <file>qml/ResetPasscodeStage2.qml</file>
         <file>qml/ResetPasscodeStage3.qml</file>
-        <file>qml/Help.qml</file>
         <file>qml/Settings.qml</file>
         <file>qml/Trace.qml</file>
 
@@ -63,7 +62,6 @@
         <file>images/ActuationItem.png</file>
 
         <file>images/Settings.png</file>
-        <file>images/Help.png</file>
         <file>images/Trace.png</file>
         <file>images/Exit.png</file>
 

@@ -1,5 +1,4 @@
 #include "Controller.hpp"
-#include "Help.hpp"
 #include "Version.hpp"
 
 //New User creation interpage variables
@@ -17,7 +16,7 @@ Controller::Controller(QGuiApplication *appPtr, QObject *parent)
 {
     app = appPtr;
 
-    appVerion_ = csa_version;
+    appVerion_ = dv_version;
     appVerion_ += ", Qt Version ";
     appVerion_ += qVersion();
 
@@ -47,9 +46,6 @@ Controller::Controller(QGuiApplication *appPtr, QObject *parent)
 
 void Controller::InitializeSysten()
 {
-    Help::LoadHelpStrings(0, helpStringList_);
-    emit HelpStringsChanged();
-
     emit IsDarkThemeChanged();
     emit IsDemoModeChanged();
     emit IsTraceEnabledChanged();
@@ -77,6 +73,9 @@ void Controller::OnAppInitializationComplete()
 {
     emit initializationComplete();
     emit DeviceListChanged();
+    emit DeviceNamesChanged();
+    emit SensingFlowListChanged();
+    emit ActuationRuleListChanged();
     emit deviceAction(true);
 }
 
@@ -136,15 +135,6 @@ QString Controller::invokeRetreiveLastPage()
     return lastPage_;
 }
 
-void Controller::invokeLoadHelpStrings(uint32_t index)
-{
-    helpStringList_.clear();
-
-    Help::LoadHelpStrings(index, helpStringList_);
-
-    emit HelpStringsChanged();
-}
-
 void Controller::invokeAddCommand()
 {
     if(lastPage_ == "Devices.qml")
@@ -199,11 +189,6 @@ void Controller::setIsDarkTheme(bool isdarktheme)
 
     emit IsDarkThemeChanged();
     emit ThemeChanged();
-}
-
-QList<QString> Controller::getHelpStrings()
-{
-    return helpStringList_;
 }
 
 void Controller::setIsFirstRun(bool isfirstrun)
@@ -449,18 +434,26 @@ UserInfo Controller::getCurrentUser()
 void Controller::setDeviceList(QList<Device> devicelist)
 {
     devices_.clear();
+    devicesNames_.clear();
 
     foreach(Device d , devicelist)
     {
         devices_.append(d);
+        devicesNames_.append(" [ " + d.DeviceId_ + " ] " + d.DeviceName_);
     }
 
     emit DeviceListChanged();
+    emit DeviceNamesChanged();
 }
 
 QList<Device> Controller::getDeviceList()
 {
     return devices_;
+}
+
+QList<QString> Controller::getDeviceNames()
+{
+    return devicesNames_;
 }
 
 void Controller::setSensingFlowList(QList<SensingFlow> sensingFlowlist)
@@ -499,6 +492,12 @@ QList<ActuationRule> Controller::getActuationRuleList()
 
 void Controller::initializeDatabase()
 {
+    users_.clear();
+    devicesNames_.clear();
+    devices_.clear();
+    actuationRules_.clear();
+    sensingFlows_.clear();
+
     users_.append(UserInfo(true, "USER001", "1234", "1234"));
 
     devices_.append(Device("DEV-001", "USER001", "Boiler Temperature Probe", "Acme", "T-100", 3, true, 1900000000ULL, SimulationModeRealtime, 15000ULL, 0ULL, 2257ULL, 8836ULL, 1100ULL, MarkovTwoState, "degC", 10));
@@ -529,7 +528,16 @@ void Controller::initializeDatabase()
     actuationRules_.append(ActuationRule("10009", "DEV-005",  1, 40, 100, 3, "/dev/USB0", 5, false, "-","-"));
     actuationRules_.append(ActuationRule("10010", "DEV-005",  2, 40, 100, 4, "/dev/USB0", 7, false, "-","-"));
 
+    foreach(Device d , devices_)
+    {
+        devices_.append(d);
+        devicesNames_.append(" [ " + d.DeviceId_ + " ] " + d.DeviceName_);
+    }
 
+    for(int x = 0; x <5; x++)
+    {
+        QThread::sleep(1);
+    }
 }
 
 void Controller::generateDashboardData()

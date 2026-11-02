@@ -20,7 +20,7 @@ Page
             font.bold: true
             color: applicationData.Theme.TextPrimaryColor
             wrapMode: "Wrap"
-            width: addDevicePage.width*0.9
+            width: addDevicePage.width
             anchors.right: parent.right
             anchors.top: parent.top
             anchors.topMargin: applicationData.Theme.BarHeight/2

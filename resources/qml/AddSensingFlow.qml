@@ -31,13 +31,13 @@ Page
             id: entityDetailsGridDlg
             rows: 8
             columns: 4
-            width: addSensingFLowPage.width*0.9
+            width: addSensingFLowPage.width
             anchors.right: parent.right
             anchors.top: entityDetailsText.bottom
             anchors.topMargin: applicationData.Theme.BarHeight/2
             spacing: 10
 
-            Label { text: "Device Id" }  TextEdit { text: "" }
+            Label { text: "Device Id" }  ComboBox { model: applicationData.DeviceNames }
             Label { text: "Flow Id" }  TextEdit { text: "" }
             Label { text: "Flow Type" }  TextEdit { text: "" }
             Label { text: "Scale" }  TextEdit { text: "" }

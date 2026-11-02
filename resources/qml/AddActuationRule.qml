@@ -31,25 +31,13 @@ Page
             id: entityDetailsGridDlg
             rows: 8
             columns: 4
-            width: addActuationRulePage.width*0.9
+            width: addActuationRulePage.width
             anchors.right: parent.right
             anchors.top: entityDetailsText.bottom
             anchors.topMargin: applicationData.Theme.BarHeight/2
             spacing: 10
 
-            Label { text: "Device Id" }
-            Label { text: "Flow Id" }  TextEdit { text: "" }
-            Label { text: "Flow Type" }  TextEdit { text: "" }
-            Label { text: "Scale" }  TextEdit { text: "" }
-            Label { text: "Duration" }  TextEdit { text: "" }
-            Label { text: "Flow Start" }  ToolButton { icon.source: "../images/Calendar.png"; height: 32; width:32  }
-            Label { text: "Flow End" }  ToolButton { icon.source: "../images/Calendar.png"; height: 32; width:32  }
-            Label { text: "Simulation Maximum" }  TextEdit { text: "" }
-            Label { text: "Simulation Minimum" }  TextEdit { text: "" }
-            Label { text: "Unit of Measurement" } TextEdit { text: "" }
-            Label { text: "Dataset Filename" }  TextEdit { text: "" }
-
-            Label { text: "Device Id" }  TextEdit { text: "" }
+            Label { text: "Device Id" }  ComboBox { model: applicationData.DeviceNames }
             Label { text: "Rule Id" }  TextEdit { text: "" }
             Label { text: "Condition" }  ComboBox { }
             Label { text: "Activation Threshold" }  TextEdit { text: "" }

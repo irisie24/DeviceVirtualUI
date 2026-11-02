@@ -57,7 +57,6 @@ public:
 
     Q_INVOKABLE void invokeSaveCurrentPage(QString page);
     Q_INVOKABLE QString invokeRetreiveLastPage();
-    Q_INVOKABLE void invokeLoadHelpStrings(uint32_t index);
     Q_INVOKABLE void invokeAddCommand();
 
     Q_PROPERTY (QString AppVersion READ getAppVersion NOTIFY AppVersionChanged)
@@ -78,9 +77,6 @@ public:
     Q_PROPERTY (UserInfo CurrentUser READ getCurrentUser WRITE setCurrentUser NOTIFY CurrentUserChanged)
     void setCurrentUser(UserInfo iuser);
     UserInfo getCurrentUser();
-
-    Q_PROPERTY (QList<QString> HelpStrings READ getHelpStrings NOTIFY HelpStringsChanged)
-    QList<QString> getHelpStrings();
 
     Q_PROPERTY (bool IsFirstRun READ getIsFirstRun WRITE setIsFirstRun NOTIFY IsFirstRunChanged)
     void setIsFirstRun(bool isfirstrun);
@@ -115,11 +111,13 @@ public:
     void setActuationRuleList(QList<ActuationRule> actuationRulelist);
     QList<ActuationRule> getActuationRuleList();
 
+    Q_PROPERTY (QList<QString> DeviceNames READ getDeviceNames NOTIFY DeviceNamesChanged)
+    QList<QString> getDeviceNames();
+
 signals:
 
     void ThemeChanged();
     void ShowIndicatorChanged();
-    void HelpStringsChanged();
     void AppSyncTimeChanged();
     void IsDarkThemeChanged();
     void IsDemoModeChanged();
@@ -169,6 +167,7 @@ signals:
     void DeviceListChanged();
     void SensingFlowListChanged();
     void ActuationRuleListChanged();
+    void DeviceNamesChanged();
 
 private slots:
     void OnAppInitializationComplete();
@@ -176,9 +175,6 @@ private slots:
 private:
 
     QGuiApplication* app;
-
-    QList<QString> helpStringList_;
-    QString helpImageUrl_;
 
     //Globals / Miscellanous
     bool is_first_run_;
@@ -206,6 +202,7 @@ private:
     QList<Device> devices_;
     QList<SensingFlow> sensingFlows_;
     QList<ActuationRule> actuationRules_;
+    QList<QString> devicesNames_;
 };
 
 extern Controller* controllerPtr;

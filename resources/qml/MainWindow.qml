@@ -57,6 +57,12 @@ ApplicationWindow
                 text: qsTr("Home")
                 width: parent.width
 
+                background: Rectangle
+                {
+                    color: applicationData.Theme.AccentHighlightColor
+                    radius: 0
+                }
+
                 onClicked:
                 {
                     drawer.close()
@@ -74,15 +80,7 @@ ApplicationWindow
                     height: iconHeight
                 }
 
-                enabled:
-                {
-                    if(applicationData.CurrentMeterSerialNo === "")
-                    {
-                        return false
-                    }
-
-                    return true
-                }
+                enabled:true
             }
 
             MenuSeparator
@@ -94,6 +92,13 @@ ApplicationWindow
             {
                 text: qsTr("Devices")
                 width: parent.width
+
+                background: Rectangle
+                {
+                    color: applicationData.Theme.AccentHighlightColor
+                    radius: 0
+                }
+
                 onClicked:
                 {
                     applicationData.invokeSaveCurrentPage("Devices.qml")
@@ -123,6 +128,12 @@ ApplicationWindow
             {
                 text: qsTr("Sensing Flows")
                 width: parent.width
+
+                background: Rectangle
+                {
+                    color: applicationData.Theme.AccentHighlightColor
+                    radius: 0
+                }
 
                 onClicked:
                 {
@@ -159,6 +170,12 @@ ApplicationWindow
                 text: qsTr("Actuation Rules")
                 width: parent.width
 
+                background: Rectangle
+                {
+                    color: applicationData.Theme.AccentHighlightColor
+                    radius: 0
+                }
+
                 onClicked:
                 {
                     drawer.close()
@@ -193,6 +210,12 @@ ApplicationWindow
             {
                 text: qsTr("Signal Graph")
                 width: parent.width
+
+                background: Rectangle
+                {
+                    color: applicationData.Theme.AccentHighlightColor
+                    radius: 0
+                }
 
                 onClicked:
                 {
@@ -233,6 +256,13 @@ ApplicationWindow
             {
                 text: qsTr("Settings")
                 width: parent.width
+
+                background: Rectangle
+                {
+                    color: applicationData.Theme.AccentHighlightColor
+                    radius: 0
+                }
+
                 onClicked:
                 {
                     applicationData.invokeSaveCurrentPage("Settings.qml")
@@ -255,32 +285,15 @@ ApplicationWindow
 
             ItemDelegate
             {
-                text: qsTr("Help")
-                width: parent.width
-                onClicked:
-                {
-                    applicationData.invokeSaveCurrentPage("Help.qml")
-                    stackView.pop()
-                    stackView.push("Help.qml")
-                    drawer.close()
-                    headerPanel.headerTitle = "Help"
-                    headerPanel.addIconVisible = false;
-                    headerPanel.progressIndicatorVisible = false;
-                    headerPanel.connectionIndicatorVisible = false;
-                }
-
-                icon
-                {
-                    source: "../images/Help.png"
-                    width: iconWidth
-                    height: iconHeight
-                }
-            }
-
-            ItemDelegate
-            {
                 text: qsTr("Trace")
                 width: parent.width
+
+                background: Rectangle
+                {
+                    color: applicationData.Theme.AccentHighlightColor
+                    radius: 0
+                }
+
                 onClicked:
                 {
                     applicationData.invokeSaveCurrentPage("Trace.qml")
@@ -310,6 +323,13 @@ ApplicationWindow
             {
                 text: qsTr("Exit")
                 width: parent.width
+
+                background: Rectangle
+                {
+                    color: applicationData.Theme.AccentHighlightColor
+                    radius: 0
+                }
+
                 onClicked:
                 {
                     drawer.close();

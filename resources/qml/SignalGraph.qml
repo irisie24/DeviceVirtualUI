@@ -26,40 +26,12 @@ Page
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.top:parent.top
 
-        popup: Popup
-        {
-            id:comboPopup
-            y: deviceList.height - 1
-            width: deviceList.width
-            height:contentItem.implicitHeight
-            padding: 1
-
-            contentItem: ListView
-            {
-                id:listView
-                implicitHeight: contentHeight
-                model: deviceList.popup.visible ? deviceList.delegateModel : null
-                ScrollIndicator.vertical: ScrollIndicator { }
-
-                delegate: Text
-                {
-                }
-            }
-
-            background: Rectangle
-            {
-                border.width: 1
-                border.color: applicationData.Theme.AccentBaseColor
-                color: applicationData.Theme.AccentHighlightColor
-            }
-        }
-
         onCurrentIndexChanged:
         {
             //loadDeviceTelemetry();
         }
 
-        model: ["Device 1", "Device 2", "Device 3", "Device 4", "Device 5", "Device 6", "Device 7", "Device 8"]
+        model: applicationData.DeviceNames
     }
 
     GraphsView

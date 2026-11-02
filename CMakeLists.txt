@@ -72,7 +72,6 @@ ${SOURCES}
 ${SOURCE_DIR}/main.cpp
 ${SOURCE_DIR}/Logger.cpp
 ${SOURCE_DIR}/DeviceVirtualApp.cpp
-${SOURCE_DIR}/Help.cpp
 ${SOURCE_DIR}/Mqtt.cpp
 ${SOURCE_DIR}/Controller.cpp
 ${SOURCE_DIR}/DataInterface.cpp
@@ -87,7 +86,6 @@ set(HEADERS
 ${HEADERS}
 ${HEADER_DIR}/Logger.hpp
 ${HEADER_DIR}/DeviceVirtualApp.hpp
-${HEADER_DIR}/Help.hpp
 ${HEADER_DIR}/GraphData.hpp
 ${HEADER_DIR}/ApplicationTheme.hpp
 ${HEADER_DIR}/Mqtt.hpp

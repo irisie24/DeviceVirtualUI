@@ -1,6 +1,6 @@
 #ifndef CSA_VERSION
 #define CSA_VERSION
 
-const char* csa_version = "5.0.0RC5";
+const char* dv_version = "1.0.0 Beta";
 
 #endif
