@@ -16,7 +16,6 @@
 #include "EntityDevice.hpp"
 #include "EntitySensingFlow.hpp"
 #include "EntityActuationRule.hpp"
-#include "Logger.hpp"
 #include "Mqtt.hpp"
 #include "DataInterface.hpp"
 #include "EntityDevice.hpp"

@@ -239,7 +239,6 @@ ApplicationTheme Controller::getTheme()
 
 void Controller::Trace(QString str)
 {
-    Logger::GetInstance()->write(str.toStdString(), LogInfo);
     str = QDateTime::currentDateTime().toString("yy-MM-dd hh:mm:ss ") + str + "\n";
     if(traceString_.length() > 1024*1024)
     {
