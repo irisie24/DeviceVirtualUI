@@ -6,6 +6,7 @@
 #include <QString>
 #include <QGuiApplication>
 #include <QScreen>
+#include <QFont>
 
 class ApplicationTheme
 {
@@ -174,11 +175,15 @@ public:
         SideMenuExpandedWidth_  = static_cast<uint32_t>(sh * 0.180);
         SideMenuCollapsedWidth_ = static_cast<uint32_t>(sh * 0.045);
 
-        FontTiny_               = static_cast<uint32_t>(sh * 0.016);
-        FontSmall_              = static_cast<uint32_t>(sh * 0.019);
-        FontNormal_             = static_cast<uint32_t>(sh * 0.022);
-        FontLarge_              = static_cast<uint32_t>(sh * 0.028);
-        FontHuge_               = static_cast<uint32_t>(sh * 0.036);
+        qreal ptSz = QGuiApplication::font().pointSizeF();
+        if (ptSz <= 0)
+            ptSz = 12.0; // Fallback safety net if point size is also uninitialized
+
+        FontTiny_               = static_cast<uint32_t>(ptSz * 0.75);
+        FontSmall_              = static_cast<uint32_t>(ptSz* 0.85);
+        FontNormal_             = static_cast<uint32_t>(ptSz);
+        FontLarge_              = static_cast<uint32_t>(ptSz * 1.25);
+        FontHuge_               = static_cast<uint32_t>(ptSz * 1.5);
     }
 };
 

@@ -251,17 +251,17 @@ Page
                 anchors.topMargin: applicationData.Theme.BarHeight/2
                 spacing: 10
 
-                Label { text: "Device Id" }  Label { text: actuationRuleListView.model[selectedIndex].DeviceId }
-                Label { text: "Rule Id" }  Label { text: actuationRuleListView.model[selectedIndex].RuleId }
-                Label { text: "Condition" }  Label { text: actuationRuleListView.model[selectedIndex].ConditionName }
-                Label { text: "Activation Threshold" }  Label { text: actuationRuleListView.model[selectedIndex].ValueThreshold }
-                Label { text: "Scale" }  Label { text: actuationRuleListView.model[selectedIndex].Scale }
-                Label { text: "Target Type" }  Label { text: actuationRuleListView.model[selectedIndex].TargetTypeStr }
-                Label { text: "Target I/O Device" }  Label { text: actuationRuleListView.model[selectedIndex].TargetDeviceName }
-                Label { text: "Target Activation Value" }  Label { text: actuationRuleListView.model[selectedIndex].TargetActionValue }
-                Label { text: "Is Chained" }  Label { text: actuationRuleListView.model[selectedIndex].IsChained }
-                Label { text: "Rule if condition fails" }  Label { text: actuationRuleListView.model[selectedIndex].RuleIdIfConditionFalse }
-                Label { text: "Rule if condition suceeds" }  Label { text: actuationRuleListView.model[selectedIndex].RuleIdIfConditionTrue }
+                Label { font.pointSize: applicationData.Theme.FontSmall; text: "Device Id" }                 Label { font.pointSize: applicationData.Theme.FontSmall; text: actuationRuleListView.model[selectedIndex].DeviceId }
+                Label { font.pointSize: applicationData.Theme.FontSmall; text: "Rule Id" }                   Label { font.pointSize: applicationData.Theme.FontSmall; text: actuationRuleListView.model[selectedIndex].RuleId }
+                Label { font.pointSize: applicationData.Theme.FontSmall; text: "Condition" }                 Label { font.pointSize: applicationData.Theme.FontSmall; text: actuationRuleListView.model[selectedIndex].ConditionName }
+                Label { font.pointSize: applicationData.Theme.FontSmall; text: "Activation Threshold" }      Label { font.pointSize: applicationData.Theme.FontSmall; text: actuationRuleListView.model[selectedIndex].ValueThreshold }
+                Label { font.pointSize: applicationData.Theme.FontSmall; text: "Scale" }                     Label { font.pointSize: applicationData.Theme.FontSmall; text: actuationRuleListView.model[selectedIndex].Scale }
+                Label { font.pointSize: applicationData.Theme.FontSmall; text: "Target Type" }               Label { font.pointSize: applicationData.Theme.FontSmall; text: actuationRuleListView.model[selectedIndex].TargetTypeStr }
+                Label { font.pointSize: applicationData.Theme.FontSmall; text: "Target I/O Device" }         Label { font.pointSize: applicationData.Theme.FontSmall; text: actuationRuleListView.model[selectedIndex].TargetDeviceName }
+                Label { font.pointSize: applicationData.Theme.FontSmall; text: "Target Activation Value" }   Label { font.pointSize: applicationData.Theme.FontSmall; text: actuationRuleListView.model[selectedIndex].TargetActionValue }
+                Label { font.pointSize: applicationData.Theme.FontSmall; text: "Is Chained" }                Label { font.pointSize: applicationData.Theme.FontSmall; text: actuationRuleListView.model[selectedIndex].IsChained }
+                Label { font.pointSize: applicationData.Theme.FontSmall; text: "Rule if condition fails" }   Label { font.pointSize: applicationData.Theme.FontSmall; text: actuationRuleListView.model[selectedIndex].RuleIdIfConditionFalse }
+                Label { font.pointSize: applicationData.Theme.FontSmall; text: "Rule if condition suceeds" } Label { font.pointSize: applicationData.Theme.FontSmall; text: actuationRuleListView.model[selectedIndex].RuleIdIfConditionTrue }
             }
 
             Rectangle

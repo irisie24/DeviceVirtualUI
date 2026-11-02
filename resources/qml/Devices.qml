@@ -251,22 +251,22 @@ Page
                 anchors.topMargin: applicationData.Theme.BarHeight/2
                 spacing: 10
 
-                Label { text: "Device Id" }  Label { text: deviceListView.model[selectedIndex].DeviceId }
-                Label { text: "Device Name" }  Label { text: deviceListView.model[selectedIndex].DeviceName }
-                Label { text: "Make" }  Label { text: deviceListView.model[selectedIndex].Make }
-                Label { text: "Model" }  Label { text: deviceListView.model[selectedIndex].Model }
-                Label { text: "Simulation Flows" }  Label { text: deviceListView.model[selectedIndex].NumberOfFlows }
-                Label { text: "Flows Repeatable" }  Label { text: deviceListView.model[selectedIndex].RepeatFlowSequence }
-                Label { text: "Flow Sequence End" }  Label { text: deviceListView.model[selectedIndex].FlowSequenceEndStr }
-                Label { text: "Simulation Mode" }  Label { text: deviceListView.model[selectedIndex].Mode }
-                Label { text: "Operating Maximum" }  Label { text: deviceListView.model[selectedIndex].OperatingMax }
-                Label { text: "Operating Minimum" }  Label { text: deviceListView.model[selectedIndex].OperatingMin }
-                Label { text: "Latitude" }  Label { text: deviceListView.model[selectedIndex].Latitude }
-                Label { text: "Longitude" }  Label { text: deviceListView.model[selectedIndex].Longitude }
-                Label { text: "Altitude" }  Label { text: deviceListView.model[selectedIndex].Altitude }
-                Label { text: "Generator Model" }  Label { text: deviceListView.model[selectedIndex].GenModelStr }
-                Label { text: "Unit of Measurement" }  Label { text: deviceListView.model[selectedIndex].UnitOfMeasurement }
-                Label { text: "Scale" }  Label { text: deviceListView.model[selectedIndex].Scale }
+                Label { font.pointSize: applicationData.Theme.FontSmall; text: "Device Id" }            Label { font.pointSize: applicationData.Theme.FontSmall; text: deviceListView.model[selectedIndex].DeviceId }
+                Label { font.pointSize: applicationData.Theme.FontSmall; text: "Device Name" }          Label { font.pointSize: applicationData.Theme.FontSmall; text: deviceListView.model[selectedIndex].DeviceName }
+                Label { font.pointSize: applicationData.Theme.FontSmall; text: "Make" }                 Label { font.pointSize: applicationData.Theme.FontSmall; text: deviceListView.model[selectedIndex].Make }
+                Label { font.pointSize: applicationData.Theme.FontSmall; text: "Model" }                Label { font.pointSize: applicationData.Theme.FontSmall; text: deviceListView.model[selectedIndex].Model }
+                Label { font.pointSize: applicationData.Theme.FontSmall; text: "Simulation Flows" }     Label { font.pointSize: applicationData.Theme.FontSmall; text: deviceListView.model[selectedIndex].NumberOfFlows }
+                Label { font.pointSize: applicationData.Theme.FontSmall; text: "Flows Repeatable" }     Label { font.pointSize: applicationData.Theme.FontSmall; text: deviceListView.model[selectedIndex].RepeatFlowSequence }
+                Label { font.pointSize: applicationData.Theme.FontSmall; text: "Flow Sequence End" }    Label { font.pointSize: applicationData.Theme.FontSmall; text: deviceListView.model[selectedIndex].FlowSequenceEndStr }
+                Label { font.pointSize: applicationData.Theme.FontSmall; text: "Simulation Mode" }      Label { font.pointSize: applicationData.Theme.FontSmall; text: deviceListView.model[selectedIndex].Mode }
+                Label { font.pointSize: applicationData.Theme.FontSmall; text: "Operating Maximum" }    Label { font.pointSize: applicationData.Theme.FontSmall; text: deviceListView.model[selectedIndex].OperatingMax }
+                Label { font.pointSize: applicationData.Theme.FontSmall; text: "Operating Minimum" }    Label { font.pointSize: applicationData.Theme.FontSmall; text: deviceListView.model[selectedIndex].OperatingMin }
+                Label { font.pointSize: applicationData.Theme.FontSmall; text: "Latitude" }             Label { font.pointSize: applicationData.Theme.FontSmall; text: deviceListView.model[selectedIndex].Latitude }
+                Label { font.pointSize: applicationData.Theme.FontSmall; text: "Longitude" }            Label { font.pointSize: applicationData.Theme.FontSmall; text: deviceListView.model[selectedIndex].Longitude }
+                Label { font.pointSize: applicationData.Theme.FontSmall; text: "Altitude" }             Label { font.pointSize: applicationData.Theme.FontSmall; text: deviceListView.model[selectedIndex].Altitude }
+                Label { font.pointSize: applicationData.Theme.FontSmall; text: "Generator Model" }      Label { font.pointSize: applicationData.Theme.FontSmall; text: deviceListView.model[selectedIndex].GenModelStr }
+                Label { font.pointSize: applicationData.Theme.FontSmall; text: "Unit of Measurement" }  Label { font.pointSize: applicationData.Theme.FontSmall; text: deviceListView.model[selectedIndex].UnitOfMeasurement }
+                Label { font.pointSize: applicationData.Theme.FontSmall; text: "Scale" }                Label { font.pointSize: applicationData.Theme.FontSmall; text: deviceListView.model[selectedIndex].Scale }
             }
 
             Rectangle

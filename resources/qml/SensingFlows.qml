@@ -251,17 +251,17 @@ Page
                 anchors.topMargin: applicationData.Theme.BarHeight/2
                 spacing: 10
 
-                Label { text: "Device Id" }  Label { text: sensingFlowListView.model[selectedIndex].DeviceId }
-                Label { text: "Flow Id" }  Label { text: sensingFlowListView.model[selectedIndex].FlowId }
-                Label { text: "Flow Type" }  Label { text: sensingFlowListView.model[selectedIndex].FlowTypeName }
-                Label { text: "Scale" }  Label { text: sensingFlowListView.model[selectedIndex].Scale }
-                Label { text: "Duration" }  Label { text: sensingFlowListView.model[selectedIndex].Duration }
-                Label { text: "Flow Start" }  Label { text: sensingFlowListView.model[selectedIndex].UnixEpochStartStr }
-                Label { text: "Flow End" }  Label { text: sensingFlowListView.model[selectedIndex].UnixEpochEndStr }
-                Label { text: "Simulation Maximum" }  Label { text: sensingFlowListView.model[selectedIndex].Maximum }
-                Label { text: "Simulation Minimum" }  Label { text: sensingFlowListView.model[selectedIndex].Minimum }
-                Label { text: "Unit of Measurement" }  Label { text: sensingFlowListView.model[selectedIndex].UnitOfMeasurement }
-                Label { text: "Dataset Filename" }  Label { text: sensingFlowListView.model[selectedIndex].DatasetFilename }
+                Label { font.pointSize: applicationData.Theme.FontSmall; text: "Device Id" }            Label { font.pointSize: applicationData.Theme.FontSmall; text: sensingFlowListView.model[selectedIndex].DeviceId }
+                Label { font.pointSize: applicationData.Theme.FontSmall; text: "Flow Id" }              Label { font.pointSize: applicationData.Theme.FontSmall; text: sensingFlowListView.model[selectedIndex].FlowId }
+                Label { font.pointSize: applicationData.Theme.FontSmall; text: "Flow Type" }            Label { font.pointSize: applicationData.Theme.FontSmall; text: sensingFlowListView.model[selectedIndex].FlowTypeName }
+                Label { font.pointSize: applicationData.Theme.FontSmall; text: "Scale" }                Label { font.pointSize: applicationData.Theme.FontSmall; text: sensingFlowListView.model[selectedIndex].Scale }
+                Label { font.pointSize: applicationData.Theme.FontSmall; text: "Duration" }             Label { font.pointSize: applicationData.Theme.FontSmall; text: sensingFlowListView.model[selectedIndex].Duration }
+                Label { font.pointSize: applicationData.Theme.FontSmall; text: "Flow Start" }           Label { font.pointSize: applicationData.Theme.FontSmall; text: sensingFlowListView.model[selectedIndex].UnixEpochStartStr }
+                Label { font.pointSize: applicationData.Theme.FontSmall; text: "Flow End" }             Label { font.pointSize: applicationData.Theme.FontSmall; text: sensingFlowListView.model[selectedIndex].UnixEpochEndStr }
+                Label { font.pointSize: applicationData.Theme.FontSmall; text: "Simulation Maximum" }   Label { font.pointSize: applicationData.Theme.FontSmall; text: sensingFlowListView.model[selectedIndex].Maximum }
+                Label { font.pointSize: applicationData.Theme.FontSmall; text: "Simulation Minimum" }   Label { font.pointSize: applicationData.Theme.FontSmall; text: sensingFlowListView.model[selectedIndex].Minimum }
+                Label { font.pointSize: applicationData.Theme.FontSmall; text: "Unit of Measurement" }  Label { font.pointSize: applicationData.Theme.FontSmall; text: sensingFlowListView.model[selectedIndex].UnitOfMeasurement }
+                Label { font.pointSize: applicationData.Theme.FontSmall; text: "Dataset Filename" }     Label { font.pointSize: applicationData.Theme.FontSmall; text: sensingFlowListView.model[selectedIndex].DatasetFilename }
             }
 
             Rectangle

@@ -509,25 +509,25 @@ void Controller::initializeDatabase()
 
     sensingFlows_.append(SensingFlow("10001", "DEV-001", 1, 100, 300, 1790812800, 1793404800, 18, 35, "degC", "Boiler.csv"));
     sensingFlows_.append(SensingFlow("10002", "DEV-001", 2, 100, 300, 1790812800, 1793404800, 18, 35, "degC", "Boiler.csv"));
-    sensingFlows_.append(SensingFlow("10003", "DEV-002", 1, 100, 300, 1790812800, 1793404800, 18, 35, "degC", "Boiler.csv"));
-    sensingFlows_.append(SensingFlow("10004", "DEV-002", 2, 100, 300, 1790812800, 1793404800, 18, 35, "degC", "Boiler.csv"));
-    sensingFlows_.append(SensingFlow("10005", "DEV-003", 1, 100, 300, 1790812800, 1793404800, 18, 35, "degC", "Boiler.csv"));
-    sensingFlows_.append(SensingFlow("10006", "DEV-003", 2, 100, 300, 1790812800, 1793404800, 18, 35, "degC", "Boiler.csv"));
-    sensingFlows_.append(SensingFlow("10007", "DEV-004", 1, 100, 300, 1790812800, 1793404800, 18, 35, "degC", "Boiler.csv"));
-    sensingFlows_.append(SensingFlow("10008", "DEV-004", 2, 100, 300, 1790812800, 1793404800, 18, 35, "degC", "Boiler.csv"));
-    sensingFlows_.append(SensingFlow("10009", "DEV-005", 1, 100, 300, 1790812800, 1793404800, 18, 35, "degC", "Boiler.csv"));
-    sensingFlows_.append(SensingFlow("10010", "DEV-005", 2, 100, 300, 1790812800, 1793404800, 18, 35, "degC", "Boiler.csv"));
+    sensingFlows_.append(SensingFlow("10003", "DEV-002", 1, 100, 300, 1790812800, 1793404800, 18, 35, "bar", "Pressure_Transducer.csv"));
+    sensingFlows_.append(SensingFlow("10004", "DEV-002", 2, 100, 300, 1790812800, 1793404800, 18, 35, "bar", "Pressure_Transducer.csv"));
+    sensingFlows_.append(SensingFlow("10005", "DEV-003", 1, 100, 300, 1790812800, 1793404800, 18, 35, "cusec", "Flow_Meter.csv"));
+    sensingFlows_.append(SensingFlow("10006", "DEV-003", 2, 100, 300, 1790812800, 1793404800, 18, 35, "cusec", "Flow_Meter.csv"));
+    sensingFlows_.append(SensingFlow("10007", "DEV-004", 1, 100, 300, 1790812800, 1793404800, 18, 35, "khz", "Vibration_Sensor.csv"));
+    sensingFlows_.append(SensingFlow("10008", "DEV-004", 2, 100, 300, 1790812800, 1793404800, 18, 35, "khz", "Vibration_Sensor.csv"));
+    sensingFlows_.append(SensingFlow("10009", "DEV-005", 1, 100, 300, 1790812800, 1793404800, 18, 35, "cm", "Level_Switch.csv"));
+    sensingFlows_.append(SensingFlow("10010", "DEV-005", 2, 100, 300, 1790812800, 1793404800, 18, 35, "cm", "Level_Switch.csv"));
 
-    actuationRules_.append(ActuationRule("10001", "DEV-001",  1, 40, 100, 3, "/dev/USB0", 5, false, " "," "));
-    actuationRules_.append(ActuationRule("10002", "DEV-001",  2, 40, 100, 4, "/dev/USB0", 7, false, " "," "));
-    actuationRules_.append(ActuationRule("10003", "DEV-002",  1, 40, 100, 3, "/dev/USB0", 5, false, " "," "));
-    actuationRules_.append(ActuationRule("10004", "DEV-002",  2, 40, 100, 4, "/dev/USB0", 7, false, " "," "));
-    actuationRules_.append(ActuationRule("10005", "DEV-003",  1, 40, 100, 3, "/dev/USB0", 5, false, " "," "));
-    actuationRules_.append(ActuationRule("10006", "DEV-003",  2, 40, 100, 4, "/dev/USB0", 7, false, " "," "));
-    actuationRules_.append(ActuationRule("10007", "DEV-004",  1, 40, 100, 3, "/dev/USB0", 5, false, " "," "));
-    actuationRules_.append(ActuationRule("10008", "DEV-004",  2, 40, 100, 4, "/dev/USB0", 7, false, " "," "));
-    actuationRules_.append(ActuationRule("10009", "DEV-005",  1, 40, 100, 3, "/dev/USB0", 5, false, " "," "));
-    actuationRules_.append(ActuationRule("10010", "DEV-005",  2, 40, 100, 4, "/dev/USB0", 7, false, " "," "));
+    actuationRules_.append(ActuationRule("10001", "DEV-001",  1, 40, 100, 3, "/dev/USB0", 5, false, "-","-"));
+    actuationRules_.append(ActuationRule("10002", "DEV-001",  2, 40, 100, 4, "/dev/USB0", 7, false, "-","-"));
+    actuationRules_.append(ActuationRule("10003", "DEV-002",  1, 40, 100, 3, "/dev/USB0", 5, false, "-","-"));
+    actuationRules_.append(ActuationRule("10004", "DEV-002",  2, 40, 100, 4, "/dev/USB0", 7, false, "-","-"));
+    actuationRules_.append(ActuationRule("10005", "DEV-003",  1, 40, 100, 3, "/dev/USB0", 5, false, "-","-"));
+    actuationRules_.append(ActuationRule("10006", "DEV-003",  2, 40, 100, 4, "/dev/USB0", 7, false, "-","-"));
+    actuationRules_.append(ActuationRule("10007", "DEV-004",  1, 40, 100, 3, "/dev/USB0", 5, false, "-","-"));
+    actuationRules_.append(ActuationRule("10008", "DEV-004",  2, 40, 100, 4, "/dev/USB0", 7, false, "-","-"));
+    actuationRules_.append(ActuationRule("10009", "DEV-005",  1, 40, 100, 3, "/dev/USB0", 5, false, "-","-"));
+    actuationRules_.append(ActuationRule("10010", "DEV-005",  2, 40, 100, 4, "/dev/USB0", 7, false, "-","-"));
 
 
 }
