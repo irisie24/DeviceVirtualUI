@@ -572,7 +572,7 @@ void Controller::connectToMqttBroker()
 void Controller::OnMqttConnected()
 {
     Trace("MQTT Connected");
-    mqttClient.subscribe("devicevirtual/telemetry");
+    mqttClient.subscribe("devicevirtual/#");
 }
 
 void Controller::OnMqttDisconnected()

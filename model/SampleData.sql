@@ -42,14 +42,14 @@ INSERT INTO "ActuationRules"
     ("RuleId", "DeviceId", "ConditionType", "ValueThreshold", "TargetType", "TargetDeviceName",
      "TargetActionValue", "IsChained", "RuleIdIfConditionFalse", "RuleIdIfConditionTrue")
 VALUES
-    ('DEV-001-r1', 'DEV-001', 4,  9500, 0, 'cooling_fan_relay',  1,    true,  'DEV-001-r2', 'None'),
-    ('DEV-001-r2', 'DEV-001', 3,  5000, 0, 'heater_relay',       1,    false, 'None',       'None'),
-    ('DEV-002-r1', 'DEV-002', 4, 30000, 1, 'relief_valve_ctrl',  1,    true,  'DEV-002-r2', 'None'),
-    ('DEV-002-r2', 'DEV-002', 3,  1000, 1, 'pump_ctrl',          1,    false, 'None',       'None'),
-    ('DEV-003-r1', 'DEV-003', 3,  2000, 0, 'bypass_valve',       1,    true,  'DEV-003-r2', 'None'),
-    ('DEV-003-r2', 'DEV-003', 4,  8000, 2, 'flow_throttle_dac',  2048, false, 'None',       'None'),
-    ('DEV-004-r1', 'DEV-004', 4,  1000, 3, 'motor_drive_ctrl',   0,    true,  'None',       'DEV-004-r2'),
-    ('DEV-004-r2', 'DEV-004', 2,   800, 4, 'alarm_beacon',       1,    false, 'None',       'None'),
-    ('DEV-005-r1', 'DEV-005', 2,   750, 0, 'inlet_valve',        0,    true,  'DEV-005-r2', 'None'),
-    ('DEV-005-r2', 'DEV-005', 1,   250, 0, 'inlet_valve',        1,    false, 'None',       'None');
+    ('10001', 'DEV-001', 4,  9500, 0, 'cooling_fan_relay',  1,    true,  '10002', 'None'),
+    ('10002', 'DEV-001', 3,  5000, 0, 'heater_relay',       1,    false, 'None',       'None'),
+    ('10003', 'DEV-002', 4, 30000, 1, 'relief_valve_ctrl',  1,    true,  '10004', 'None'),
+    ('10004', 'DEV-002', 3,  1000, 1, 'pump_ctrl',          1,    false, 'None',       'None'),
+    ('10005', 'DEV-003', 3,  2000, 0, 'bypass_valve',       1,    true,  '10006', 'None'),
+    ('10006', 'DEV-003', 4,  8000, 2, 'flow_throttle_dac',  2048, false, 'None',       'None'),
+    ('10007', 'DEV-004', 4,  1000, 3, 'motor_drive_ctrl',   0,    true,  'None',       '10008'),
+    ('10008', 'DEV-004', 2,   800, 4, 'alarm_beacon',       1,    false, 'None',       'None'),
+    ('10009', 'DEV-005', 2,   750, 0, 'inlet_valve',        0,    true,  '10010', 'None'),
+    ('10010', 'DEV-005', 1,   250, 0, 'inlet_valve',        1,    false, 'None',       'None');
     
