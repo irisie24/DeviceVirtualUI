@@ -8,11 +8,6 @@ Page
 {
     id: signalGraphPage
 
-    background: Rectangle
-    {
-        color: "#20242b"
-    }
-
     ColumnLayout
     {
         anchors.fill: parent
@@ -40,10 +35,10 @@ Page
             Layout.fillWidth: true
             Layout.fillHeight: true
 
-            theme: GraphsTheme
-            {
-                colorScheme: GraphsTheme.ColorScheme.Dark
-            }
+            // theme: GraphsTheme
+            // {
+            //     colorScheme: GraphsTheme.ColorScheme.Dark
+            // }
 
             axisX: DateTimeAxis
             {
