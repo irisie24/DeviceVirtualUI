@@ -36,42 +36,46 @@ Page
 
     GraphsView
     {
-        id: chart
-        height: signalGraphPage.height - deviceList.height
-        width: signalGraphPage.width
-        anchors.top: deviceList.bottom
-        anchors.horizontalCenter: parent.horizontalCenter
-        anchors.topMargin: 5
+        id: temperatureGraph
 
-        theme: GraphsTheme { }
+        anchors.fill: parent
 
-        // Configure the horizontal X axis
-        axisX: ValueAxis
+        axisX: DateTimeAxis
         {
-            min: 0
-            max: 5
-            labelFormat: "%.1f"
+            id: timeAxis
+
+            labelFormat: "hh:mm:ss"
+            timeZone: timeAxis.timeZoneFromString("Asia/Kolkata")
+            min: new Date(Date.now() - 60000)
+            max: new Date(Date.now())
+            titleText: "Time"
         }
 
-        // Configure the vertical Y axis
         axisY: ValueAxis
         {
+            id: temperatureAxis
+
             min: 0
-            max: 10
-            labelFormat: "%d"
+            max: 50
+            labelFormat: "%.1f"
+            titleText: "Temperature (°C)"
         }
 
-        // Define the data series
         LineSeries
         {
-            id: lineSeries
-            color: "#2196F3" // Line color
-            width: 3        // Line thickness
-        }
-    }
+            id: temperatureSeries
 
-    function loadDeviceTelemetry()
-    {
+            color: "#29B6F6"
+            width: 2
+
+            function addReading(timestamp, temperature)
+            {
+                append(timestamp, temperature)
+
+                if (count > 25)
+                    remove(0)
+            }
+        }
     }
 
     Connections
@@ -81,6 +85,6 @@ Page
 
     function onTelemetry(x, y)
     {
-        lineSeries.append(x, y);
+        temperatureSeries.addReading(x.getTime(), y);
     }
 }

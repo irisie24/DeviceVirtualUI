@@ -585,4 +585,46 @@ void Controller::OnMqttDisconnected()
 void Controller::OnMqttMessageReceived(const QString &topic, const QString &message)
 {
     Trace("MQTT Message Received => " + message);
+
+    QHash<QString, QString> fields;
+
+    const QStringList parts = message.split(',', Qt::SkipEmptyParts);
+
+    for (const QString &part : parts)
+    {
+        const qsizetype separator = part.indexOf('=');
+
+        if (separator <= 0)
+            continue;
+
+        const QString key = part.left(separator).trimmed();
+        const QString value = part.mid(separator + 1).trimmed();
+
+        fields.insert(key, value);
+    }
+
+    bool timestampOk = false;
+    bool valueOk = false;
+    bool scaleOk = false;
+
+    const qint64 timestamp =
+        fields.value("timestamp").toLongLong(&timestampOk);
+
+    const double value =
+        fields.value("value").toDouble(&valueOk);
+
+    const double scale =
+        fields.value("scale").toDouble(&scaleOk);
+
+    if (!timestampOk || !valueOk || !scaleOk || scale == 0.0)
+    {
+        Trace("Invalid telemetry payload");
+        return;
+    }
+
+    const QDateTime x = QDateTime::fromSecsSinceEpoch(timestamp, QTimeZone::UTC);
+    const float y = static_cast<float>(value / scale);
+
+    emit telemetry(x, y);
+
 }

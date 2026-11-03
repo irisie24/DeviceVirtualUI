@@ -159,6 +159,7 @@ signals:
     void sensingFlowMessage(bool fl, QString str);
     void actuationRuleAction(bool fl);
     void actuationRuleMessage(bool fl, QString str);
+    void telemetry(QDateTime x, float y);
 
     //User management errors
     void userNameError();
