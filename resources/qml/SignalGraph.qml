@@ -1,3 +1,4 @@
+
 import QtQuick 2.15
 import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.3
@@ -7,73 +8,108 @@ Page
 {
     id: signalGraphPage
 
-    Component.onCompleted:
+    background: Rectangle
     {
+        color: "#20242b"
     }
 
-    Rectangle
+    ColumnLayout
     {
-        id: background
-        width: parent.width
-        height: parent.height
-        anchors.top: parent.top
-    }
-
-    ComboBox
-    {
-        id: deviceList
-        width: signalGraphPage.width*0.9
-        anchors.horizontalCenter: parent.horizontalCenter
-        anchors.top:parent.top
-
-        onCurrentIndexChanged:
-        {
-            //loadDeviceTelemetry();
-        }
-
-        model: applicationData.DeviceNames
-    }
-
-    GraphsView
-    {
-        id: temperatureGraph
-
         anchors.fill: parent
+        anchors.margins: 12
+        spacing: 10
 
-        axisX: DateTimeAxis
+        ComboBox
         {
-            id: timeAxis
+            id: deviceList
 
-            labelFormat: "hh:mm:ss"
-            timeZone: timeAxis.timeZoneFromString("Asia/Kolkata")
-            min: new Date(Date.now() - 60000)
-            max: new Date(Date.now())
-            titleText: "Time"
-        }
+            Layout.fillWidth: true
 
-        axisY: ValueAxis
-        {
-            id: temperatureAxis
+            model: applicationData.DeviceNames
 
-            min: 0
-            max: 50
-            labelFormat: "%.1f"
-            titleText: "Temperature (°C)"
-        }
-
-        LineSeries
-        {
-            id: temperatureSeries
-
-            color: "#29B6F6"
-            width: 2
-
-            function addReading(timestamp, temperature)
+            onCurrentIndexChanged:
             {
-                append(timestamp, temperature)
+                // loadDeviceTelemetry();
+            }
+        }
 
-                if (count > 25)
-                    remove(0)
+        GraphsView
+        {
+            id: temperatureGraph
+
+            Layout.fillWidth: true
+            Layout.fillHeight: true
+
+            theme: GraphsTheme
+            {
+                colorScheme: GraphsTheme.ColorScheme.Dark
+            }
+
+            axisX: DateTimeAxis
+            {
+                id: timeAxis
+
+                labelFormat: "hh:mm:ss"
+                timeZone: timeZoneFromString("Asia/Kolkata")
+
+                min: new Date(0)
+                max: new Date(60000)
+
+                titleText: "Time"
+            }
+
+            axisY: ValueAxis
+            {
+                id: temperatureAxis
+
+                min: 0
+                max: 50
+
+                tickInterval: 5
+                labelFormat: "%.1f"
+
+                titleText: "Temperature (°C)"
+            }
+
+            LineSeries
+            {
+                id: temperatureSeries
+
+                color: "#29B6F6"
+                width: 2
+
+                pointDelegate: Rectangle
+                {
+                    property color pointColor
+
+                    width: 7
+                    height: 7
+                    radius: 3.5
+                    color: pointColor
+                }
+
+                function addReading(timestamp, temperature)
+                {
+                    // Timestamp is already in milliseconds.
+
+                    append(timestamp, temperature)
+
+                    // Maintain a rolling window of 25 readings.
+
+                    if (count > 25)
+                        remove(0)
+
+                    // Keep the X axis aligned with available readings.
+
+                    if (count > 0)
+                    {
+                        const first = at(0).x
+                        const last = at(count - 1).x
+
+                        timeAxis.min = new Date(first - 2500)
+                        timeAxis.max = new Date(last + 2500)
+                    }
+                }
             }
         }
     }
@@ -81,10 +117,10 @@ Page
     Connections
     {
         target: applicationData
-    }
 
-    function onTelemetry(x, y)
-    {
-        temperatureSeries.addReading(x.getTime(), y);
+        function onTelemetry(x, y)
+        {
+            temperatureSeries.addReading(x.getTime(), y)
+        }
     }
 }
