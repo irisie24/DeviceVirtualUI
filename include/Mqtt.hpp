@@ -3,6 +3,7 @@
 
 #include <QObject>
 #include <QTcpSocket>
+#include <QTimer>
 #include <QString>
 #include <QByteArray>
 #include <atomic>
@@ -14,12 +15,16 @@ class Mqtt : public QObject
 public:
     explicit Mqtt(QObject *parent = nullptr);
     Mqtt(const QString &brokerAddress, int port, const QString &clientId,
-               const QString &username, const QString &password, QObject *parent = nullptr);
+         const QString &username, const QString &password, QObject *parent = nullptr);
     ~Mqtt() override;
 
     void Initialize(const QString &brokerAddress, int port, const QString &clientId,
                     const QString &username, const QString &password);
-    void connect(int qos = 1, int timeout = 30);
+
+    // qos:       1 or 0 (QoS 2 handshake is not implemented; subscribe clamps to 1)
+    // timeout:   seconds to wait synchronously for TCP connect + CONNACK
+    // keepAlive: MQTT keepalive in seconds (0 disables PINGREQ and broker timeout)
+    void connect(int qos = 1, int timeout = 30, int keepAlive = 30);
     void disconnect();
 
     void publish(const QString &topic, const QString &message);
@@ -38,9 +43,11 @@ private slots:
     void onSocketConnected();
     void onSocketDisconnected();
     void onSocketError(QAbstractSocket::SocketError socketError);
+    void onKeepAlive();
 
 private:
     void sendPacket(const QByteArray &data);
+    quint16 nextPacketId();
     QByteArray buildConnectPacket(int qos, int keepAliveSeconds);
     QByteArray buildPublishPacket(const QString &topic, const QString &message, int qos);
     QByteArray buildSubscribePacket(const QString &topic, int qos);
@@ -57,8 +64,10 @@ private:
     bool m_isConnected;
     int m_qos;
     int m_timeout;
-    std::atomic<int> m_nextPacketId;
+    int m_keepAlive;
+    std::atomic<quint32> m_nextPacketId;
     QByteArray m_readBuffer;
+    QTimer *m_keepAliveTimer;
 };
 
-#endif // MQTTCLIENT_HPP
+#endif // MQTT_HPP

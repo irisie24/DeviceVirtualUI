@@ -8,6 +8,7 @@ namespace
 constexpr std::uint8_t kConnect = 0x10;
 constexpr std::uint8_t kConnAck = 0x20;
 constexpr std::uint8_t kPublish = 0x30;
+constexpr std::uint8_t kPubAck = 0x40;
 constexpr std::uint8_t kSubscribe = 0x80;
 constexpr std::uint8_t kSubAck = 0x90;
 constexpr std::uint8_t kUnsubscribe = 0xA0;
@@ -52,16 +53,19 @@ Mqtt::Mqtt(QObject *parent)
     , m_isConnected(false)
     , m_qos(1)
     , m_timeout(30)
+    , m_keepAlive(30)
     , m_nextPacketId(1)
+    , m_keepAliveTimer(new QTimer(this))
 {
     QObject::connect(m_socket, &QTcpSocket::connected, this, &Mqtt::onSocketConnected);
     QObject::connect(m_socket, &QTcpSocket::disconnected, this, &Mqtt::onSocketDisconnected);
     QObject::connect(m_socket, &QTcpSocket::readyRead, this, &Mqtt::onReadyRead);
     QObject::connect(m_socket, &QTcpSocket::errorOccurred, this, &Mqtt::onSocketError);
+    QObject::connect(m_keepAliveTimer, &QTimer::timeout, this, &Mqtt::onKeepAlive);
 }
 
 Mqtt::Mqtt(const QString &brokerAddress, int port, const QString &clientId,
-                       const QString &username, const QString &password, QObject *parent)
+           const QString &username, const QString &password, QObject *parent)
     : QObject(parent)
     , m_brokerAddress(brokerAddress)
     , m_port(port)
@@ -72,16 +76,19 @@ Mqtt::Mqtt(const QString &brokerAddress, int port, const QString &clientId,
     , m_isConnected(false)
     , m_qos(1)
     , m_timeout(30)
+    , m_keepAlive(30)
     , m_nextPacketId(1)
+    , m_keepAliveTimer(new QTimer(this))
 {
     QObject::connect(m_socket, &QTcpSocket::connected, this, &Mqtt::onSocketConnected);
     QObject::connect(m_socket, &QTcpSocket::disconnected, this, &Mqtt::onSocketDisconnected);
     QObject::connect(m_socket, &QTcpSocket::readyRead, this, &Mqtt::onReadyRead);
     QObject::connect(m_socket, &QTcpSocket::errorOccurred, this, &Mqtt::onSocketError);
+    QObject::connect(m_keepAliveTimer, &QTimer::timeout, this, &Mqtt::onKeepAlive);
 }
 
 void Mqtt::Initialize(const QString &brokerAddress, int port, const QString &clientId,
-                            const QString &username, const QString &password)
+                      const QString &username, const QString &password)
 {
     m_brokerAddress = brokerAddress;
     m_port = port;
@@ -91,6 +98,7 @@ void Mqtt::Initialize(const QString &brokerAddress, int port, const QString &cli
     m_isConnected = false;
     m_qos = 1;
     m_timeout = 30;
+    m_keepAlive = 30;
     m_nextPacketId = 1;
 }
 
@@ -104,10 +112,11 @@ bool Mqtt::isConnected() const
     return m_isConnected;
 }
 
-void Mqtt::connect(int qos, int timeout)
+void Mqtt::connect(int qos, int timeout, int keepAlive)
 {
     m_qos = qos;
     m_timeout = timeout;
+    m_keepAlive = keepAlive;
     m_readBuffer.clear();
 
     if (m_socket->state() != QAbstractSocket::UnconnectedState)
@@ -124,6 +133,7 @@ void Mqtt::connect(int qos, int timeout)
 
     QObject::connect(this, &Mqtt::connected, &loop, &QEventLoop::quit);
     QObject::connect(&timer, &QTimer::timeout, &loop, &QEventLoop::quit);
+    QObject::connect(m_socket, &QTcpSocket::disconnected, &loop, &QEventLoop::quit);
     QObject::connect(m_socket, &QAbstractSocket::errorOccurred, &loop, [&loop](QAbstractSocket::SocketError) {
         loop.quit();
     });
@@ -139,6 +149,8 @@ void Mqtt::connect(int qos, int timeout)
 
 void Mqtt::disconnect()
 {
+    m_keepAliveTimer->stop();
+
     if (m_socket->state() != QAbstractSocket::UnconnectedState)
     {
         QByteArray packet;
@@ -158,12 +170,14 @@ void Mqtt::disconnect()
 
 void Mqtt::onSocketConnected()
 {
-    const auto connectPacket = buildConnectPacket(m_qos, m_timeout);
+    const auto connectPacket = buildConnectPacket(m_qos, m_keepAlive);
     sendPacket(connectPacket);
 }
 
 void Mqtt::onSocketDisconnected()
 {
+    m_keepAliveTimer->stop();
+
     bool wasConnected = m_isConnected;
     m_isConnected = false;
     m_readBuffer.clear();
@@ -178,6 +192,12 @@ void Mqtt::onSocketError(QAbstractSocket::SocketError socketError)
 {
     Q_UNUSED(socketError);
     qWarning() << "MqttClient socket error:" << m_socket->errorString();
+}
+
+void Mqtt::onKeepAlive()
+{
+    static const char ping[2] = { static_cast<char>(kPingReq), 0x00 };
+    sendPacket(QByteArray(ping, 2));
 }
 
 void Mqtt::sendPacket(const QByteArray &data)
@@ -205,7 +225,6 @@ void Mqtt::onReadyRead()
 
         quint32 remainingLength = 0;
         quint32 multiplier = 1;
-        int remainingLengthBytesCount = 0;
         bool remLenFinished = false;
 
         for (int i = 0; i < 4; ++i)
@@ -216,7 +235,6 @@ void Mqtt::onReadyRead()
             }
             quint8 byte = static_cast<quint8>(m_readBuffer.at(index++));
             remainingLength += (static_cast<quint32>(byte & 0x7F) * multiplier);
-            remainingLengthBytesCount++;
             if ((byte & 0x80) == 0)
             {
                 remLenFinished = true;
@@ -227,30 +245,58 @@ void Mqtt::onReadyRead()
 
         if (!remLenFinished)
         {
+            // Either the remaining-length bytes are still arriving (wait),
+            // or all 4 had the continuation bit set (malformed stream).
+            if (index >= 5)
+            {
+                qWarning() << "MQTT malformed remaining length, dropping connection";
+                m_readBuffer.clear();
+                m_socket->disconnectFromHost();
+            }
             break;
         }
 
-        int totalPacketSize = index + remainingLength;
+        const qint64 totalPacketSize = static_cast<qint64>(index) + remainingLength;
         if (m_readBuffer.size() < totalPacketSize)
         {
             break;
         }
 
-        QByteArray packet = m_readBuffer.left(totalPacketSize);
-        m_readBuffer.remove(0, totalPacketSize);
+        QByteArray packet = m_readBuffer.left(static_cast<int>(totalPacketSize));
+        m_readBuffer.remove(0, static_cast<int>(totalPacketSize));
 
         const quint8 messageType = fixedHeader & 0xF0;
 
         if (messageType == kConnAck)
         {
-            m_isConnected = true;
-            emit connected();
+            if (packet.size() >= 4 && packet.at(3) == 0)
+            {
+                m_isConnected = true;
+                if (m_keepAlive > 0)
+                {
+                    m_keepAliveTimer->start(m_keepAlive * 500);   // half the keepalive interval
+                }
+                emit connected();
+            }
+            else
+            {
+                qWarning() << "MQTT CONNACK refused, code"
+                           << (packet.size() >= 4 ? static_cast<int>(packet.at(3)) : -1);
+            }
         }
         else if (messageType == kPublish)
         {
             parseIncomingPacket(packet);
         }
+        // SUBACK, UNSUBACK, PUBACK, PINGRESP: nothing to do
     }
+}
+
+quint16 Mqtt::nextPacketId()
+{
+    // MQTT packet identifiers are 1..65535. Zero is invalid and brokers may drop the connection.
+    const auto n = m_nextPacketId.fetch_add(1, std::memory_order_relaxed);
+    return static_cast<quint16>(n % 65535U + 1U);
 }
 
 QByteArray Mqtt::buildConnectPacket(int qos, int keepAliveSeconds)
@@ -314,7 +360,7 @@ QByteArray Mqtt::buildPublishPacket(const QString &topic, const QString &message
 
     if (qos > 0)
     {
-        const quint16 packetId = static_cast<quint16>(m_nextPacketId.fetch_add(1, std::memory_order_relaxed));
+        const quint16 packetId = nextPacketId();
         payload.append(static_cast<char>((packetId >> 8) & 0xFF));
         payload.append(static_cast<char>(packetId & 0xFF));
     }
@@ -334,7 +380,7 @@ QByteArray Mqtt::buildSubscribePacket(const QString &topic, int qos)
     QByteArray packet;
     packet.append(static_cast<char>(kSubscribe | 0x02));
 
-    const quint16 packetId = static_cast<quint16>(m_nextPacketId.fetch_add(1, std::memory_order_relaxed));
+    const quint16 packetId = nextPacketId();
     QByteArray payload;
 
     payload.append(static_cast<char>((packetId >> 8) & 0xFF));
@@ -355,7 +401,7 @@ QByteArray Mqtt::buildUnsubscribePacket(const QString &topic)
     QByteArray packet;
     packet.append(static_cast<char>(kUnsubscribe | 0x02));
 
-    const quint16 packetId = static_cast<quint16>(m_nextPacketId.fetch_add(1, std::memory_order_relaxed));
+    const quint16 packetId = nextPacketId();
     QByteArray payload;
 
     payload.append(static_cast<char>((packetId >> 8) & 0xFF));
@@ -372,61 +418,58 @@ QByteArray Mqtt::buildUnsubscribePacket(const QString &topic)
 
 void Mqtt::parseIncomingPacket(const QByteArray &packet)
 {
-    if (packet.size() < 5)
+    const auto *p = reinterpret_cast<const quint8 *>(packet.constData());
+    const int size = packet.size();
+    if (size < 2)
     {
         return;
     }
 
-    const quint8 messageType = static_cast<quint8>(packet.at(0) & 0xF0);
-    if (messageType != kPublish)
-    {
-        return;
-    }
+    const int qos = (p[0] >> 1) & 0x03;
 
     int idx = 1;
-    quint32 remainingLength = 0;
-    quint32 multiplier = 1;
-
-    while (true)
+    while (idx < size && (p[idx++] & 0x80))
     {
-        if (idx >= packet.size())
+        // skip remaining-length bytes
+    }
+
+    if (idx + 2 > size)
+    {
+        return;
+    }
+    const int topicLen = (p[idx] << 8) | p[idx + 1];
+    idx += 2;
+    if (idx + topicLen > size)
+    {
+        return;
+    }
+
+    const QString topic = QString::fromUtf8(packet.constData() + idx, topicLen);
+    idx += topicLen;
+
+    quint16 packetId = 0;
+    if (qos > 0)
+    {
+        if (idx + 2 > size)
         {
             return;
         }
-
-        quint8 byte = static_cast<quint8>(packet.at(idx++));
-        remainingLength += (static_cast<quint32>(byte & 0x7F) * multiplier);
-        if ((byte & 0x80) == 0)
-        {
-            break;
-        }
-        multiplier *= 128;
-    }
-
-    if (idx + 2 > packet.size())
-    {
-        return;
-    }
-
-    const quint16 topicLength = static_cast<quint16>((static_cast<quint16>(packet.at(idx)) << 8) |
-                                                     static_cast<quint16>(packet.at(idx + 1)));
-    idx += 2;
-
-    if (idx + topicLength > packet.size())
-    {
-        return;
-    }
-
-    QString topic = QString::fromUtf8(packet.constData() + idx, topicLength);
-    idx += topicLength;
-
-    const quint8 qosFlags = static_cast<quint8>(packet.at(0) & 0x06);
-    if (qosFlags != 0)
-    {
+        packetId = static_cast<quint16>((p[idx] << 8) | p[idx + 1]);
         idx += 2;
     }
 
-    QString message = QString::fromUtf8(packet.constData() + idx, packet.size() - idx);
+    const QString message = QString::fromUtf8(packet.constData() + idx, size - idx);
+
+    if (qos == 1)
+    {
+        QByteArray ack;
+        ack.append(static_cast<char>(kPubAck));
+        ack.append(static_cast<char>(0x02));
+        ack.append(static_cast<char>(packetId >> 8));
+        ack.append(static_cast<char>(packetId & 0xFF));
+        sendPacket(ack);
+    }
+
     emit messageReceived(topic, message);
 }
 
@@ -448,7 +491,8 @@ void Mqtt::subscribe(const QString &topic)
         return;
     }
 
-    const auto packet = buildSubscribePacket(topic, m_qos);
+    // QoS 2 handshake is not implemented, so never request more than QoS 1.
+    const auto packet = buildSubscribePacket(topic, qMin(m_qos, 1));
     sendPacket(packet);
 }
 
