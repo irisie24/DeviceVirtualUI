@@ -13,6 +13,7 @@ Rectangle
     property bool connectionIndicatorVisible: true
     property bool progressIndicatorVisible: true
     property bool addIconVisible: true
+    signal drawerInvoked()
 
     Component.onCompleted:
     {
@@ -34,31 +35,33 @@ Rectangle
 
         Rectangle
         {
-            id: spacer1
+            id: spacer0
             anchors.verticalCenter: parent.verticalCenter
             height: titleRect.height*0.5
             width: titleRect.height*0.5
             anchors.left: parent.left
         }
 
-        Image
+        ToolButton
         {
-            id: connectionStatusIcon
-            height: titleRect.height*0.5
-            width: titleRect.height*0.5
+            id: menuButton
+            icon.source : "../images/Menu.png"
+            icon.width:  titleRect.height*0.5
+            icon.height: titleRect.height*0.5
             anchors.verticalCenter: parent.verticalCenter
-            anchors.left: spacer1.right
-            source : "../images/GreenDot.png"
-            visible: connectionIndicatorVisible
+            onClicked:
+            {
+                drawerInvoked();
+            }
         }
 
         Rectangle
         {
-            id: spacer2
+            id: spacer1
             anchors.verticalCenter: parent.verticalCenter
             height: titleRect.height*0.5
             width: titleRect.height*0.5
-            anchors.left: connectionStatusIcon.right
+            anchors.left: menuButton.right
         }
 
         Label
@@ -70,7 +73,38 @@ Rectangle
             horizontalAlignment: Qt.AlignHCenter
             verticalAlignment: Qt.AlignVCenter
             anchors.verticalCenter: parent.verticalCenter
-            anchors.left: spacer2.right
+            anchors.left: spacer1.right
+        }
+
+        //
+
+        Rectangle
+        {
+            id: spacer2
+            anchors.verticalCenter: parent.verticalCenter
+            height: titleRect.height*0.5
+            width: titleRect.height*0.5
+            anchors.right: parent.right
+        }
+
+        Image
+        {
+            id: connectionStatusIcon
+            height: titleRect.height*0.5
+            width: titleRect.height*0.5
+            anchors.verticalCenter: parent.verticalCenter
+            anchors.right: spacer2.left
+            source : "../images/Connected.png"
+            visible: connectionIndicatorVisible
+        }
+
+        Rectangle
+        {
+            id: spacer3
+            anchors.verticalCenter: parent.verticalCenter
+            height: titleRect.height*0.5
+            width: titleRect.height*0.5
+            anchors.right: connectionStatusIcon.left
         }
 
         RoundButton
@@ -96,11 +130,11 @@ Rectangle
 
         Rectangle
         {
-            id: spacer3
+            id: spacer4
             anchors.verticalCenter: parent.verticalCenter
             height: titleRect.height*0.5
             width: titleRect.height*0.5
-            anchors.right: progressAnimator.left
+            anchors.right: titleRect.left
         }
 
         BusyIndicator
@@ -109,7 +143,7 @@ Rectangle
             height: titleRect.height*0.85
             width: titleRect.height*0.85
             anchors.verticalCenter: parent.verticalCenter
-            anchors.right: titleRect.right
+            anchors.right: spacer4.left
             anchors.rightMargin: 0
             running: true
             visible: progressIndicatorVisible

@@ -125,6 +125,12 @@ public:
     Q_PROPERTY (QList<QString> RuleNames READ getRuleNames NOTIFY RuleNamesChanged)
     QList<QString> getRuleNames();
 
+    Q_PROPERTY (QList<QString> SelectedFlowNames READ getSelectedFlowNames NOTIFY SelectedFlowNamesChanged)
+    QList<QString> getSelectedFlowNames();
+
+    Q_PROPERTY (QList<QString> SelectedRuleNames READ getSelectedRuleNames NOTIFY SelectedRuleNamesChanged)
+    QList<QString> getSelectedRuleNames();
+
 signals:
 
     void ThemeChanged();
@@ -182,6 +188,8 @@ signals:
     void DeviceNamesChanged();
     void FlowNamesChanged();
     void RuleNamesChanged();
+    void SelectedFlowNamesChanged();
+    void SelectedRuleNamesChanged();
 
 private slots:
     void OnAppInitializationComplete();
@@ -226,6 +234,8 @@ private:
     QList<QString> deviceNames_;
     QList<QString> ruleNames_;
     QList<QString> flowNames_;
+    QList<QString> selectedRuleNames_;
+    QList<QString> selectedFlowNames_;
 };
 
 extern Controller* controllerPtr;

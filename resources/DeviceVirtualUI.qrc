@@ -34,7 +34,9 @@
 
         <file>images/AnimationSplash.gif</file>
 
-        <file>images/Logo.png</file>
+        <file>images/Logo.png</file>        
+        <file>images/Alarm.png</file>
+        <file>images/Event.png</file>
         <file>images/Next.png</file>
         <file>images/NextWhite.png</file>
         <file>images/NextBlack.png</file>
@@ -44,32 +46,24 @@
         <file>images/Menu.png</file>
         <file>images/MenuWhite.png</file>
         <file>images/MenuBlack.png</file>
-        <file>images/GreenDot.png</file>
+        <file>images/Connected.png</file>
         <file>images/Delete.png</file>
-
         <file>images/User.png</file>
         <file>images/Home.png</file>
-
         <file>images/Device.png</file>
         <file>images/DeviceItem.png</file>
-
         <file>images/Sensing.png</file>
         <file>images/SensingItem.png</file>
-
         <file>images/SignalGraph.png</file>
-
         <file>images/Actuation.png</file>
         <file>images/ActuationItem.png</file>
-
         <file>images/Settings.png</file>
         <file>images/Trace.png</file>
         <file>images/Exit.png</file>
-
         <file>images/Add.png</file>
         <file>images/AddGrey.png</file>
         <file>images/Pass.png</file>
         <file>images/Fail.png</file>
-        <file>images/Done.png</file>
         <file>images/Filter.png</file>
         <file>images/Calendar.png</file>
         <file>images/Warning.png</file>

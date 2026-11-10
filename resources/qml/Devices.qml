@@ -24,7 +24,7 @@ Page
         id: deviceListView
         anchors.fill: parent
         visible: true
-        spacing: 5
+        spacing: 0
         clip: true
         model: applicationData.DeviceList
 
@@ -57,6 +57,7 @@ Page
                     text: deviceListView.model[index].DeviceId
                     anchors.verticalCenter: parent.verticalCenter
                     anchors.left: spacer1.right
+                    font.pointSize: applicationData.Theme.FontSmall
                 }
 
                 Rectangle
@@ -76,6 +77,7 @@ Page
                     text: deviceListView.model[index].DeviceName
                     anchors.verticalCenter: parent.verticalCenter
                     anchors.left: spacer2.right
+                    font.pointSize: applicationData.Theme.FontSmall
                 }
 
                 // ----
@@ -258,7 +260,7 @@ Page
                 Label { font.pointSize: applicationData.Theme.FontSmall; text: "Simulation Flows" }     Label { font.pointSize: applicationData.Theme.FontSmall; text: deviceListView.model[selectedIndex].NumberOfFlows }
                 Label { font.pointSize: applicationData.Theme.FontSmall; text: "Flows Repeatable" }     Label { font.pointSize: applicationData.Theme.FontSmall; text: deviceListView.model[selectedIndex].RepeatFlowSequence }
                 Label { font.pointSize: applicationData.Theme.FontSmall; text: "Flow Sequence End" }    Label { font.pointSize: applicationData.Theme.FontSmall; text: deviceListView.model[selectedIndex].FlowSequenceEndStr }
-                Label { font.pointSize: applicationData.Theme.FontSmall; text: "Simulation Mode" }      Label { font.pointSize: applicationData.Theme.FontSmall; text: deviceListView.model[selectedIndex].Mode }
+                Label { font.pointSize: applicationData.Theme.FontSmall; text: "Simulation Mode" }      Label { font.pointSize: applicationData.Theme.FontSmall; text: deviceListView.model[selectedIndex].ModeStr }
                 Label { font.pointSize: applicationData.Theme.FontSmall; text: "Operating Maximum" }    Label { font.pointSize: applicationData.Theme.FontSmall; text: deviceListView.model[selectedIndex].OperatingMax }
                 Label { font.pointSize: applicationData.Theme.FontSmall; text: "Operating Minimum" }    Label { font.pointSize: applicationData.Theme.FontSmall; text: deviceListView.model[selectedIndex].OperatingMin }
                 Label { font.pointSize: applicationData.Theme.FontSmall; text: "Latitude" }             Label { font.pointSize: applicationData.Theme.FontSmall; text: deviceListView.model[selectedIndex].Latitude }
@@ -267,6 +269,86 @@ Page
                 Label { font.pointSize: applicationData.Theme.FontSmall; text: "Generator Model" }      Label { font.pointSize: applicationData.Theme.FontSmall; text: deviceListView.model[selectedIndex].GenModelStr }
                 Label { font.pointSize: applicationData.Theme.FontSmall; text: "Unit of Measurement" }  Label { font.pointSize: applicationData.Theme.FontSmall; text: deviceListView.model[selectedIndex].UnitOfMeasurement }
                 Label { font.pointSize: applicationData.Theme.FontSmall; text: "Scale" }                Label { font.pointSize: applicationData.Theme.FontSmall; text: deviceListView.model[selectedIndex].Scale }
+            }
+
+            Rectangle
+            {
+                id: line1
+                width: entityDetails.width*0.9
+                height: 2
+                border.width: 1
+                anchors.top: entityDetailsGridDlg.bottom
+                anchors.horizontalCenter: parent.horizontalCenter
+                border.color: applicationData.Theme.AccentBaseColor
+                anchors.topMargin: applicationData.Theme.BarHeight/3
+            }
+
+            Grid
+            {
+                id: simulationGridDlg
+                rows: 1
+                columns: 4
+                width: entityDetails.width*0.9
+                anchors.right: parent.right
+                anchors.top: line1.bottom
+                anchors.topMargin: applicationData.Theme.BarHeight/2
+                spacing: 10
+
+                Label { font.pointSize: applicationData.Theme.FontSmall; text: "Sensing Flow" }  ComboBox { width: 200; height:applicationData.Theme.BarHeight/2; model: ["UART", "I2C", "SPI", "GPIO", "BLE"] }
+                Label { width: 200 }
+
+                CustomButton
+                {
+                    id:btnRunFlow
+                    width: 105
+                    height: applicationData.Theme.BarHeight
+                    text: "Run"
+                    isDefault: true
+                    accentColor: applicationData.Theme.AccentBaseColor
+                    onClicked:
+                    {
+                    }
+                }
+            }
+
+            Rectangle
+            {
+                id: line2
+                width: entityDetails.width*0.9
+                height: 2
+                border.width: 1
+                anchors.top: simulationGridDlg.bottom
+                anchors.horizontalCenter: parent.horizontalCenter
+                border.color: applicationData.Theme.AccentBaseColor
+                anchors.topMargin: applicationData.Theme.BarHeight/3
+            }
+
+            Grid
+            {
+                id: actuationGridDlg
+                rows: 1
+                columns: 4
+                width: entityDetails.width*0.9
+                anchors.right: parent.right
+                anchors.top: line2.bottom
+                anchors.topMargin: applicationData.Theme.BarHeight/2
+                spacing: 10
+
+                Label { font.pointSize: applicationData.Theme.FontSmall; text: "Actuation Command" }  ComboBox { width: 200; height:applicationData.Theme.BarHeight/2; model: ["UART", "I2C", "SPI", "GPIO", "BLE"] }
+                Label { width: 200 }
+
+                CustomButton
+                {
+                    id:btnSendCommand
+                    width: 105
+                    height: applicationData.Theme.BarHeight
+                    text: "Send"
+                    isDefault: true
+                    accentColor: applicationData.Theme.AccentBaseColor
+                    onClicked:
+                    {
+                    }
+                }
             }
 
             Rectangle

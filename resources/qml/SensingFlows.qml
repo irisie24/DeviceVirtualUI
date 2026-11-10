@@ -24,7 +24,6 @@ Page
         id: sensingFlowListView
         anchors.fill: parent
         visible: true
-        spacing: 5
         clip: true
         model: applicationData.SensingFlowList
 
@@ -55,6 +54,7 @@ Page
                 {
                     id: deviceId
                     text: sensingFlowListView.model[index].FlowId
+                    font.pointSize: applicationData.Theme.FontSmall
                     anchors.verticalCenter: parent.verticalCenter
                     anchors.left: spacer1.right
                 }
@@ -74,6 +74,7 @@ Page
                 {
                     id: deviceName
                     text: sensingFlowListView.model[index].FlowTypeName
+                    font.pointSize: applicationData.Theme.FontSmall
                     anchors.verticalCenter: parent.verticalCenter
                     anchors.left: spacer2.right
                 }

@@ -52,7 +52,6 @@ Page
         anchors.fill: parent
     }
 
-
     Rectangle
     {
         id: line0
@@ -61,7 +60,7 @@ Page
         border.width: 1
         anchors.top: parent.top
         anchors.horizontalCenter: parent.horizontalCenter
-        border.color: applicationData.Theme.BaseColor
+        border.color: applicationData.Theme.AccentBaseColor
     }
 
     CustomSelector
@@ -70,7 +69,7 @@ Page
         anchors.top:  line0.bottom
         anchors.topMargin: applicationData.Theme.BarHeight/3
         anchors.left: line0.left
-        selectorSize: 32
+        selectorSize: 28
         text: "Demo Mode"
         accentColor: applicationData.Theme.AccentBaseColor
         fontColor: applicationData.Theme.TextPrimaryColor
@@ -100,7 +99,7 @@ Page
         anchors.top:  line2.bottom
         anchors.topMargin: applicationData.Theme.BarHeight/3
         anchors.left: line0.left
-        selectorSize: 32
+        selectorSize: 28
         text: "Trace"
         accentColor: applicationData.Theme.AccentBaseColor
         fontColor: applicationData.Theme.TextPrimaryColor
@@ -139,7 +138,7 @@ Page
         anchors.top:  line3.bottom
         anchors.topMargin: applicationData.Theme.BarHeight/3
         anchors.left: line0.left
-        selectorSize: 32
+        selectorSize: 28
         text: "Dump Rx/Tx"
         accentColor: applicationData.Theme.AccentBaseColor
         fontColor: applicationData.Theme.TextPrimaryColor
@@ -174,11 +173,11 @@ Page
         anchors.top: line4.bottom
         spacing: 10
 
-        Label { text: "MQTT Host Address" }  TextField { width: 200; height:applicationData.Theme.BarHeight/2 }
-        Label { text: "MQTT Port" }  TextField { width: 200; height:applicationData.Theme.BarHeight/2 }
-        Label { text: "MQTT Client ID" }  TextField { width: 200; height:applicationData.Theme.BarHeight/2  }
-        Label { text: "MQTT User" }  TextField { width: 200; height:applicationData.Theme.BarHeight/2 }
-        Label { text: "MQTT Password" }  TextField { width: 200; height:applicationData.Theme.BarHeight/2 }
+        Label { font.pointSize: applicationData.Theme.FontSmall; text: "MQTT Host Address" }  TextField { width: 200; height:applicationData.Theme.BarHeight/2 }
+        Label { font.pointSize: applicationData.Theme.FontSmall; text: "MQTT Port" }  TextField { width: 200; height:applicationData.Theme.BarHeight/2 }
+        Label { font.pointSize: applicationData.Theme.FontSmall; text: "MQTT Client ID" }  TextField { width: 200; height:applicationData.Theme.BarHeight/2  }
+        Label { font.pointSize: applicationData.Theme.FontSmall; text: "MQTT User" }  TextField { width: 200; height:applicationData.Theme.BarHeight/2 }
+        Label { font.pointSize: applicationData.Theme.FontSmall; text: "MQTT Password" }  TextField { width: 200; height:applicationData.Theme.BarHeight/2 }
     }
 
     Rectangle
@@ -204,11 +203,11 @@ Page
         anchors.top: line5.bottom
         spacing: 10
 
-        Label { text: "Database Name" }  TextField { width: 200; height:applicationData.Theme.BarHeight/2  }
-        Label { text: "Database Host Address" }  TextField { width: 200; height:applicationData.Theme.BarHeight/2 }
-        Label { text: "Database Port" }  TextField { width: 200; height:applicationData.Theme.BarHeight/2 }
-        Label { text: "Database User" }  TextField { width: 200; height:applicationData.Theme.BarHeight/2 }
-        Label { text: "Database Password" }  TextField { width: 200; height:applicationData.Theme.BarHeight/2 }
+        Label { font.pointSize: applicationData.Theme.FontSmall; text: "Database Name" }  TextField { width: 200; height:applicationData.Theme.BarHeight/2  }
+        Label { font.pointSize: applicationData.Theme.FontSmall; text: "Database Host Address" }  TextField { width: 200; height:applicationData.Theme.BarHeight/2 }
+        Label { font.pointSize: applicationData.Theme.FontSmall; text: "Database Port" }  TextField { width: 200; height:applicationData.Theme.BarHeight/2 }
+        Label { font.pointSize: applicationData.Theme.FontSmall; text: "Database User" }  TextField { width: 200; height:applicationData.Theme.BarHeight/2 }
+        Label { font.pointSize: applicationData.Theme.FontSmall; text: "Database Password" }  TextField { width: 200; height:applicationData.Theme.BarHeight/2 }
     }
 
 
@@ -227,7 +226,7 @@ Page
     Rectangle
     {
         id: rect4
-        width: settingsPage.width
+        width: settingsPage.width*0.95
         height: applicationData.Theme.BarHeight*2
         anchors.top: line6.bottom
         anchors.topMargin: 10

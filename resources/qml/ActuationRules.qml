@@ -24,7 +24,6 @@ Page
         id: actuationRuleListView
         anchors.fill: parent
         visible: true
-        spacing: 5
         clip: true
         model: applicationData.ActuationRuleList
 
@@ -55,6 +54,7 @@ Page
                 {
                     id: deviceId
                     text: actuationRuleListView.model[index].RuleId
+                    font.pointSize: applicationData.Theme.FontSmall
                     anchors.verticalCenter: parent.verticalCenter
                     anchors.left: spacer1.right
                 }
@@ -74,6 +74,7 @@ Page
                 {
                     id: deviceName
                     text: actuationRuleListView.model[index].ConditionName
+                    font.pointSize: applicationData.Theme.FontSmall
                     anchors.verticalCenter: parent.verticalCenter
                     anchors.left: spacer2.right
                 }

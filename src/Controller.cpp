@@ -500,6 +500,11 @@ QList<QString> Controller::getFlowNames()
     return flowNames_;
 }
 
+QList<QString> Controller::getSelectedFlowNames()
+{
+    return selectedFlowNames_;
+}
+
 void Controller::setActuationRuleList(QList<ActuationRule> actuationRulelist)
 {
     actuationRules_.clear();
@@ -522,6 +527,11 @@ QList<ActuationRule> Controller::getActuationRuleList()
 QList<QString> Controller::getRuleNames()
 {
     return ruleNames_;
+}
+
+QList<QString> Controller::getSelectedRuleNames()
+{
+    return selectedRuleNames_;
 }
 
 void Controller::initializeDatabase()

@@ -26,7 +26,6 @@ ApplicationWindow
     Component.onCompleted:
     {
         headerPanel.visible = false
-        collapsedMenu.visible = false
         stackView.push("SplashScreen.qml")
         applicationData.invokeApplicationInitialization()
     }
@@ -44,8 +43,10 @@ ApplicationWindow
 
         background: Rectangle
         {
-            color: applicationData.Theme.AccentHighlightColor
+            color: applicationData.Theme.PanelUpperColor
             radius: 0
+            border.color: applicationData.Theme.LineColor
+            border.width: 1
         }
 
         Column
@@ -56,10 +57,11 @@ ApplicationWindow
             {
                 text: qsTr("Home")
                 width: parent.width
+                font.pointSize: applicationData.Theme.FontSmall
 
                 background: Rectangle
                 {
-                    color: applicationData.Theme.AccentHighlightColor
+                    color: applicationData.Theme.PanelUpperColor
                     radius: 0
                 }
 
@@ -92,10 +94,11 @@ ApplicationWindow
             {
                 text: qsTr("Devices")
                 width: parent.width
+                font.pointSize: applicationData.Theme.FontSmall
 
                 background: Rectangle
                 {
-                    color: applicationData.Theme.AccentHighlightColor
+                    color: applicationData.Theme.PanelUpperColor
                     radius: 0
                 }
 
@@ -128,10 +131,11 @@ ApplicationWindow
             {
                 text: qsTr("Sensing Flows")
                 width: parent.width
+                font.pointSize: applicationData.Theme.FontSmall
 
                 background: Rectangle
                 {
-                    color: applicationData.Theme.AccentHighlightColor
+                    color: applicationData.Theme.PanelUpperColor
                     radius: 0
                 }
 
@@ -169,10 +173,11 @@ ApplicationWindow
             {
                 text: qsTr("Actuation Rules")
                 width: parent.width
+                font.pointSize: applicationData.Theme.FontSmall
 
                 background: Rectangle
                 {
-                    color: applicationData.Theme.AccentHighlightColor
+                    color: applicationData.Theme.PanelUpperColor
                     radius: 0
                 }
 
@@ -210,10 +215,11 @@ ApplicationWindow
             {
                 text: qsTr("Signal Graph")
                 width: parent.width
+                font.pointSize: applicationData.Theme.FontSmall
 
                 background: Rectangle
                 {
-                    color: applicationData.Theme.AccentHighlightColor
+                    color: applicationData.Theme.PanelUpperColor
                     radius: 0
                 }
 
@@ -254,12 +260,82 @@ ApplicationWindow
 
             ItemDelegate
             {
-                text: qsTr("Settings")
+                text: qsTr("Alarms")
                 width: parent.width
+                font.pointSize: applicationData.Theme.FontSmall
 
                 background: Rectangle
                 {
-                    color: applicationData.Theme.AccentHighlightColor
+                    color: applicationData.Theme.PanelUpperColor
+                    radius: 0
+                }
+
+                onClicked:
+                {
+                    applicationData.invokeSaveCurrentPage("Settings.qml")
+                    stackView.pop()
+                    stackView.push("Settings.qml")
+                    headerPanel.headerTitle = "Settings"
+                    headerPanel.addIconVisible = false;
+                    headerPanel.progressIndicatorVisible = false;
+                    headerPanel.connectionIndicatorVisible = false;
+                    drawer.close()
+                }
+
+                icon
+                {
+                    source: "../images/Alarm.png"
+                    width: iconWidth
+                    height: iconHeight
+                }
+            }
+
+            ItemDelegate
+            {
+                text: qsTr("Events")
+                width: parent.width
+                font.pointSize: applicationData.Theme.FontSmall
+
+                background: Rectangle
+                {
+                    color: applicationData.Theme.PanelUpperColor
+                    radius: 0
+                }
+
+                onClicked:
+                {
+                    applicationData.invokeSaveCurrentPage("Trace.qml")
+                    stackView.pop()
+                    stackView.push("Trace.qml")
+                    drawer.close()
+                    headerPanel.headerTitle = "Trace"
+                    headerPanel.addIconVisible = false;
+                    headerPanel.progressIndicatorVisible = false;
+                    headerPanel.connectionIndicatorVisible = false;
+                }
+
+                icon
+                {
+                    source: "../images/Event.png"
+                    width: iconWidth
+                    height: iconHeight
+                }
+            }
+
+            MenuSeparator
+            {
+                width: parent.width
+            }
+
+            ItemDelegate
+            {
+                text: qsTr("Settings")
+                width: parent.width
+                font.pointSize: applicationData.Theme.FontSmall
+
+                background: Rectangle
+                {
+                    color: applicationData.Theme.PanelUpperColor
                     radius: 0
                 }
 
@@ -287,10 +363,11 @@ ApplicationWindow
             {
                 text: qsTr("Trace")
                 width: parent.width
+                font.pointSize: applicationData.Theme.FontSmall
 
                 background: Rectangle
                 {
-                    color: applicationData.Theme.AccentHighlightColor
+                    color: applicationData.Theme.PanelUpperColor
                     radius: 0
                 }
 
@@ -323,10 +400,11 @@ ApplicationWindow
             {
                 text: qsTr("Exit")
                 width: parent.width
+                font.pointSize: applicationData.Theme.FontSmall
 
                 background: Rectangle
                 {
-                    color: applicationData.Theme.AccentHighlightColor
+                    color: applicationData.Theme.PanelUpperColor
                     radius: 0
                 }
 
@@ -346,86 +424,23 @@ ApplicationWindow
         }
     }
 
-    Rectangle
-    {
-        id: collapsedMenu
-        visible: true
-        height: parent.height
-        width: applicationData.Theme.SideMenuCollapsedWidth
-        anchors.top: parent.top
-        anchors.bottom: parent.bottom
-        anchors.left: parent.left
-        color: applicationData.Theme.PanelLowerColor
-
-        ColumnLayout
-        {
-            anchors.top: parent.top
-            anchors.bottom: parent.bottom
-            anchors.horizontalCenter: parent.horizontalCenter
-            spacing: 10
-
-            ToolButton
-            {
-                icon.source : "../images/Menu.png"
-                icon.width:  iconWidth
-                icon.height: iconHeight
-                onClicked:
-                {
-                    drawer.open();
-                }
-            }
-
-            // bottom utility icons — settings, logout etc.
-            ToolButton
-            {
-                icon.source: "../images/Home.png"
-                icon.width:  iconWidth
-                icon.height: iconHeight
-                onClicked:
-                {
-                    stackView.pop()
-                    applicationData.invokeSaveCurrentPage("Dashboard.qml")
-                    stackView.push("Dashboard.qml")
-                    headerPanel.addIconVisible = false
-                    headerPanel.progressIndicatorVisible = false;
-                }
-            }
-
-            // spacer to push bottom items down
-            Item
-            {
-                Layout.fillHeight: true
-            }
-
-            ToolButton
-            {
-                icon.source: "../images/Exit.png"
-                icon.width:  iconWidth
-                icon.height: iconHeight
-                onClicked:
-                {
-                    drawer.close();
-                    applicationData.invokeExit();
-                }
-            }
-        }
-    }
-
     Header
     {
         id: headerPanel
         anchors.top: parent.top
-        anchors.left: collapsedMenu.right
-        width: parent.width - applicationData.Theme.SideMenuCollapsedWidth
+        width: parent.width
+        onDrawerInvoked:
+        {
+            drawer.open()
+        }
     }
 
     StackView
     {
        id: stackView
        anchors.top: headerPanel.bottom
-       anchors.right: parent.right
-       anchors.bottom: parent.bottom
-       anchors.left: collapsedMenu.right
+       width: parent.width
+       height: parent.height - headerPanel.height
     }
 
     Connections
@@ -435,7 +450,6 @@ ApplicationWindow
         function onInitializationComplete()
         {
             headerPanel.visible = true
-            collapsedMenu.visible = true
             stackView.pop()
             applicationData.invokeSaveCurrentPage("Dashboard.qml")
             stackView.push("Dashboard.qml")
