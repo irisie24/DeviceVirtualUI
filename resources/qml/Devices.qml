@@ -134,6 +134,47 @@ Page
                         confirm.open()
                     }
                 }
+
+                Rectangle
+                {
+                    id: spacer5
+                    height: parent.height*0.95
+                    width: parent.height*0.95
+                    color: applicationData.Theme.PanelUpperColor
+                    anchors.verticalCenter: parent.verticalCenter
+                    anchors.right: cmdDelete.left
+                    border.width: 0
+                }
+
+                Label
+                {
+                    id: deviceStatus
+                    text:
+                    {
+                        if(deviceListView.model[index].IsOnline === false)
+                        {
+                            return "Offline"
+                        }
+                        else
+                        {
+                            return "Online "
+                        }
+                    }
+                    anchors.verticalCenter: parent.verticalCenter
+                    anchors.right: spacer5.left
+                    font.pointSize: applicationData.Theme.FontSmall
+                    color:
+                    {
+                        if(deviceListView.model[index].IsOnline === false)
+                        {
+                            return applicationData.Theme.TextPrimaryColor
+                        }
+                        else
+                        {
+                            return applicationData.Theme.AccentBaseColor
+                        }
+                    }
+                }
             }
         }
     }
@@ -305,6 +346,7 @@ Page
                     text: "Run"
                     isDefault: true
                     accentColor: applicationData.Theme.AccentBaseColor
+                    enabled : deviceListView.model[selectedIndex].IsOnline
                     onClicked:
                     {
                     }
@@ -345,6 +387,7 @@ Page
                     text: "Send"
                     isDefault: true
                     accentColor: applicationData.Theme.AccentBaseColor
+                    enabled : deviceListView.model[selectedIndex].IsOnline
                     onClicked:
                     {
                     }
@@ -385,9 +428,7 @@ Page
 
         function onDeviceAction(fl)
         {
-            console.log("Device update received")
             deviceListView.model = applicationData.DeviceList
-            console.log(deviceListView.count + " devices in QML onDeviceAction")
         }
 
         function onDeviceMessage(fl, str)

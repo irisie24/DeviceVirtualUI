@@ -596,6 +596,20 @@ void Controller::OnMqttMessageReceived(const QString &topic, const QString &mess
 {
     Trace(message);
 
+    if(topic.contains("keepalive"))
+    {
+        for(int x = 0; x < devices_.count(); x++)
+        {
+            if(devices_[x].DeviceId_.trimmed() == message.trimmed())
+            {
+                devices_[x].IsOnline_ = true;
+            }
+        }
+
+        emit DeviceListChanged();
+        emit deviceAction(true);
+    }
+
     if(topic.contains("sensing"))
     {
         QHash<QString, QString> fields;

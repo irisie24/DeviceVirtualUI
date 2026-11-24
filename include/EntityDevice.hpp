@@ -55,6 +55,7 @@ public:
     QString     UnitOfMeasurement_ = "";
     int         Scale_ = 10;
     QString     FlowSequenceEndStr_ = 0;
+    bool        IsOnline_ = false;
 
 public:
     Q_PROPERTY(QString DeviceId MEMBER DeviceId_)
@@ -77,6 +78,7 @@ public:
     Q_PROPERTY(QString UnitOfMeasurement MEMBER UnitOfMeasurement_)
     Q_PROPERTY(int Scale MEMBER Scale_)
     Q_PROPERTY(QString FlowSequenceEndStr MEMBER FlowSequenceEndStr_)
+    Q_PROPERTY(bool IsOnline MEMBER IsOnline_)
 
 public:
     Device()
@@ -86,7 +88,8 @@ public:
     Device(QString iDeviceId, QString iUserId, QString iDeviceName, QString iMake, QString iModel,
                quint32 iNumberOfFlows, bool iRepeatFlowSequence, quint64 iFlowSequenceEnd,
                int iMode, quint64 iOperatingMax, quint64 iOperatingMin,
-               quint64 iLatitude, quint64 iLongitude, quint64 iAltitude, int iGenModel, QString iuom, int iscale)
+               quint64 iLatitude, quint64 iLongitude, quint64 iAltitude, int iGenModel, QString iuom, int iscale,
+                bool isonline)
     {
         DeviceId_ = iDeviceId;
         UserId_ = iUserId;
@@ -105,6 +108,7 @@ public:
         GenModel_ = iGenModel;
         UnitOfMeasurement_ = iuom;
         Scale_ = iscale;
+        IsOnline_ = isonline;
 
         ModeStr_ = getSimulationModeName((SimulationMode)iMode);
         GenModelStr_ = getGeneratorModelName((GeneratorModelType)iGenModel);
